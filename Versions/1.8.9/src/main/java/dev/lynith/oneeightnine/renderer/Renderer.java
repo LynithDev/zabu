@@ -1,0 +1,143 @@
+package dev.lynith.oneeightnine.renderer;
+
+import dev.lynith.Core.utils.GuiScreens;
+import dev.lynith.Core.utils.ZabuColor;
+import dev.lynith.Core.versions.renderer.IRenderer;
+import dev.lynith.Core.versions.renderer.Screen;
+import lombok.Getter;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
+
+public class Renderer implements IRenderer {
+
+    private final Gui gui = new Gui();
+
+    @Override
+    public void rect(int x, int y, int width, int height, ZabuColor color) {
+        Gui.drawRect(x, y, x + width, y + height, color.toHex());
+    }
+
+    @Override
+    public void circle(int x, int y, int radius, ZabuColor color) {
+
+    }
+
+    @Override
+    public void line(int x1, int y1, int x2, int y2, ZabuColor color) {
+//        Tessellator tessellator = Tessellator.getInstance();
+//        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+//        GlStateManager.enableBlend();
+//        GlStateManager.disableTexture2D();
+//        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+//        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+//        worldRenderer.begin(1, DefaultVertexFormats.POSITION);
+//        worldRenderer.pos(x1, y1, 0.0D).endVertex();
+//        worldRenderer.pos(x2, y2, 0.0D).endVertex();
+//        tessellator.draw();
+//        GlStateManager.enableTexture2D();
+//        GlStateManager.disableBlend();
+    }
+
+    @Override
+    public void text(String text, int x, int y, ZabuColor color, boolean shadow) {
+        Minecraft.getMinecraft().fontRendererObj.drawString(text, x, y, color.toHex(), shadow);
+    }
+
+    @Override
+    public int getTextWidth(String text) {
+        return Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
+    }
+
+    @Override
+    public int getTextHeight() {
+        return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
+    }
+
+    @Override
+    public void image(String path, int x, int y, int width, int height) {
+        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(path));
+        gui.drawTexturedModalRect(x, y, 0, 0, width, height);
+    }
+
+    @Override
+    public int getDisplayWidth() {
+        return Minecraft.getMinecraft().displayWidth;
+    }
+
+    @Override
+    public int getDisplayHeight() {
+        return Minecraft.getMinecraft().displayHeight;
+    }
+
+    @Override
+    public int getScaleFactor() {
+        return Minecraft.getMinecraft().gameSettings.guiScale;
+    }
+
+    @Getter
+    private GuiScreens currentScreen;
+
+    @Override
+    public void setCurrentScreen(Screen screen) {
+        this.currentScreen = screen.getType();
+
+        Minecraft.getMinecraft().displayGuiScreen(toGuiScreen(screen));
+    }
+
+    @Override
+    public void setCurrentScreen(GuiScreens screen) {
+
+    }
+
+    public GuiScreen toGuiScreen(Screen screen) {
+        return new GuiScreen() {
+            @Override
+            public void drawScreen(int i, int j, float f) {
+                screen.render(i, j, f);
+            }
+
+            @Override
+            public void initGui() {
+                screen.init();
+            }
+
+            @Override
+            public void updateScreen() {
+                screen.update();
+            }
+
+            @Override
+            public void onGuiClosed() {
+                screen.onClosed();
+            }
+
+            @Override
+            public void onResize(Minecraft minecraft, int i, int j) {
+                screen.onResize(i, j);
+            }
+
+            @Override
+            protected void mouseClicked(int i, int j, int k) {
+                screen.mouseClicked(i, j, k);
+            }
+
+            @Override
+            protected void mouseClickMove(int i, int j, int k, long l) {
+                screen.mouseClickedMoved(i, j);
+            }
+
+            @Override
+            protected void mouseReleased(int i, int j, int k) {
+                screen.mouseReleased(i, j, k);
+            }
+
+            @Override
+            protected void keyTyped(char c, int i) {
+                screen.keyTyped(c, i);
+            }
+        };
+    }
+
+}

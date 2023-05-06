@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_13",
+  "package": "dev.lynith.onenineteenfour.mixins",
+  "verbose": true,
+  "mixins": [
+    "MinecraftMixin"
+  ]
+}

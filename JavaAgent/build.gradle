@@ -1,0 +1,74 @@
+plugins {
+    id("java")
+    id("net.kyori.blossom") version "1.2.0"
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+configurations {
+    exportLib
+    compileOnly.extendsFrom(exportLib)
+}
+
+repositories {
+    maven {
+        name = "Fabric"
+        url = uri("https://maven.fabricmc.net/")
+    }
+}
+
+blossom {
+    replaceToken("%gradle.package%", rootProject.group)
+}
+
+dependencies {
+    compileOnly(project(":Core"))
+
+    compileOnly(libs.bundles.asm)
+    compileOnly(libs.guava)
+    compileOnly(libs.gson)
+    compileOnly(libs.commons.io)
+
+    exportLib(libs.mixin) {
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+    }
+}
+
+tasks.register("addServices") {
+    file("src/main/resources/META-INF/services/org.spongepowered.asm.service.IGlobalPropertyService").withWriter {
+        it.write("${rootProject.group}.javaagent.mixin.ClientMixinGlobalPropertyService")
+    }
+
+    file("src/main/resources/META-INF/services/org.spongepowered.asm.service.IMixinService").withWriter {
+        it.write("${rootProject.group}.javaagent.mixin.ClientMixinService")
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            "Premain-Class": "${rootProject.group}.javaagent.AgentMain",
+            "Can-Redefine-Classes": "true",
+            "Can-Retransform-Classes": "true"
+        )
+    }
+
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
+    shouldRunAfter("addServices") {
+        from {
+            configurations.exportLib.collect { it.isDirectory() ? it : zipTree(it) }
+        } {
+            exclude "META-INF/*.SF"
+            exclude "META-INF/*.DSA"
+            exclude "META-INF/*.RSA"
+        }
+    }
+
+}
