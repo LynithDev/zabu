@@ -16,6 +16,10 @@ public abstract class UIScreen extends Component implements ChildrenFeature {
     public UIScreen() {
         super();
         this.logger = new Logger(getClass() + " UIScreen");
+
+        setOnResize((width, height) -> this.children.forEach(Component::update));
+
+        setupHandlers(this);
     }
 
     @Getter
@@ -30,48 +34,7 @@ public abstract class UIScreen extends Component implements ChildrenFeature {
     public void init() {
         setParent(this);
 
-        setOnDestroy(() -> this.children.forEach(child -> child.getOnDestroy().handle()));
-        setOnResize((screen, width, height) -> this.children.forEach(Component::update));
-
-        // TODO: Make this only apply if the component is focused
-        setOnKeyTyped((typedChar, keyCode) -> this.children.forEach(child -> child.getOnKeyTyped().handle(typedChar, keyCode)));
-
-        setOnClick((mouseX, mouseY) -> {
-            this.children.forEach(child -> {
-                if (isIntersecting(child, mouseX, mouseY)) {
-                    child.getOnClick().handle(mouseX, mouseY);
-                }
-            });
-        });
-
-        setOnDrag((mouseX, mouseY) -> {
-            this.children.forEach(child -> {
-                if (isIntersecting(child, mouseX, mouseY)) {
-                    child.getOnDrag().handle(mouseX, mouseY);
-                }
-            });
-        });
-
-        setOnEnter((mouseX, mouseY) -> {
-            this.children.forEach(child -> {
-                if (isIntersecting(child, mouseX, mouseY)) {
-                    child.setMouseInside(true);
-                    child.getOnEnter().handle(mouseX, mouseY);
-                } else if (child.isMouseInside()) {
-                    child.setMouseInside(false);
-                    child.getOnLeave().handle(mouseX, mouseY);
-                }
-            });
-        });
-
         this.children.forEach(Component::init);
-    }
-
-    private boolean isIntersecting(Component component, int pointX, int pointY) {
-        return pointX >= component.getX() &&                          // Left border
-                pointX <= component.getX() + component.getWidth() &&  // Right border
-                pointY >= component.getY() &&                         // Top border
-                pointY <= component.getY() + component.getHeight();   // Bottom
     }
 
     @Override
@@ -85,21 +48,16 @@ public abstract class UIScreen extends Component implements ChildrenFeature {
     }
 
     @Override
-    public void removeChild(Component child) {
-        this.children.remove(child);
-    }
-
-    @Override
-    public void clearChildren() {
-        this.children.clear();
+    public void removeChild(int index) {
+        this.children.remove(index);
     }
 
     @Getter @Setter
-    private ResizeCallback onResize = (screen, width, height) -> {};
+    private ResizeCallback onResize = (width, height) -> {};
 
     @FunctionalInterface
     public interface ResizeCallback {
-        void handle(UIScreen screen, int width, int height);
+        void handle(int width, int height);
     }
 
 }

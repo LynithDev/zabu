@@ -1,5 +1,6 @@
 package dev.lynith.oneeightnine.renderer;
 
+import dev.lynith.Core.ClientStartup;
 import dev.lynith.Core.utils.GuiScreens;
 import dev.lynith.Core.utils.ZabuColor;
 import dev.lynith.Core.versions.renderer.IRenderer;
@@ -7,8 +8,14 @@ import dev.lynith.Core.versions.renderer.Screen;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Renderer implements IRenderer {
 
@@ -87,8 +94,35 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public void setCurrentScreen(GuiScreens screen) {
+    public void setCurrentScreen(GuiScreens screen, Object... args) {
+        this.currentScreen = screen;
 
+        List<Object> arguments = new ArrayList<>(Arrays.asList(args));
+
+        try {
+            for (Object arg : arguments) {
+                if (arg instanceof GuiScreens) {
+                    int index = arguments.indexOf(arg);
+                    arguments.set(index, ((Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(arg)).newInstance());
+                }
+            }
+
+            if (screen == GuiScreens.OPTIONS_SCREEN) {
+                Minecraft.getMinecraft().displayGuiScreen(new GuiOptions((GuiScreen) arguments.get(0), Minecraft.getMinecraft().gameSettings));
+                return;
+            }
+
+            Class<?> clazz = (Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(screen);
+
+            Class<?>[] argTypes = new Class[args.length];
+            for (int i = 0; i < args.length; i++) {
+                argTypes[i] = args[i].getClass();
+            }
+
+            Minecraft.getMinecraft().displayGuiScreen((GuiScreen) clazz.getDeclaredConstructor(argTypes).newInstance(args));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public GuiScreen toGuiScreen(Screen screen) {

@@ -7,6 +7,10 @@ import dev.lynith.Core.versions.renderer.IRenderer;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The base class for everything in the UI. This is where you should start when creating a new component.
+ * @apiNote If making an abstract component, you should override the logger.
+ */
 public abstract class Component {
 
     protected IVersion bridge;
@@ -20,9 +24,6 @@ public abstract class Component {
 
     @Getter @Setter
     protected int x, y, width, height;
-
-    @Getter @Setter
-    protected int paddingLeft, paddingRight, paddingTop, paddingBottom;
 
     /**
      * Whether or not the mouse is inside the component. Used for enter and exit events.
@@ -105,6 +106,20 @@ public abstract class Component {
     @FunctionalInterface
     public interface KeyTypedCallback {
         void handle(char typedChar, int keyCode);
+    }
+
+    public static boolean isIntersecting(Component component, Component target) {
+        return component.getX() >= target.getX() &&                          // Left border
+                component.getX() <= target.getX() + target.getWidth() &&     // Right border
+                component.getY() >= target.getY() &&                         // Top border
+                component.getY() <= target.getY() + target.getHeight();      // Bottom
+    }
+
+    public static boolean isIntersecting(Component component, int pointX, int pointY) {
+        return pointX >= component.getX() &&                          // Left border
+                pointX <= component.getX() + component.getWidth() &&  // Right border
+                pointY >= component.getY() &&                         // Top border
+                pointY <= component.getY() + component.getHeight();   // Bottom
     }
 
 }

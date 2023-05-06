@@ -35,18 +35,13 @@ public class ScreenWrapper extends Screen {
     }
 
     @Override
-    public void update() {
-        this.screen.update();
-    }
-
-    @Override
     public void onClosed() {
         this.screen.getOnDestroy().handle();
     }
 
     @Override
     public void onResize(int width, int height) {
-        this.screen.getOnResize().handle(this.screen, width, height);
+        this.screen.getOnResize().handle(width, height);
     }
 
     @Override

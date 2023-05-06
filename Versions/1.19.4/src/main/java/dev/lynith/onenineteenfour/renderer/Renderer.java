@@ -9,7 +9,11 @@ import dev.lynith.Core.versions.renderer.Screen;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.network.chat.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Renderer implements IRenderer {
 
@@ -80,11 +84,32 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public void setCurrentScreen(GuiScreens screen) {
-        this.currentScreen = null;
+    public void setCurrentScreen(GuiScreens screen, Object... args) {
+        this.currentScreen = screen;
+
+        List<Object> arguments = new ArrayList<>(List.of(args));
+
         try {
-            Object clazz = ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(screen).getClass().newInstance();
-            Minecraft.getInstance().setScreen((net.minecraft.client.gui.screens.Screen) clazz);
+            for (Object arg : arguments) {
+                if (arg instanceof GuiScreens) {
+                    int index = arguments.indexOf(arg);
+                    arguments.set(index, ((Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(arg)).newInstance());
+                }
+            }
+
+            if (screen == GuiScreens.OPTIONS_SCREEN) {
+                Minecraft.getInstance().setScreen(new OptionsScreen((net.minecraft.client.gui.screens.Screen) arguments.get(0), Minecraft.getInstance().options));
+                return;
+            }
+
+            Class<?> clazz = (Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(screen);
+            Class<?>[] argTypes = new Class[args.length];
+
+            for (int i = 0; i < args.length; i++) {
+                argTypes[i] = args[i].getClass();
+            }
+
+            Minecraft.getInstance().setScreen((net.minecraft.client.gui.screens.Screen) clazz.getDeclaredConstructor(argTypes).newInstance(args));
         } catch (Exception e) {
             e.printStackTrace();
         }
