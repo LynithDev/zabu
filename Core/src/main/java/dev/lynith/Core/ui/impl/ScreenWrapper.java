@@ -30,6 +30,7 @@ public class ScreenWrapper extends Screen {
 
     @Override
     public void init() {
+        this.screen.clearChildren();
         this.screen.init();
     }
 

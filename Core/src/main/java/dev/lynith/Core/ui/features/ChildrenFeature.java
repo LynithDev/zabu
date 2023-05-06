@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ChildrenFeature {
 
+    void clearChildren();
     void addChild(Component child);
     void removeChild(Component child);
 

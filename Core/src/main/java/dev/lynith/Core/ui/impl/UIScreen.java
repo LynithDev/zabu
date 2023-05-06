@@ -89,6 +89,11 @@ public abstract class UIScreen extends Component implements ChildrenFeature {
         this.children.remove(child);
     }
 
+    @Override
+    public void clearChildren() {
+        this.children.clear();
+    }
+
     @Getter @Setter
     private ResizeCallback onResize = (screen, width, height) -> {};
 
