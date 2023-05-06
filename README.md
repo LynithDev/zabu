@@ -1,13 +1,24 @@
-# Multi Version Minecraft Client
-Multi version Minecraft client starter. 
-Still got a lot left to do such as run configurations + a lot of code refactoring
+# Zabu (WIP)
+A multi-version Minecraft client. 
 
 ## Roadmap
-- [x] Multi version support (Tested 1.8.9 and 1.19.4)
-- [x] Mixins support
-- [x] Run Configurations
-- [x] Code Refactoring (This includes the god damn gradle files)
-- [ ] Test more versions
+- [x] Multi version support (Currently only 1.8.9 and 1.19.4)
+- [x] Mixins
+- [ ] UI Framework
+- [ ] Social features
+    - [ ] Friends
+    - [ ] Parties
+    - [ ] Chat / DMs / Group chats
+    - [ ] World hosting and joining
+- [ ] Editable HUD
+- [ ] Configurable keybinds
+- [ ] Multiple build targets
+    - [x] Vanilla (Obfuscated environment)
+    - [ ] [Forge](https://files.minecraftforge.net/) (SRG Mappings)
+    - [ ] [Fabric](https://fabricmc.net/) (Yarn Mappings)
+    - [ ] [Lunar Client](https://lunarclient.com/) (Custom mappings)
+    - [ ] [Badlion Client](https://client.badlion.net/) (Custom mappings)
+    - [ ] Others?
 
 ## How to add support for a new version
 1. Copy a pre-existing version folder
@@ -26,7 +37,7 @@ Still got a lot left to do such as run configurations + a lot of code refactorin
         │   └── <your package>/
         │       ├── <the version name in word form (e.g oneeightnine)>/
         │       │   ├── mixins/
-        │       │   │   └── <Your mixins go here>
+        │       │   │   └── <Mixins go here>
         │       │   └── <any interfaces in order to share the correct methods to the Core>
         │       └── start/
         │           └── VersionMain.java
@@ -47,3 +58,6 @@ Still got a lot left to do such as run configurations + a lot of code refactorin
 1. Create a new interface in the version package
 2. Add the methods you want to share with the core
 3. Make sure the interface is implemented in the versions that support it
+
+## License
+This project is licensed under the [GPL v3](./LICENSE) license.
