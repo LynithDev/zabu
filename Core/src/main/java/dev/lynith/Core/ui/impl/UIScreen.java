@@ -1,5 +1,6 @@
 package dev.lynith.Core.ui.impl;
 
+import dev.lynith.Core.Logger;
 import dev.lynith.Core.ui.Component;
 import dev.lynith.Core.ui.features.ChildrenFeature;
 import dev.lynith.Core.versions.IVersion;
@@ -11,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class UIScreen extends Component implements ChildrenFeature {
+
+    public UIScreen() {
+        super();
+        this.logger = new Logger(getClass() + " UIScreen");
+    }
 
     @Getter
     private List<Component> children = new ArrayList<>();

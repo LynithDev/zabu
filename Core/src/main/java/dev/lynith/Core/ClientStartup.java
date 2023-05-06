@@ -4,7 +4,7 @@ import dev.lynith.Core.events.EventBus;
 import dev.lynith.Core.events.Subscribe;
 import dev.lynith.Core.events.impl.GuiScreenChangedEvent;
 import dev.lynith.Core.ui.impl.ScreenWrapper;
-import dev.lynith.Core.ui.impl.ZabuMainMenu;
+import dev.lynith.Core.ui.impl.screens.ZabuMainMenu;
 import dev.lynith.Core.utils.GuiScreens;
 import dev.lynith.Core.versions.IVersion;
 import lombok.Getter;

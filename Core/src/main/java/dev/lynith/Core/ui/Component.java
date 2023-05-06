@@ -1,6 +1,7 @@
 package dev.lynith.Core.ui;
 
 import dev.lynith.Core.ClientStartup;
+import dev.lynith.Core.Logger;
 import dev.lynith.Core.versions.IVersion;
 import dev.lynith.Core.versions.renderer.IRenderer;
 import lombok.Getter;
@@ -8,35 +9,88 @@ import lombok.Setter;
 
 public abstract class Component {
 
+    protected IVersion bridge;
+
+    protected Logger logger;
+
+    public Component() {
+        this.bridge = ClientStartup.getInstance().getBridge();
+        this.logger = new Logger(getClass().getSimpleName() + " Component");
+    }
+
     @Getter @Setter
     protected int x, y, width, height;
 
+    @Getter @Setter
+    protected int paddingLeft, paddingRight, paddingTop, paddingBottom;
+
+    /**
+     * Whether or not the mouse is inside the component. Used for enter and exit events.
+     * @apiNote Can be used inside the render method if needed though strongly discouraged.
+     */
     @Getter @Setter
     protected boolean mouseInside = false;
 
     @Getter @Setter
     protected Component parent;
 
-    protected IVersion bridge;
-
-    public Component() {
-        this.bridge = ClientStartup.getInstance().getBridge();
-    }
-
+    /**
+     * Component rendering code. This is where you should render your component.
+     */
     public abstract void render(IRenderer renderer);
 
+    /**
+     * Called when the component is added to a screen NOT when it is created.
+     */
     public abstract void init();
 
+    /**
+     * Called when the component needs to be updated, such as its size or position changing.
+     */
     public void update() {}
 
+    /**
+     * Called when the component is removed / destroyed. This is where you should clean up any resources.
+     */
     @Setter @Getter
     private ComponentCallback onDestroy = () -> {};
 
+    /**
+     * Called when the mouse is clicked inside the component.
+     */
     @Getter @Setter
-    private MouseCallback onClick, onEnter, onLeave, onDrag = (mouseX, mouseY) -> {};
+    private MouseCallback onClick = (mouseX, mouseY) -> {};
 
+    /**
+     * Called when the mouse intersects the component. In other words, this is the hover event.
+     */
+    @Getter @Setter
+    private MouseCallback onEnter = (mouseX, mouseY) -> {};
+
+    /**
+     * Called when the mouse leaves the component. Also known as the mouse exit event.
+     */
+    @Getter @Setter
+    private MouseCallback onLeave = (mouseX, mouseY) -> {};
+
+    /**
+     * Called when the mouse is dragged (click and hold) inside the component.
+     * This is not the same as the click event.
+     * @apiNote This is not tested properly and may not work as expected.
+     */
+    @Getter @Setter
+    private MouseCallback onDrag = (mouseX, mouseY) -> {};
+
+    /**
+     * TODO: Only activate when the component is focused.
+     * <br><br>
+     * Called when a key is typed while the component is focused.
+     * @apiNote Not implemented properly yet. Gets called for every key press and not just when the component is focused.
+     */
     @Getter @Setter
     private KeyTypedCallback onKeyTyped = (typedChar, keyCode) -> {};
+
+    // Interface callbacks
 
     @FunctionalInterface
     public interface ComponentCallback {

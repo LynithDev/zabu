@@ -62,12 +62,12 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public int getDisplayWidth() {
+    public int getWindowWidth() {
         return Minecraft.getMinecraft().displayWidth;
     }
 
     @Override
-    public int getDisplayHeight() {
+    public int getWindowHeight() {
         return Minecraft.getMinecraft().displayHeight;
     }
 

@@ -5,6 +5,10 @@ import dev.lynith.Core.utils.GuiScreens;
 import dev.lynith.Core.versions.renderer.Screen;
 import lombok.Getter;
 
+/**
+ * Wrapper for {@link UIScreen} to be used as a {@link Screen}
+ * This should be used for screens using the UI system
+ */
 public class ScreenWrapper extends Screen {
 
     @Getter
