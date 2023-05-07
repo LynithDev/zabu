@@ -15,7 +15,7 @@ public abstract class UIScreen extends Component implements ChildrenFeature {
 
     public UIScreen() {
         super();
-        this.logger = new Logger(getClass() + " UIScreen");
+        this.logger = new Logger(getClass().getSimpleName() + " UIScreen");
 
         setOnResize((width, height) -> this.children.forEach(Component::update));
 

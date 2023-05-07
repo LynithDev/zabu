@@ -31,6 +31,22 @@ public interface IRenderer {
      * @param color The color of the rectangle
      */
     void rect(int x, int y, int width, int height, ZabuColor color);
+
+    /**
+     * Draws a rectangle with an outline and no fill on the screen
+     * @param x The x position of the rectangle
+     * @param y The y position of the rectangle
+     * @param width The width of the rectangle
+     * @param height The height of the rectangle
+     * @param thickness The thickness of the outline
+     * @param color The color of the rectangle
+     */
+    default void rectOutline(int x, int y, int width, int height, int thickness, ZabuColor color) {
+        rect(x, y, width, thickness, color); // Top
+        rect(x, y, thickness, height, color); // Left
+        rect(x + width - thickness, y, thickness, height, color); // Right
+        rect(x, y + height - thickness, width, thickness, color); // Bottom
+    }
     
     /**
      * Draws a circle on the screen

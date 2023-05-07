@@ -57,4 +57,8 @@ public class ZabuColor {
         return new ZabuColor(color.red, color.green, color.blue, color.alpha);
     }
 
+    @Override
+    public String toString() {
+        return "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
+    }
 }

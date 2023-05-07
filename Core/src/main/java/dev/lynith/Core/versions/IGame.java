@@ -12,4 +12,12 @@ public interface IGame {
 
     Map<GuiScreens, Object> getGuiScreens();
 
+    default void shutdown(int exitCode) {
+        System.exit(exitCode);
+    }
+
+    default void shutdown() {
+        shutdown(0);
+    }
+
 }

@@ -32,6 +32,7 @@ public class ScreenWrapper extends Screen {
     public void init() {
         this.screen.clearChildren();
         this.screen.init();
+        this.onResize(ClientStartup.getInstance().getBridge().getRenderer().getWindowWidth(), ClientStartup.getInstance().getBridge().getRenderer().getWindowHeight());
     }
 
     @Override

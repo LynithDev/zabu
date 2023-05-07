@@ -4,8 +4,8 @@ import lombok.Getter;
 
 public enum GuiScreens {
     UNKNOWN,
-    WORLD_SELECT,
-    SERVERS_SELECT,
+    SINGLEPLAYER_SELECT,
+    MULTIPLAYER_SELECT,
     REALMS_SCREEN,
     OPTIONS_SCREEN,
     LANGUAGE_SELECT,

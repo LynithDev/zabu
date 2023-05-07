@@ -7,10 +7,7 @@ import dev.lynith.Core.versions.renderer.IRenderer;
 import dev.lynith.Core.versions.renderer.Screen;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiOptions;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.*;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
@@ -80,7 +77,7 @@ public class Renderer implements IRenderer {
 
     @Override
     public int getScaleFactor() {
-        return Minecraft.getMinecraft().gameSettings.guiScale;
+        return new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
     }
 
     @Getter
@@ -94,32 +91,49 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public void setCurrentScreen(GuiScreens screen, Object... args) {
+    public void setCurrentScreen(GuiScreens screen, Object... _args) {
         this.currentScreen = screen;
 
-        List<Object> arguments = new ArrayList<>(Arrays.asList(args));
-
         try {
+            List<Object> arguments = new ArrayList<>(Arrays.asList(_args));
+
             for (Object arg : arguments) {
+                // Set any GuiScreens to their respective classes
                 if (arg instanceof GuiScreens) {
                     int index = arguments.indexOf(arg);
-                    arguments.set(index, ((Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(arg)).newInstance());
+
+                    // Create a new instance of the class and set it in the list
+                    Object clazz = ((Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(arg)).newInstance();
+                    arguments.set(index, clazz);
                 }
             }
 
+            // Special condition for the options screen because it requires the game settings
             if (screen == GuiScreens.OPTIONS_SCREEN) {
                 Minecraft.getMinecraft().displayGuiScreen(new GuiOptions((GuiScreen) arguments.get(0), Minecraft.getMinecraft().gameSettings));
                 return;
             }
 
-            Class<?> clazz = (Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(screen);
+            // Get the argument types
+            Class<?>[] argTypes = new Class[arguments.size()];
+            for (int i = 0; i < arguments.size(); i++) {
+                Class<?> clazz = arguments.get(i).getClass();
 
-            Class<?>[] argTypes = new Class[args.length];
-            for (int i = 0; i < args.length; i++) {
-                argTypes[i] = args[i].getClass();
+                // If the class is a subclass of GuiScreen, set it to GuiScreen
+                if (clazz.getSuperclass() != null && clazz.getSuperclass() == GuiScreen.class) {
+                    clazz = clazz.getSuperclass();
+                }
+
+                argTypes[i] = clazz;
             }
 
-            Minecraft.getMinecraft().displayGuiScreen((GuiScreen) clazz.getDeclaredConstructor(argTypes).newInstance(args));
+            // Get the GuiScreen class to display
+            Class<?> clazz = (Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(screen);
+
+            // Here is the instance of the GuiScreen, with the passed arguments
+            GuiScreen instance = (GuiScreen) clazz.getConstructor(argTypes).newInstance(arguments.toArray());
+
+            Minecraft.getMinecraft().displayGuiScreen(instance);
         } catch (Exception e) {
             e.printStackTrace();
         }

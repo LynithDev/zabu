@@ -17,13 +17,15 @@ public class Button extends Component implements TextFeature {
         this.text = text;
     }
 
+    private ZabuColor color = ZabuColor.from(50);
+
     public Button() {
         this("Placeholder");
     }
 
     @Override
     public void render(IRenderer renderer) {
-        renderer.rect(this.x, this.y, this.width, this.height, ZabuColor.from(50));
+        renderer.rect(this.x, this.y, this.width, this.height, color);
         renderer.text(this.text,
                 this.x + (this.width / 2 - renderer.getTextWidth(this.text) / 2),
                 this.y + (this.height / 2 - renderer.getTextHeight() / 2),
@@ -34,6 +36,14 @@ public class Button extends Component implements TextFeature {
     public void init() {
         this.width = bridge.getRenderer().getTextWidth(this.text) + 10;
         this.height = bridge.getRenderer().getTextHeight() + 10;
+
+        setOnEnter((mouseX, mouseY) -> {
+            this.color = ZabuColor.from(70);
+        });
+
+        setOnLeave((mouseX, mouseY) -> {
+            this.color = ZabuColor.from(50);
+        });
     }
 
     @Override

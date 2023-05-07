@@ -25,6 +25,23 @@ public abstract class Component {
     @Getter @Setter
     protected int x, y, width, height;
 
+    @Getter
+    protected boolean fillWidth, fillHeight;
+
+    public void setFillWidth(boolean fillWidth) {
+        this.fillWidth = fillWidth;
+        if (fillWidth && parent != null) {
+            this.width = parent.getWidth();
+        }
+    }
+
+    public void setFillHeight(boolean fillHeight) {
+        this.fillHeight = fillHeight;
+        if (fillHeight && parent != null) {
+            this.height = parent.getHeight();
+        }
+    }
+
     /**
      * Whether or not the mouse is inside the component. Used for enter and exit events.
      * @apiNote Can be used inside the render method if needed though strongly discouraged.
