@@ -46,12 +46,13 @@ public class ZabuMainMenu extends UIScreen {
         horizontalPanel.setEqualSizeChildren(true);
         horizontalPanel.outline = ZabuColor.from(0, 255, 0);
         horizontalPanel.setFillWidth(true);
+        horizontalPanel.setSpacing(5);
 
-        Panel panel = Panel.of(singlePlayerButton, multiplayerButton);
+        Panel panel = Panel.of(singlePlayerButton, multiplayerButton, horizontalPanel);
         panel.setEqualSizeChildren(true);
         panel.outline = ZabuColor.from(255, 0, 0);
 
-        panel.setSpacing(10);
+        panel.setSpacing(15);
         panel.setWidth(200);
         panel.setHeight(150);
 
