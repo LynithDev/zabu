@@ -72,11 +72,6 @@ public class Panel extends Component implements ChildrenFeature {
         update();
     }
 
-    private int getChildSize(int a, boolean vertical) {
-        int divider = vertical ? getChildren().size() + (spacing > 0 ? 1 : 0) : getChildren().size() + 1;
-        return (a - (spacing * 2)) / divider;
-    }
-
     @Override
     public void update() {
         int childX = getX() + spacing;
@@ -86,11 +81,8 @@ public class Panel extends Component implements ChildrenFeature {
         if (!fillHeight) setHeight(originalHeight);
 
         // TODO: Fix child width size calculation
-        int childWidth = (getWidth() - (spacing * 2)) / (getChildren().size() + (direction == Direction.ROW && spacing > 0 ? 1 : 0));
+        int childWidth = (getWidth() - (spacing * (2 + 1))) / (getChildren().size());
         int childHeight = (getHeight() - (spacing * 2)) / (getChildren().size() + (direction == Direction.COLUMN && spacing > 0 ? 1 : 0));
-
-//        int childWidth = getChildSize(getWidth(), false);
-//        int childHeight = getChildSize(getHeight(), true);
 
         for (Component child : getChildren()) {
             child.init();
