@@ -22,8 +22,24 @@ public abstract class Component {
         this.logger = new Logger(getClass().getSimpleName() + " Component");
     }
 
-    @Getter @Setter
+    @Getter
     protected int x, y, width, height;
+
+    public void setHeight(int height) {
+        this.height = Math.abs(height);
+    }
+
+    public void setWidth(int width) {
+        this.width = Math.abs(width);
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 
     @Getter
     protected boolean fillWidth, fillHeight;

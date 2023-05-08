@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,9 +32,8 @@ public class Panel extends Component implements ChildrenFeature {
     @Getter @Setter
     private boolean equalSizeChildren;
 
-    private int originalWidth, originalHeight = 0;
-
-    public ZabuColor outline;
+    @Setter
+    private int initialWidth, initialHeight = 0;
 
     public Panel(Direction direction) {
         this.direction = direction;
@@ -58,14 +56,10 @@ public class Panel extends Component implements ChildrenFeature {
     @Override
     public void render(IRenderer renderer) {
         getChildren().forEach((child) -> child.render(renderer));
-        if (outline != null) renderer.rectOutline(getX(), getY(), getWidth(), getHeight(), 1, outline);
     }
 
     @Override
     public void init() {
-        if (this.originalWidth == 0) this.originalWidth = getWidth();
-        if (this.originalHeight == 0) this.originalHeight = getHeight();
-
         this.children.forEach(Component::init);
         setupHandlers(this);
 
@@ -77,25 +71,28 @@ public class Panel extends Component implements ChildrenFeature {
         int childX = getX() + spacing;
         int childY = getY() + spacing;
 
-        if (!fillWidth) setWidth(originalWidth);
-        if (!fillHeight) setHeight(originalHeight);
+        if (!fillWidth && initialWidth > 0) setWidth(initialWidth);
+        if (!fillHeight && initialHeight > 0) setHeight(initialHeight);
 
-        // TODO: Fix child width size calculation
-        int childWidth = (getWidth() - (spacing * (2 + 1))) / (getChildren().size());
-        int childHeight = (getHeight() - (spacing * 2)) / (getChildren().size() + (direction == Direction.COLUMN && spacing > 0 ? 1 : 0));
+        int childHeight = (getHeight() - (spacing * (getChildren().size() + 1))) / getChildren().size();
+        int childWidth = (getWidth() - (spacing * (getChildren().size() + 1))) / getChildren().size();
 
         for (Component child : getChildren()) {
-            child.init();
             if (equalSizeChildren) {
-                if (getWidth() > 0) {
-                    child.setFillWidth(true);
-                    child.setWidth(direction == Direction.COLUMN ? getWidth() - (spacing * 2) : childWidth);
+                if (getWidth() <= 0 || childWidth <= 0) {
+                    setWidth(child.getWidth() + spacing * 2);
+                    childWidth = (getWidth() - (spacing * (getChildren().size() + 1))) / getChildren().size();
                 }
+                child.setFillWidth(true);
+                child.setWidth(direction == Direction.COLUMN ? getWidth() - (spacing * 2) : childWidth);
 
-                if (getHeight() > 0 ) {
-                    child.setFillHeight(true);
-                    child.setHeight(direction == Direction.COLUMN ? childHeight : getHeight() - (spacing * 2));
+                if (getHeight() <= 0 || childHeight <= 0) {
+                    setHeight(child.getHeight() + spacing * 2);
+                    childHeight = (getHeight() - (spacing * (getChildren().size() + 1))) / getChildren().size();
                 }
+                child.setFillHeight(true);
+                child.setHeight(direction == Direction.COLUMN ? childHeight : getHeight() - (spacing * 2));
+
             } else {
                 if (direction == Direction.COLUMN) {
                     child.setFillWidth(true);
@@ -116,6 +113,7 @@ public class Panel extends Component implements ChildrenFeature {
                 childX += child.getWidth() + spacing;
                 if (!fillWidth) setWidth(childX - getX());
             }
+            child.update();
         }
 
     }

@@ -42,19 +42,24 @@ public class ZabuMainMenu extends UIScreen {
             bridge.getGame().shutdown();
         }));
 
-        Panel horizontalPanel = Panel.of(Panel.Direction.ROW, optionsButton, exitButton);
+        Button exitButton1 = new Button("Exit");
+        exitButton1.setOnClick(((mouseX, mouseY) -> {
+            bridge.getGame().shutdown();
+        }));
+
+        Panel horizontalPanel = Panel.of(Panel.Direction.ROW, optionsButton, exitButton, exitButton1);
         horizontalPanel.setEqualSizeChildren(true);
-        horizontalPanel.outline = ZabuColor.from(0, 255, 0);
-        horizontalPanel.setFillWidth(true);
-        horizontalPanel.setSpacing(5);
 
         Panel panel = Panel.of(singlePlayerButton, multiplayerButton, horizontalPanel);
         panel.setEqualSizeChildren(true);
-        panel.outline = ZabuColor.from(255, 0, 0);
 
-        panel.setSpacing(15);
-        panel.setWidth(200);
-        panel.setHeight(150);
+        panel.setSpacing(10);
+
+        setOnResize((w, h) -> {
+            panel.setWidth(w - 50);
+            panel.setHeight(h - 50);
+            panel.update();
+        });
 
         addChild(panel);
         super.init();

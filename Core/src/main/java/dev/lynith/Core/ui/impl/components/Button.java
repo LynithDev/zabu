@@ -28,7 +28,7 @@ public class Button extends Component implements TextFeature {
         renderer.rect(this.x, this.y, this.width, this.height, color);
         renderer.text(this.text,
                 this.x + (this.width / 2 - renderer.getTextWidth(this.text) / 2),
-                this.y + (this.height / 2 - renderer.getTextHeight() / 2),
+                this.y + (this.height / 2 - renderer.getTextHeight() / 2) + 1,
                 ZabuColor.from(255));
     }
 

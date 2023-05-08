@@ -32,7 +32,10 @@ public class ScreenWrapper extends Screen {
     public void init() {
         this.screen.clearChildren();
         this.screen.init();
-        this.onResize(ClientStartup.getInstance().getBridge().getRenderer().getWindowWidth(), ClientStartup.getInstance().getBridge().getRenderer().getWindowHeight());
+
+        int width = ClientStartup.getInstance().getBridge().getRenderer().getWindowWidth() / ClientStartup.getInstance().getBridge().getRenderer().getScaleFactor();
+        int height = ClientStartup.getInstance().getBridge().getRenderer().getWindowHeight() / ClientStartup.getInstance().getBridge().getRenderer().getScaleFactor();
+        this.onResize(width, height);
     }
 
     @Override
