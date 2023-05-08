@@ -4,7 +4,7 @@ import dev.lynith.core.ClientStartup;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;
-import dev.lynith.core.versions.renderer.Screen;
+import dev.lynith.core.versions.renderer.MCScreen;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -84,7 +84,7 @@ public class Renderer implements IRenderer {
     private GuiScreens currentScreen;
 
     @Override
-    public void setCurrentScreen(Screen screen) {
+    public void setCurrentScreen(MCScreen screen) {
         this.currentScreen = screen.getType();
 
         Minecraft.getMinecraft().displayGuiScreen(toGuiScreen(screen));
@@ -139,7 +139,7 @@ public class Renderer implements IRenderer {
         }
     }
 
-    public GuiScreen toGuiScreen(Screen screen) {
+    public GuiScreen toGuiScreen(MCScreen screen) {
         return new GuiScreen() {
             @Override
             public void drawScreen(int i, int j, float f) {

@@ -5,11 +5,12 @@ import dev.lynith.core.ClientStartup;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;
-import dev.lynith.core.versions.renderer.Screen;
+import dev.lynith.core.versions.renderer.MCScreen;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.OptionsScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class Renderer implements IRenderer {
     private GuiScreens currentScreen;
 
     @Override
-    public void setCurrentScreen(Screen screen) {
+    public void setCurrentScreen(MCScreen screen) {
         this.currentScreen = screen.getType();
 
         Minecraft.getInstance().setScreen(toGuiScreen(screen));
@@ -105,7 +106,7 @@ public class Renderer implements IRenderer {
 
             // Special condition for the options screen because it requires the game settings
             if (screen == GuiScreens.OPTIONS_SCREEN) {
-                Minecraft.getInstance().setScreen(new OptionsScreen((net.minecraft.client.gui.screens.Screen) arguments.get(0), Minecraft.getInstance().options));
+                Minecraft.getInstance().setScreen(new OptionsScreen((Screen) arguments.get(0), Minecraft.getInstance().options));
                 return;
             }
 
@@ -115,7 +116,7 @@ public class Renderer implements IRenderer {
                 Class<?> clazz = arguments.get(i).getClass();
 
                 // If the class is a subclass of GuiScreen, set it to GuiScreen
-                if (clazz.getSuperclass() != null && clazz.getSuperclass() == net.minecraft.client.gui.screens.Screen.class) {
+                if (clazz.getSuperclass() != null && clazz.getSuperclass() == Screen.class) {
                     clazz = clazz.getSuperclass();
                 }
 
@@ -126,7 +127,7 @@ public class Renderer implements IRenderer {
             Class<?> clazz = (Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(screen);
 
             // Here is the instance of the GuiScreen, with the passed arguments
-            net.minecraft.client.gui.screens.Screen instance = (net.minecraft.client.gui.screens.Screen) clazz.getConstructor(argTypes).newInstance(arguments.toArray());
+            Screen instance = (Screen) clazz.getConstructor(argTypes).newInstance(arguments.toArray());
 
             Minecraft.getInstance().setScreen(instance);
         } catch (Exception e) {
@@ -134,8 +135,8 @@ public class Renderer implements IRenderer {
         }
     }
 
-    public net.minecraft.client.gui.screens.Screen toGuiScreen(Screen screen) {
-        return new net.minecraft.client.gui.screens.Screen(Component.empty()) {
+    public Screen toGuiScreen(MCScreen screen) {
+        return new Screen(Component.empty()) {
             @Override
             public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
                 matrixStack = matrices;

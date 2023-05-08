@@ -14,7 +14,7 @@ public interface IRenderer {
      * Sets the current screen to be rendered
      * @param screen The screen to render
      */
-    void setCurrentScreen(Screen screen);
+    void setCurrentScreen(MCScreen screen);
     
     /**
      * Sets the current Minecraft screen to be rendered. This is a cross-version compatibility method.

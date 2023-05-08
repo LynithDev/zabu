@@ -3,22 +3,22 @@ package dev.lynith.core.ui.impl;
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.VersionUtils;
-import dev.lynith.core.versions.renderer.Screen;
+import dev.lynith.core.versions.renderer.MCScreen;
 import lombok.Getter;
 
 /**
- * Wrapper for {@link UIScreen} to be used as a {@link Screen}
+ * Wrapper for {@link Screen} to be used as a {@link MCScreen}
  * This should be used for screens using the UI system
  */
-public class ScreenWrapper extends Screen {
+public class ScreenWrapper extends MCScreen {
 
     @Getter
     private final GuiScreens type;
 
     @Getter
-    private final UIScreen screen;
+    private final Screen screen;
 
-    public ScreenWrapper(GuiScreens type, UIScreen screen) {
+    public ScreenWrapper(GuiScreens type, Screen screen) {
         this.type = type;
         this.screen = screen;
     }

@@ -29,7 +29,7 @@ public interface ChildrenFeature {
 
     /**
      * Handlers should be setup in the init method of the component.
-     * @param self
+     * @param self The component to setup handlers for
      */
     default void setupHandlers(Component self) {
         self.setOnDestroy(() -> getChildren().forEach(child -> child.getOnDestroy().handle()));
@@ -58,10 +58,17 @@ public interface ChildrenFeature {
                 if (isIntersecting(child, mouseX, mouseY)) {
                     child.setMouseInside(true);
                     child.getOnEnter().handle(mouseX, mouseY);
-                } else if (child.isMouseInside()) {
+                } else {
                     child.setMouseInside(false);
                     child.getOnLeave().handle(mouseX, mouseY);
                 }
+            });
+        });
+
+        self.setOnLeave((mouseX, mouseY) -> {
+            getChildren().forEach(child -> {
+                child.setMouseInside(false);
+                child.getOnLeave().handle(mouseX, mouseY);
             });
         });
     }

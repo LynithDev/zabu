@@ -10,9 +10,9 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UIScreen extends Component implements ChildrenFeature {
+public abstract class Screen extends Component implements ChildrenFeature {
 
-    public UIScreen() {
+    public Screen() {
         super();
         this.logger = new Logger(getClass().getSimpleName() + " UIScreen");
 

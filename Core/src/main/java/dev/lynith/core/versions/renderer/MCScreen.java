@@ -3,7 +3,7 @@ package dev.lynith.core.versions.renderer;
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.utils.GuiScreens;
 
-public abstract class Screen {
+public abstract class MCScreen {
 
     protected final IRenderer renderer = ClientStartup.getInstance().getBridge().getRenderer();
 

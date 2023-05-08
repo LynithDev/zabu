@@ -1,14 +1,14 @@
 package dev.lynith.core.ui.impl.screens;
 
 import dev.lynith.core.ui.impl.Panel;
-import dev.lynith.core.ui.impl.UIScreen;
+import dev.lynith.core.ui.impl.Screen;
 import dev.lynith.core.ui.impl.components.Button;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.MathHelper;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;
 
-public class ZabuMainMenu extends UIScreen {
+public class ZabuMainMenu extends Screen {
 
     @Override
     public void render(IRenderer renderer) {
