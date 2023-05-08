@@ -1,8 +1,8 @@
 package dev.lynith.onenineteenfour;
 
-import dev.lynith.Core.versions.IGame;
-import dev.lynith.Core.versions.IVersion;
-import dev.lynith.Core.versions.renderer.IRenderer;
+import dev.lynith.core.versions.IGame;
+import dev.lynith.core.versions.IVersion;
+import dev.lynith.core.versions.renderer.IRenderer;
 import dev.lynith.onenineteenfour.renderer.Renderer;
 import lombok.Getter;
 

@@ -1,10 +1,10 @@
 package dev.lynith.oneeightnine.renderer;
 
-import dev.lynith.Core.ClientStartup;
-import dev.lynith.Core.utils.GuiScreens;
-import dev.lynith.Core.utils.ZabuColor;
-import dev.lynith.Core.versions.renderer.IRenderer;
-import dev.lynith.Core.versions.renderer.Screen;
+import dev.lynith.core.ClientStartup;
+import dev.lynith.core.utils.GuiScreens;
+import dev.lynith.core.utils.ZabuColor;
+import dev.lynith.core.versions.renderer.IRenderer;
+import dev.lynith.core.versions.renderer.Screen;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;

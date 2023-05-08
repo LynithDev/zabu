@@ -1,8 +1,7 @@
 package dev.lynith.oneeightnine;
 
-import dev.lynith.Core.utils.GuiScreens;
-import dev.lynith.Core.utils.Tuple;
-import dev.lynith.Core.versions.IGame;
+import dev.lynith.core.utils.GuiScreens;
+import dev.lynith.core.versions.IGame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.GuiInventory;

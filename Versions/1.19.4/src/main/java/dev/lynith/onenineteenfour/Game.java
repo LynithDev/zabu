@@ -1,18 +1,14 @@
 package dev.lynith.onenineteenfour;
 
-import dev.lynith.Core.utils.GuiScreens;
-import dev.lynith.Core.utils.Tuple;
-import dev.lynith.Core.versions.IGame;
+import dev.lynith.core.utils.GuiScreens;
+import dev.lynith.core.versions.IGame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
-import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
-import net.minecraft.client.multiplayer.ServerList;
 
-import java.util.List;
 import java.util.Map;
 
 public class Game implements IGame {

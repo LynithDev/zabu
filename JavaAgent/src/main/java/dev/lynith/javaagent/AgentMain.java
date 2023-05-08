@@ -1,23 +1,16 @@
 package dev.lynith.javaagent;
 
-import dev.lynith.Core.ClientStartup;
-import dev.lynith.Core.Logger;
-import dev.lynith.Core.versions.IVersion;
-import dev.lynith.Core.versions.IVersionMain;
+import dev.lynith.core.ClientStartup;
+import dev.lynith.core.Logger;
+import dev.lynith.core.versions.IVersion;
+import dev.lynith.core.versions.IVersionMain;
 import dev.lynith.javaagent.mixin.ClientMixinTransformer;
-import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Arrays;
 
 public class AgentMain {
     public static void premain(String agentArgs, Instrumentation inst) {

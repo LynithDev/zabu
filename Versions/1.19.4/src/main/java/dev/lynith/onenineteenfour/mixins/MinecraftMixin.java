@@ -1,10 +1,10 @@
 package dev.lynith.onenineteenfour.mixins;
 
-import dev.lynith.Core.events.EventBus;
-import dev.lynith.Core.events.impl.GuiScreenChangedEvent;
-import dev.lynith.Core.events.impl.MinecraftInitEvent;
-import dev.lynith.Core.events.impl.MinecraftShutdownEvent;
-import dev.lynith.Core.utils.GuiScreens;
+import dev.lynith.core.events.EventBus;
+import dev.lynith.core.events.impl.GuiScreenChangedEvent;
+import dev.lynith.core.events.impl.MinecraftInitEvent;
+import dev.lynith.core.events.impl.MinecraftShutdownEvent;
+import dev.lynith.core.utils.GuiScreens;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
