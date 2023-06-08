@@ -1,5 +1,6 @@
 package dev.lynith.core.ui.hud;
 
+import dev.lynith.core.ui.Component;
 import dev.lynith.core.ui.impl.Screen;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;
@@ -13,7 +14,7 @@ public class HUD extends Screen {
 
     @Override
     public void init() {
-        addChild(new DraggableComponent() {
+        addChild(new Component() {
             @Override
             public void render(IRenderer renderer) {
                 renderer.rect(getX(), getY(), getWidth(), getHeight(), ZabuColor.from(0));
@@ -21,6 +22,7 @@ public class HUD extends Screen {
 
             @Override
             public void init() {
+                setDraggable(true);
                 setWidth(100);
                 setHeight(100);
                 setX(100);

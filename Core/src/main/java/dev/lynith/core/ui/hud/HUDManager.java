@@ -3,6 +3,7 @@ package dev.lynith.core.ui.hud;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.Subscribe;
 import dev.lynith.core.events.impl.KeyPressEvent;
+import dev.lynith.core.ui.Component;
 import dev.lynith.core.utils.KeyboardHelper;
 import lombok.Getter;
 
@@ -18,17 +19,17 @@ public class HUDManager {
     }
 
     @Getter
-    private List<DraggableComponent> components = new ArrayList<>();
+    private List<Component> components = new ArrayList<>();
 
     public HUDManager() {
         EventBus.getEventBus().register(this);
     }
 
-    public void addComponent(DraggableComponent component) {
+    public void addComponent(Component component) {
         components.add(component);
     }
 
-    public void removeComponent(DraggableComponent component) {
+    public void removeComponent(Component component) {
         components.remove(component);
     }
 
