@@ -35,11 +35,11 @@ public class Button extends Component implements TextFeature {
         this.width = bridge.getRenderer().getTextWidth(this.text) + 10;
         this.height = bridge.getRenderer().getTextHeight() + 10;
 
-        setOnEnter((mouseX, mouseY) -> {
+        addCallback(EnterCallback.class, (mouseX, mouseY) -> {
             this.color = ZabuColor.from(70);
         });
 
-        setOnLeave((mouseX, mouseY) -> {
+        addCallback(LeaveCallback.class, (mouseX, mouseY) -> {
             this.color = ZabuColor.from(50);
         });
     }

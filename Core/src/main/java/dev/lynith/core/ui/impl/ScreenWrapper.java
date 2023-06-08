@@ -1,6 +1,7 @@
 package dev.lynith.core.ui.impl;
 
 import dev.lynith.core.ClientStartup;
+import dev.lynith.core.ui.Component;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.VersionUtils;
 import dev.lynith.core.versions.renderer.MCScreen;
@@ -30,8 +31,8 @@ public class ScreenWrapper extends MCScreen {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         this.screen.render(ClientStartup.getInstance().getBridge().getRenderer());
-        this.screen.getOnEnter().handle(mouseX, mouseY);
-        if (this.dragging) this.screen.getOnDrag().handle(mouseX, mouseY);
+        this.screen.callCallbacks(Component.EnterCallback.class, mouseX, mouseY);
+        if (this.dragging) this.screen.callCallbacks(Component.DragCallback.class, mouseX, mouseY);
     }
 
     @Override
@@ -52,17 +53,17 @@ public class ScreenWrapper extends MCScreen {
 
     @Override
     public void onClosed() {
-        this.screen.getOnDestroy().handle();
+        this.screen.callCallbacks(Component.DestroyCallback.class);
     }
 
     @Override
     public void onResize(int width, int height) {
-        this.screen.getOnResize().handle(width, height);
+        this.screen.callCallbacks(Screen.ResizeCallback.class, width, height);
     }
 
     @Override
     public void keyTyped(char typedChar, int keyCode) {
-        this.screen.getOnKeyTyped().handle(typedChar, keyCode);
+        this.screen.callCallbacks(Component.KeyTypedCallback.class, typedChar, keyCode);
     }
 
     private boolean clicked = false;
@@ -72,22 +73,17 @@ public class ScreenWrapper extends MCScreen {
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         this.clicked = true;
         this.dragging = true;
-        this.screen.getOnPress().handle(mouseX, mouseY);
+        this.screen.callCallbacks(Component.PressCallback.class, mouseX, mouseY);
     }
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
         if (this.clicked) {
             this.clicked = false;
-            this.screen.getOnClick().handle(mouseX, mouseY);
+            this.screen.callCallbacks(Component.ClickCallback.class, mouseX, mouseY);
         }
         this.dragging = false;
-        this.screen.getOnRelease().handle(mouseX, mouseY);
+        this.screen.callCallbacks(Component.ReleaseCallback.class, mouseX, mouseY);
     }
-
-//    @Override
-//    public void mouseClickedMoved(int mouseX, int mouseY) {
-//        this.screen.getOnDrag().handle(mouseX, mouseY);
-//    }
 
 }

@@ -14,7 +14,7 @@ public class HUD extends Screen {
 
     @Override
     public void init() {
-        addChild(new Component() {
+        Component component = new Component() {
             @Override
             public void render(IRenderer renderer) {
                 renderer.rect(getX(), getY(), getWidth(), getHeight(), ZabuColor.from(0));
@@ -28,7 +28,13 @@ public class HUD extends Screen {
                 setX(100);
                 setY(100);
             }
+        };
+
+        component.addCallback(ReleaseCallback.class, (mouseX, mouseY) -> {
+
         });
+
+        addChild(component);
 
         super.init();
     }

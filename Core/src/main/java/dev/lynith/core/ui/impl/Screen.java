@@ -14,9 +14,9 @@ public abstract class Screen extends Component implements ChildrenFeature {
 
     public Screen() {
         super();
-        this.logger = new Logger(getClass().getSimpleName() + " UIScreen");
+        this.logger = new Logger(getClass().getSimpleName() + " Screen");
 
-        setOnResize((width, height) -> this.children.forEach(Component::update));
+        addCallback(ResizeCallback.class, (width, height) -> this.children.forEach(Component::update));
 
         setupHandlers(this);
     }
@@ -51,11 +51,8 @@ public abstract class Screen extends Component implements ChildrenFeature {
         this.children.remove(index);
     }
 
-    @Getter @Setter
-    private ResizeCallback onResize = (width, height) -> {};
-
     @FunctionalInterface
-    public interface ResizeCallback {
+    public interface ResizeCallback extends CallbackInterface {
         void handle(int width, int height);
     }
 

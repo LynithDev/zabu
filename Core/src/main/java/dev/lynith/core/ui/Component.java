@@ -2,10 +2,19 @@ package dev.lynith.core.ui;
 
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.Logger;
+import dev.lynith.core.utils.MutableTuple;
+import dev.lynith.core.utils.Tuple;
 import dev.lynith.core.versions.IVersion;
 import dev.lynith.core.versions.renderer.IRenderer;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The base class for everything in the UI. This is where you should start when creating a new component.
@@ -46,6 +55,20 @@ public abstract class Component {
     public Component() {
         this.bridge = ClientStartup.getInstance().getBridge();
         this.logger = new Logger(getClass().getSimpleName() + " Component");
+
+        addCallback(PressCallback.class, (mouseX, mouseY) -> {
+            if (draggable) {
+                this.offX = mouseX - getX();
+                this.offY = mouseY - getY();
+            }
+        });
+
+        addCallback(DragCallback.class, (mouseX, mouseY) -> {
+            if (draggable) {
+                this.x = mouseX - offX;
+                this.y = mouseY - offY;
+            }
+        });
     }
 
     public void setHeight(int height) {
@@ -73,97 +96,116 @@ public abstract class Component {
     /**
      * Component rendering code. This is where you should render your component.
      */
-    public abstract void render(IRenderer renderer);
+    public void render(IRenderer renderer) {}
 
     /**
      * Called when the component is added to a screen NOT when it is created.
      */
-    public abstract void init();
+    public void init() {}
 
     /**
      * Called when the component needs to be updated, such as its size or position changing.
      */
     public void update() {}
 
-    /**
-     * Called when the component is removed / destroyed. This is where you should clean up any resources.
-     */
-    @Setter @Getter
-    private ComponentCallback onDestroy = () -> {};
+    private final List<Tuple<Class<? extends CallbackInterface>, CallbackInterface>> callbacks = new ArrayList<>();
 
-    /**
-     * Called when the mouse is clicked inside the component.
-     */
-    @Getter @Setter
-    private MouseCallback onClick = (mouseX, mouseY) -> {};
+    protected interface CallbackInterface {}
 
-    /**
-     * Called when the mouse is clicked inside the component.
-     */
-    @Getter @Setter
-    private MouseCallback onPress = (mouseX, mouseY) -> {
-        this.offX = mouseX - getX();
-        this.offY = mouseY - getY();
-    };
+    public <T extends CallbackInterface> void addCallback(Class<T> callback, T callbackInstance) {
+        callbacks.add(new Tuple<>(callback, callbackInstance));
+    }
 
-    /**
-     * Called when the mouse is clicked inside the component.
-     */
-    @Getter @Setter
-    private MouseCallback onRelease = (mouseX, mouseY) -> {};
+    public <T extends CallbackInterface> void callCallbacks(Class<T> callback, Object... args) {
+        boolean antiSpam = !callback.getSimpleName().equals("EnterCallback") && !callback.getSimpleName().equals("ExitCallback");
 
-    /**
-     * Called when the mouse intersects the component. In other words, this is the hover event.
-     */
-    @Getter @Setter
-    private MouseCallback onEnter = (mouseX, mouseY) -> {};
-
-    /**
-     * Called when the mouse leaves the component. Also known as the mouse exit event.
-     */
-    @Getter @Setter
-    private MouseCallback onLeave = (mouseX, mouseY) -> {};
-
-    /**
-     * Called when the mouse is dragged (click and hold) inside the component.
-     * This is not the same as the click event.
-     * @apiNote This is not tested properly and may not work as expected.
-     */
-    @Getter @Setter
-    private MouseCallback onDrag = (mouseX, mouseY) -> {
-        if (draggable) {
-            setX(mouseX - this.offX);
-            setY(mouseY - this.offY);
+        for (Tuple<Class<? extends CallbackInterface>, CallbackInterface> entry : callbacks) {
+            Class<? extends CallbackInterface> callbackClass = entry.getKey();
+            CallbackInterface callbackInstance = entry.getValue();
+            if (callbackClass.equals(callback)) {
+                try {
+                    Method[] methods = callbackClass.getMethods();
+                    inner:
+                    for (Method method : methods) {
+                        if (method.getName().equals("handle")) {
+                            List<Object> params = new ArrayList<>();
+                            for (Class<?> param : method.getParameterTypes()) {
+                                if (!param.isPrimitive()) {
+                                    params.add(param.cast(args[params.size()]));
+                                } else {
+                                    params.add(args[params.size()]);
+                                }
+                            }
+                            method.invoke(callbackInstance, params.toArray());
+                            break inner;
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error("Failed to call callback " + callbackClass.getSimpleName() + " with args " + args);
+                    e.printStackTrace();
+                }
+            }
         }
-    };
-
-    /**
-     * TODO: Only activate when the component is focused.
-     * <br><br>
-     * Called when a key is typed while the component is focused.
-     * @apiNote Not implemented properly yet. Gets called for every key press and not just when the component is focused.
-     */
-    @Getter @Setter
-    private KeyTypedCallback onKeyTyped = (typedChar, keyCode) -> {};
+    }
 
     // # ------------------- #
     // # Interface callbacks #
     // # ------------------- #
 
     @FunctionalInterface
-    public interface ComponentCallback {
+    private interface EmptyInterface extends CallbackInterface {
         void handle();
     }
 
     @FunctionalInterface
-    public interface MouseCallback {
+    private interface MouseCallback extends CallbackInterface {
         void handle(int mouseX, int mouseY);
     }
 
     @FunctionalInterface
-    public interface KeyTypedCallback {
+    private interface KeyCallback extends CallbackInterface {
         void handle(char typedChar, int keyCode);
     }
+
+    /**
+     * Called when the component is removed / destroyed. This is where you should clean up any resources.
+     */
+    public interface DestroyCallback extends EmptyInterface {}
+
+    /**
+     * Called when the mouse intersects the component.
+     */
+    public interface EnterCallback extends MouseCallback {}
+
+    /**
+     * Called when the mouse leaves the component.
+     */
+    public interface LeaveCallback extends MouseCallback {}
+
+    /**
+     * Called when the mouse is released inside the component.
+     */
+    public interface ReleaseCallback extends MouseCallback {}
+
+    /**
+     * Called when the mouse is pressed inside the component.
+     */
+    public interface PressCallback extends MouseCallback {}
+
+    /**
+     * Called when the mouse is clicked inside the component.
+     */
+    public interface ClickCallback extends MouseCallback {}
+
+    /**
+     * Called when the mouse is dragged inside the component.
+     */
+    public interface DragCallback extends MouseCallback {}
+
+    /**
+     * Called when a key is typed while the component is focused.
+     */
+    public interface KeyTypedCallback extends KeyCallback {}
 
     // # --------------- #
     // # Utility methods #

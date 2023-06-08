@@ -32,59 +32,62 @@ public interface ChildrenFeature {
      * @param self The component to setup handlers for
      */
     default void setupHandlers(Component self) {
-        self.setOnDestroy(() -> getChildren().forEach(child -> child.getOnDestroy().handle()));
+        self.addCallback(Component.DestroyCallback.class, () -> {
+            getChildren().forEach(child -> child.callCallbacks(Component.DestroyCallback.class));
+        });
 
         // TODO: Make this only apply if the component is focused
-        self.setOnKeyTyped((typedChar, keyCode) -> getChildren().forEach(child -> child.getOnKeyTyped().handle(typedChar, keyCode)));
+        self.addCallback(Component.KeyTypedCallback.class, (typedChar, keyCode) -> {
+            getChildren().forEach(child -> child.callCallbacks(Component.KeyTypedCallback.class, typedChar, keyCode));
+        });
 
-        self.setOnClick((mouseX, mouseY) -> {
+        self.addCallback(Component.ClickCallback.class, (mouseX, mouseY) -> {
             getChildren().forEach(child -> {
                 if (isIntersecting(child, mouseX, mouseY)) {
-                    child.getOnClick().handle(mouseX, mouseY);
+                    child.callCallbacks(Component.ClickCallback.class, mouseX, mouseY);
                 }
             });
         });
 
-        self.setOnRelease((mouseX, mouseY) -> {
+        self.addCallback(Component.ReleaseCallback.class, (mouseX, mouseY) -> {
             getChildren().forEach(child -> {
                 if (isIntersecting(child, mouseX, mouseY)) {
-                    child.getOnRelease().handle(mouseX, mouseY);
+                    child.callCallbacks(Component.ReleaseCallback.class, mouseX, mouseY);
                 }
             });
         });
 
-        self.setOnPress((mouseX, mouseY) -> {
+        self.addCallback(Component.PressCallback.class, (mouseX, mouseY) -> {
             getChildren().forEach(child -> {
                 if (isIntersecting(child, mouseX, mouseY)) {
-                    child.getOnPress().handle(mouseX, mouseY);
+                    child.callCallbacks(Component.PressCallback.class, mouseX, mouseY);
                 }
             });
         });
 
-        self.setOnDrag((mouseX, mouseY) -> {
+        self.addCallback(Component.DragCallback.class, (mouseX, mouseY) -> {
             getChildren().forEach(child -> {
                 if (isIntersecting(child, mouseX, mouseY)) {
-                    child.getOnDrag().handle(mouseX, mouseY);
+                    child.callCallbacks(Component.DragCallback.class, mouseX, mouseY);
                 }
             });
         });
 
-        self.setOnEnter((mouseX, mouseY) -> {
+        self.addCallback(Component.EnterCallback.class, (mouseX, mouseY) -> {
             getChildren().forEach(child -> {
                 if (isIntersecting(child, mouseX, mouseY)) {
                     child.setMouseInside(true);
-                    child.getOnEnter().handle(mouseX, mouseY);
+                    child.callCallbacks(Component.EnterCallback.class, mouseX, mouseY);
                 } else {
-                    child.setMouseInside(false);
-                    child.getOnLeave().handle(mouseX, mouseY);
+                    child.callCallbacks(Component.LeaveCallback.class, mouseX, mouseY);
                 }
             });
         });
 
-        self.setOnLeave((mouseX, mouseY) -> {
+        self.addCallback(Component.LeaveCallback.class, (mouseX, mouseY) -> {
             getChildren().forEach(child -> {
                 child.setMouseInside(false);
-                child.getOnLeave().handle(mouseX, mouseY);
+                child.callCallbacks(Component.LeaveCallback.class, mouseX, mouseY);
             });
         });
     }

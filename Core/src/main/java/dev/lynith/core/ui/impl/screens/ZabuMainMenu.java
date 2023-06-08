@@ -20,22 +20,22 @@ public class ZabuMainMenu extends Screen {
     public void init() {
         Button singlePlayerButton = new Button("Singleplayer");
 
-        singlePlayerButton.setOnClick(((mouseX, mouseY) -> {
+        singlePlayerButton.addCallback(ClickCallback.class, ((mouseX, mouseY) -> {
             bridge.getRenderer().setCurrentScreen(GuiScreens.SINGLEPLAYER_SELECT, GuiScreens.MAIN_MENU);
         }));
 
         Button multiplayerButton = new Button("Multiplayer");
-        multiplayerButton.setOnClick(((mouseX, mouseY) -> {
+        multiplayerButton.addCallback(ClickCallback.class, ((mouseX, mouseY) -> {
             bridge.getRenderer().setCurrentScreen(GuiScreens.MULTIPLAYER_SELECT, GuiScreens.MAIN_MENU);
         }));
 
         Button optionsButton = new Button("Options");
-        optionsButton.setOnClick(((mouseX, mouseY) -> {
+        optionsButton.addCallback(ClickCallback.class, ((mouseX, mouseY) -> {
             bridge.getRenderer().setCurrentScreen(GuiScreens.OPTIONS_SCREEN, GuiScreens.MAIN_MENU);
         }));
 
         Button exitButton = new Button("Exit");
-        exitButton.setOnClick(((mouseX, mouseY) -> {
+        exitButton.addCallback(ClickCallback.class, ((mouseX, mouseY) -> {
             bridge.getGame().shutdown();
         }));
 
@@ -46,7 +46,7 @@ public class ZabuMainMenu extends Screen {
         Panel panel = Panel.of(singlePlayerButton, multiplayerButton, horizontalPanel);
         panel.setSpacing(5);
 
-        setOnResize((w, h) -> {
+        addCallback(ResizeCallback.class, (w, h) -> {
             panel.setWidth(MathHelper.clamp(w / 2, 150, 200));
             panel.setHeight(100);
             panel.setX(w / 2 - panel.getWidth() / 2);
