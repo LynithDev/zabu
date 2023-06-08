@@ -2,6 +2,7 @@ package dev.lynith.onenineteenfour.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.lynith.core.ClientStartup;
+import dev.lynith.core.ui.impl.ScreenWrapper;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;

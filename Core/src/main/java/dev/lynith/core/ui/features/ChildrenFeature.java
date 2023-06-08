@@ -45,6 +45,22 @@ public interface ChildrenFeature {
             });
         });
 
+        self.setOnRelease((mouseX, mouseY) -> {
+            getChildren().forEach(child -> {
+                if (isIntersecting(child, mouseX, mouseY)) {
+                    child.getOnRelease().handle(mouseX, mouseY);
+                }
+            });
+        });
+
+        self.setOnPress((mouseX, mouseY) -> {
+            getChildren().forEach(child -> {
+                if (isIntersecting(child, mouseX, mouseY)) {
+                    child.getOnPress().handle(mouseX, mouseY);
+                }
+            });
+        });
+
         self.setOnDrag((mouseX, mouseY) -> {
             getChildren().forEach(child -> {
                 if (isIntersecting(child, mouseX, mouseY)) {

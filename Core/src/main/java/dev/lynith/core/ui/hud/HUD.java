@@ -1,6 +1,5 @@
 package dev.lynith.core.ui.hud;
 
-import dev.lynith.core.ui.DraggableComponent;
 import dev.lynith.core.ui.impl.Screen;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;

@@ -3,8 +3,6 @@ package dev.lynith.core.ui.hud;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.Subscribe;
 import dev.lynith.core.events.impl.KeyPressEvent;
-import dev.lynith.core.ui.Component;
-import dev.lynith.core.ui.DraggableComponent;
 import dev.lynith.core.utils.KeyboardHelper;
 import lombok.Getter;
 

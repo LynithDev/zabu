@@ -14,16 +14,39 @@ import lombok.Setter;
 public abstract class Component {
 
     protected IVersion bridge;
-
     protected Logger logger;
+
+    /**
+     * Whether or not the mouse is inside the component. Used for enter and exit events.
+     * @apiNote Can be used inside the render method if needed though strongly discouraged.
+     */
+    @Getter @Setter
+    protected boolean mouseInside = false;
+
+    @Getter @Setter
+    private boolean draggable = false;
+
+    @Getter @Setter
+    protected Component parent;
+
+    @Getter
+    protected int width, height;
+
+    @Getter @Setter
+    protected int x, y;
+
+    @Getter
+    protected boolean fillWidth, fillHeight;
+
+    /**
+     * The offset of the mouse to the declared axis of the component. Used for dragging
+     */
+    private int offX, offY;
 
     public Component() {
         this.bridge = ClientStartup.getInstance().getBridge();
         this.logger = new Logger(getClass().getSimpleName() + " Component");
     }
-
-    @Getter
-    protected int x, y, width, height;
 
     public void setHeight(int height) {
         this.height = Math.abs(height);
@@ -32,17 +55,6 @@ public abstract class Component {
     public void setWidth(int width) {
         this.width = Math.abs(width);
     }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Getter
-    protected boolean fillWidth, fillHeight;
 
     public void setFillWidth(boolean fillWidth) {
         this.fillWidth = fillWidth;
@@ -57,16 +69,6 @@ public abstract class Component {
             this.height = parent.getHeight();
         }
     }
-
-    /**
-     * Whether or not the mouse is inside the component. Used for enter and exit events.
-     * @apiNote Can be used inside the render method if needed though strongly discouraged.
-     */
-    @Getter @Setter
-    protected boolean mouseInside = false;
-
-    @Getter @Setter
-    protected Component parent;
 
     /**
      * Component rendering code. This is where you should render your component.
@@ -96,6 +98,21 @@ public abstract class Component {
     private MouseCallback onClick = (mouseX, mouseY) -> {};
 
     /**
+     * Called when the mouse is clicked inside the component.
+     */
+    @Getter @Setter
+    private MouseCallback onPress = (mouseX, mouseY) -> {
+        this.offX = mouseX - getX();
+        this.offY = mouseY - getY();
+    };
+
+    /**
+     * Called when the mouse is clicked inside the component.
+     */
+    @Getter @Setter
+    private MouseCallback onRelease = (mouseX, mouseY) -> {};
+
+    /**
      * Called when the mouse intersects the component. In other words, this is the hover event.
      */
     @Getter @Setter
@@ -113,7 +130,12 @@ public abstract class Component {
      * @apiNote This is not tested properly and may not work as expected.
      */
     @Getter @Setter
-    private MouseCallback onDrag = (mouseX, mouseY) -> {};
+    private MouseCallback onDrag = (mouseX, mouseY) -> {
+        if (draggable) {
+            setX(mouseX - this.offX);
+            setY(mouseY - this.offY);
+        }
+    };
 
     /**
      * TODO: Only activate when the component is focused.
@@ -124,7 +146,9 @@ public abstract class Component {
     @Getter @Setter
     private KeyTypedCallback onKeyTyped = (typedChar, keyCode) -> {};
 
-    // Interface callbacks
+    // # ------------------- #
+    // # Interface callbacks #
+    // # ------------------- #
 
     @FunctionalInterface
     public interface ComponentCallback {
@@ -140,6 +164,10 @@ public abstract class Component {
     public interface KeyTypedCallback {
         void handle(char typedChar, int keyCode);
     }
+
+    // # --------------- #
+    // # Utility methods #
+    // # --------------- #
 
     public static boolean isIntersecting(Component component, Component target) {
         return component.getX() >= target.getX() &&                          // Left border

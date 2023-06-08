@@ -31,6 +31,7 @@ public class ScreenWrapper extends MCScreen {
     public void render(int mouseX, int mouseY, float partialTicks) {
         this.screen.render(ClientStartup.getInstance().getBridge().getRenderer());
         this.screen.getOnEnter().handle(mouseX, mouseY);
+        if (this.dragging) this.screen.getOnDrag().handle(mouseX, mouseY);
     }
 
     @Override
@@ -65,10 +66,13 @@ public class ScreenWrapper extends MCScreen {
     }
 
     private boolean clicked = false;
+    private boolean dragging = false;
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         this.clicked = true;
+        this.dragging = true;
+        this.screen.getOnPress().handle(mouseX, mouseY);
     }
 
     @Override
@@ -77,11 +81,13 @@ public class ScreenWrapper extends MCScreen {
             this.clicked = false;
             this.screen.getOnClick().handle(mouseX, mouseY);
         }
+        this.dragging = false;
+        this.screen.getOnRelease().handle(mouseX, mouseY);
     }
 
-    @Override
-    public void mouseClickedMoved(int mouseX, int mouseY) {
-        this.screen.getOnDrag().handle(mouseX, mouseY);
-    }
+//    @Override
+//    public void mouseClickedMoved(int mouseX, int mouseY) {
+//        this.screen.getOnDrag().handle(mouseX, mouseY);
+//    }
 
 }
