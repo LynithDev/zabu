@@ -18,6 +18,10 @@ public class ScreenWrapper extends MCScreen {
     @Getter
     private final Screen screen;
 
+    public ScreenWrapper(Screen screen) {
+        this(GuiScreens.UNKNOWN, screen);
+    }
+
     public ScreenWrapper(GuiScreens type, Screen screen) {
         this.type = type;
         this.screen = screen;

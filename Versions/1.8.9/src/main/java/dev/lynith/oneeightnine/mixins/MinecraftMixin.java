@@ -2,12 +2,18 @@ package dev.lynith.oneeightnine.mixins;
 
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.impl.GuiScreenChangedEvent;
+import dev.lynith.core.events.impl.KeyPressEvent;
 import dev.lynith.core.events.impl.MinecraftInitEvent;
 import dev.lynith.core.events.impl.MinecraftShutdownEvent;
 import dev.lynith.core.utils.GuiScreens;
+import dev.lynith.core.utils.KeyboardHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.settings.KeyBinding;
+import org.lwjgl.input.Keyboard;
+import org.spongepowered.asm.mixin.Implements;
+import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,5 +42,4 @@ public class MinecraftMixin {
 
         EventBus.getEventBus().post(new GuiScreenChangedEvent(screenType));
     }
-
 }

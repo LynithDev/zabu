@@ -1,5 +1,7 @@
 package dev.lynith.core.versions.renderer;
 
+import dev.lynith.core.ui.impl.Screen;
+import dev.lynith.core.ui.impl.ScreenWrapper;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.ZabuColor;
 
@@ -15,7 +17,15 @@ public interface IRenderer {
      * @param screen The screen to render
      */
     void setCurrentScreen(MCScreen screen);
-    
+
+    /**
+     * Sets the current UI Screen to be rendered
+     * @param screen The screen to render
+     */
+    default void setCurrentScreen(Screen screen) {
+        setCurrentScreen(new ScreenWrapper(screen));
+    }
+
     /**
      * Sets the current Minecraft screen to be rendered. This is a cross-version compatibility method.
      * @param screen The screen type to render

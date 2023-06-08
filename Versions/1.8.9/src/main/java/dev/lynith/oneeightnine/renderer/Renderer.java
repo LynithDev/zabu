@@ -144,46 +144,55 @@ public class Renderer implements IRenderer {
             @Override
             public void drawScreen(int i, int j, float f) {
                 screen.render(i, j, f);
+                super.drawScreen(i, j, f);
             }
 
             @Override
             public void initGui() {
                 screen.init();
+                super.initGui();
             }
 
             @Override
             public void updateScreen() {
                 screen.update();
+                super.updateScreen();
             }
 
             @Override
             public void onGuiClosed() {
                 screen.onClosed();
+                super.onGuiClosed();
             }
 
             @Override
             public void onResize(Minecraft minecraft, int i, int j) {
                 screen.onResize(i, j);
+                super.onResize(minecraft, i, j);
             }
 
             @Override
             protected void mouseClicked(int i, int j, int k) {
                 screen.mouseClicked(i, j, k);
+                super.mouseClicked(i, j, k);
             }
 
             @Override
             protected void mouseClickMove(int i, int j, int k, long l) {
                 screen.mouseClickedMoved(i, j);
+                super.mouseClickMove(i, j, k, l);
             }
 
             @Override
             protected void mouseReleased(int i, int j, int k) {
                 screen.mouseReleased(i, j, k);
+                super.mouseReleased(i, j, k);
             }
 
             @Override
             protected void keyTyped(char c, int i) {
                 screen.keyTyped(c, i);
+                super.keyTyped(c, i);
             }
         };
     }

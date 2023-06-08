@@ -141,40 +141,49 @@ public class Renderer implements IRenderer {
             public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
                 matrixStack = matrices;
                 screen.render(mouseX, mouseY, delta);
+                super.render(matrices, mouseX, mouseY, delta);
             }
 
             @Override
             protected void init() {
                 screen.init();
+                super.init();
             }
 
             @Override
             public void resize(Minecraft client, int width, int height) {
                 screen.onResize(width, height);
+                super.resize(client, width, height);
             }
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int button) {
                 screen.mouseClicked((int) mouseX, (int) mouseY, button);
-                return true;
+                return super.mouseClicked(mouseX, mouseY, button);
+            }
+
+            @Override
+            public void onClose() {
+                screen.onClosed();
+                super.onClose();
             }
 
             @Override
             public boolean mouseReleased(double mouseX, double mouseY, int button) {
                 screen.mouseReleased((int) mouseX, (int) mouseY, button);
-                return true;
+                return super.mouseReleased(mouseX, mouseY, button);
             }
 
             @Override
             public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
                 screen.mouseClickedMoved((int) mouseX, (int) mouseY);
-                return true;
+                return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
             }
 
             @Override
             public boolean charTyped(char chr, int modifiers) {
                 screen.keyTyped(chr, modifiers);
-                return true;
+                return super.charTyped(chr, modifiers);
             }
         };
     }

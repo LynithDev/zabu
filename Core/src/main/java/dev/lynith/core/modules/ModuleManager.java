@@ -1,0 +1,94 @@
+package dev.lynith.core.modules;
+
+import dev.lynith.core.events.EventBus;
+import dev.lynith.core.events.Subscribe;
+import dev.lynith.core.events.impl.KeyPressEvent;
+import dev.lynith.core.modules.impl.ConsoleSpammerModule;
+import dev.lynith.core.utils.Key;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ModuleManager {
+
+    private static ModuleManager instance;
+    public static ModuleManager getInstance() {
+        if (instance == null) instance = new ModuleManager();
+        return instance;
+    }
+
+    private final List<Module> modules = new ArrayList<>();
+
+    public ModuleManager() {
+        EventBus.getEventBus().register(this);
+        register(new ConsoleSpammerModule());
+
+        init();
+    }
+
+    private void init() {
+        for (Module module : modules) {
+            if (module.isEnabled()) {
+                module.onEnable();
+            }
+        }
+    }
+
+    public void enableByKeyBind(Key key) {
+        for (Module module : modules) {
+            if (module.getKey().getCode() == key.getCode()) {
+                module.setEnabled(true);
+            }
+        }
+    }
+
+    public void disableByKeyBind(Key key) {
+        for (Module module : modules) {
+            if (module.getKey().getCode() == key.getCode()) {
+                module.setEnabled(false);
+            }
+        }
+    }
+
+    public void toggleByKeyBind(Key key) {
+        for (Module module : modules) {
+            if (module.getKey().getCode() == key.getCode()) {
+                module.setEnabled(!module.isEnabled());
+            }
+        }
+    }
+
+    @Subscribe
+    public void onKeyPress(KeyPressEvent event) {
+        toggleByKeyBind(event.getKey());
+    }
+
+    /**
+     * Registers a module
+     * @param module The instance of a module to register
+     * @apiNote The module won't be added if it's already registered
+     */
+    public void register(Module module) {
+        if (modules.contains(module)) return;
+        this.modules.add(module);
+    }
+
+    /**
+     * Gets a module by name
+     * @param name The name of the module
+     * @return The module, or null if it doesn't exist
+     */
+    public Module getModuleByName(String name) {
+        return this.modules.stream().filter(module -> module.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    /**
+     * Gets a module by class
+     * @param clazz The class of the module
+     * @return The module, or null if it doesn't exist
+     */
+    public <M extends Module> M getModuleByClass(Class<M> clazz) {
+        return (M) this.modules.stream().filter(module -> module.getClass().equals(clazz)).findFirst().orElse(null);
+    }
+
+}
