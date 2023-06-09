@@ -4,6 +4,7 @@
   "package": "dev.lynith.onenineteenfour.mixins",
   "verbose": true,
   "mixins": [
+    "InGameHudMixin",
     "KeyboardHandlerMixin",
     "MinecraftMixin"
   ]

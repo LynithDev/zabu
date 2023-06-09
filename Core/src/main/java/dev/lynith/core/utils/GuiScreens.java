@@ -9,5 +9,9 @@ public enum GuiScreens {
     LANGUAGE_SELECT,
     INVENTORY,
     PAUSE_MENU,
-    MAIN_MENU;
+    MAIN_MENU,
+    IN_GAME,
+
+    // Custom
+    HUD_CONFIG_SCREEN;
 }

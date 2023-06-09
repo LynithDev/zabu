@@ -94,6 +94,8 @@ public class Renderer implements IRenderer {
     public void setCurrentScreen(GuiScreens screen, Object... _args) {
         this.currentScreen = screen;
 
+        if (screen == GuiScreens.UNKNOWN) return;
+
         try {
             List<Object> arguments = new ArrayList<>(Arrays.asList(_args));
 

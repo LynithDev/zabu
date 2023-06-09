@@ -26,6 +26,10 @@ public interface IRenderer {
         setCurrentScreen(new ScreenWrapper(screen));
     }
 
+    default void setCurrentScreen(GuiScreens type, Screen screen) {
+        setCurrentScreen(new ScreenWrapper(type, screen));
+    }
+
     /**
      * Sets the current Minecraft screen to be rendered. This is a cross-version compatibility method.
      * @param screen The screen type to render
@@ -100,6 +104,14 @@ public interface IRenderer {
      * @see #text(String, int, int, ZabuColor, boolean)
      */
     default void text(String text, int x, int y) { text(text, x, y, ZabuColor.from(255)); }
+
+    default void textCentered(String text, int x, int y, ZabuColor color, boolean shadow) {
+        text(text, x - getTextWidth(text) / 2, y - getTextHeight() / 2, color, shadow);
+    }
+
+    default void textCentered(String text, int x, int y, ZabuColor color) {
+        textCentered(text, x, y, color, false);
+    }
 
     /**
      * Gets the width of a string from the current font renderer

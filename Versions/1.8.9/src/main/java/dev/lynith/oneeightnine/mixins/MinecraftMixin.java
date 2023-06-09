@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
 
-    @Inject(method = "startGame", at = @At("HEAD"))
+    @Inject(method = "startGame", at = @At("RETURN"))
     public void startGame(CallbackInfo ci) {
         EventBus.getEventBus().post(new MinecraftInitEvent());
     }

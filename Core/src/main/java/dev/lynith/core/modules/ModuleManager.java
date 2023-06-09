@@ -1,5 +1,6 @@
 package dev.lynith.core.modules;
 
+import dev.lynith.core.Logger;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.Subscribe;
 import dev.lynith.core.events.impl.KeyPressEvent;
@@ -17,21 +18,22 @@ public class ModuleManager {
         return instance;
     }
 
+    private final Logger logger = new Logger("ModuleManager");
+
     private final List<Module> modules = new ArrayList<>();
 
-    public ModuleManager() {
-        EventBus.getEventBus().register(this);
+    public ModuleManager() {}
+
+    public void init() {
         register(new ConsoleSpammerModule());
 
-        init();
-    }
-
-    private void init() {
         for (Module module : modules) {
             if (module.isEnabled()) {
                 module.onEnable();
             }
         }
+
+        logger.log("Loaded module manager");
     }
 
     public void enableByKeyBind(Key key) {

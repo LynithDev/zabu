@@ -54,6 +54,7 @@ public class ScreenWrapper extends MCScreen {
     @Override
     public void onClosed() {
         this.screen.callCallbacks(Component.DestroyCallback.class);
+        ClientStartup.getInstance().getBridge().getRenderer().setCurrentScreen(GuiScreens.UNKNOWN);
     }
 
     @Override

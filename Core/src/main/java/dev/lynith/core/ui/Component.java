@@ -65,8 +65,8 @@ public abstract class Component {
 
         addCallback(DragCallback.class, (mouseX, mouseY) -> {
             if (draggable) {
-                this.x = mouseX - offX;
-                this.y = mouseY - offY;
+                setX(mouseX - offX);
+                setY(mouseY - offY);
             }
         });
     }
@@ -77,6 +77,23 @@ public abstract class Component {
 
     public void setWidth(int width) {
         this.width = Math.abs(width);
+    }
+
+    public void setBounds(int x, int y) {
+        setX(x);
+        setY(y);
+    }
+
+    public void setBounds(int x, int y, int width, int height) {
+        setX(x);
+        setY(y);
+        setWidth(width);
+        setHeight(height);
+    }
+
+    public void setSize(int width, int height) {
+        setWidth(width);
+        setHeight(height);
     }
 
     public void setFillWidth(boolean fillWidth) {

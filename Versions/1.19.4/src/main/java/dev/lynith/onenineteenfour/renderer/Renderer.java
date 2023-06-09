@@ -20,7 +20,7 @@ import java.util.List;
 
 public class Renderer implements IRenderer {
 
-    private PoseStack matrixStack = null;
+    public static PoseStack matrixStack = null;
 
     @Override
     public void rect(int x, int y, int width, int height, ZabuColor color) {
@@ -73,7 +73,6 @@ public class Renderer implements IRenderer {
 
     @Override
     public int getScaleFactor() {
-        System.out.println(Minecraft.getInstance().getWindow().getGuiScale());
         return (int) Minecraft.getInstance().getWindow().getGuiScale();
     }
 
@@ -90,6 +89,8 @@ public class Renderer implements IRenderer {
     @Override
     public void setCurrentScreen(GuiScreens screen, Object... _args) {
         this.currentScreen = screen;
+
+        if (screen == GuiScreens.UNKNOWN) return;
 
         try {
             List<Object> arguments = new ArrayList<>(Arrays.asList(_args));
