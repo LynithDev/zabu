@@ -1,4 +1,7 @@
 plugins {
-    id "java"
-    alias(libs.plugins.loom)
+    id "dev.lynith.multiversion.version"
+}
+
+multiversion {
+//    buildTargets =
 }

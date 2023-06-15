@@ -1,18 +1,17 @@
 package dev.lynith.onenineteenfour.renderer;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.lynith.core.ClientStartup;
-import dev.lynith.core.ui.impl.ScreenWrapper;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;
 import dev.lynith.core.versions.renderer.MCScreen;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.screens.OptionsScreen;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,11 +19,11 @@ import java.util.List;
 
 public class Renderer implements IRenderer {
 
-    public static PoseStack matrixStack = null;
+    public static MatrixStack matrixStack = null;
 
     @Override
     public void rect(int x, int y, int width, int height, ZabuColor color) {
-        GuiComponent.fill(matrixStack, x, y, x + width, y + height, color.toHex());
+        DrawableHelper.fill(matrixStack, x, y, x + width, y + height, color.toHex());
     }
 
     @Override
@@ -40,20 +39,20 @@ public class Renderer implements IRenderer {
     @Override
     public void text(String text, int x, int y, ZabuColor color, boolean shadow) {
         if (shadow) {
-            Minecraft.getInstance().font.drawShadow(matrixStack, text, x, y, color.toHex());
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrixStack, text, x, y, color.toHex());
         } else {
-            Minecraft.getInstance().font.draw(matrixStack, text, x, y, color.toHex());
+            MinecraftClient.getInstance().textRenderer.draw(matrixStack, text, x, y, color.toHex());
         }
     }
 
     @Override
     public int getTextHeight() {
-        return Minecraft.getInstance().font.lineHeight;
+        return MinecraftClient.getInstance().textRenderer.fontHeight;
     }
 
     @Override
     public int getTextWidth(String text) {
-        return Minecraft.getInstance().font.width(text);
+        return MinecraftClient.getInstance().textRenderer.getWidth(text);
     }
 
     @Override
@@ -63,17 +62,17 @@ public class Renderer implements IRenderer {
 
     @Override
     public int getWindowWidth() {
-        return Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        return MinecraftClient.getInstance().getWindow().getScaledWidth();
     }
 
     @Override
     public int getWindowHeight() {
-        return Minecraft.getInstance().getWindow().getGuiScaledHeight();
+        return MinecraftClient.getInstance().getWindow().getScaledHeight();
     }
 
     @Override
     public int getScaleFactor() {
-        return (int) Minecraft.getInstance().getWindow().getGuiScale();
+        return (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
     }
 
     @Getter
@@ -83,7 +82,7 @@ public class Renderer implements IRenderer {
     public void setCurrentScreen(MCScreen screen) {
         this.currentScreen = screen.getType();
 
-        Minecraft.getInstance().setScreen(toGuiScreen(screen));
+        MinecraftClient.getInstance().setScreen(toGuiScreen(screen));
     }
 
     @Override
@@ -108,7 +107,7 @@ public class Renderer implements IRenderer {
 
             // Special condition for the options screen because it requires the game settings
             if (screen == GuiScreens.OPTIONS_SCREEN) {
-                Minecraft.getInstance().setScreen(new OptionsScreen((Screen) arguments.get(0), Minecraft.getInstance().options));
+                MinecraftClient.getInstance().setScreen(new OptionsScreen((Screen) arguments.get(0), MinecraftClient.getInstance().options));
                 return;
             }
 
@@ -131,16 +130,16 @@ public class Renderer implements IRenderer {
             // Here is the instance of the GuiScreen, with the passed arguments
             Screen instance = (Screen) clazz.getConstructor(argTypes).newInstance(arguments.toArray());
 
-            Minecraft.getInstance().setScreen(instance);
+            MinecraftClient.getInstance().setScreen(instance);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public Screen toGuiScreen(MCScreen screen) {
-        return new Screen(Component.empty()) {
+        return new Screen(Text.empty()) {
             @Override
-            public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
+            public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
                 matrixStack = matrices;
                 screen.render(mouseX, mouseY, delta);
                 super.render(matrices, mouseX, mouseY, delta);
@@ -153,7 +152,7 @@ public class Renderer implements IRenderer {
             }
 
             @Override
-            public void resize(Minecraft client, int width, int height) {
+            public void resize(MinecraftClient client, int width, int height) {
                 screen.onResize(width, height);
                 super.resize(client, width, height);
             }
@@ -165,9 +164,9 @@ public class Renderer implements IRenderer {
             }
 
             @Override
-            public void onClose() {
+            public void close() {
                 screen.onClosed();
-                super.onClose();
+                super.close();
             }
 
             @Override

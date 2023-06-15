@@ -6,9 +6,12 @@ import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;
 import dev.lynith.core.versions.renderer.MCScreen;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.SettingsScreen;
+import net.minecraft.client.util.Window;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,11 +19,11 @@ import java.util.List;
 
 public class Renderer implements IRenderer {
 
-    private final Gui gui = new Gui();
+    private final DrawableHelper gui = new DrawableHelper();
 
     @Override
     public void rect(int x, int y, int width, int height, ZabuColor color) {
-        Gui.drawRect(x, y, x + width, y + height, color.toHex());
+        DrawableHelper.fill(x, y, x + width, y + height, color.toHex());
     }
 
     @Override
@@ -46,38 +49,38 @@ public class Renderer implements IRenderer {
 
     @Override
     public void text(String text, int x, int y, ZabuColor color, boolean shadow) {
-        Minecraft.getMinecraft().fontRendererObj.drawString(text, x, y, color.toHex(), shadow);
+        MinecraftClient.getInstance().textRenderer.draw(text, x, y, color.toHex(), shadow);
     }
 
     @Override
     public int getTextWidth(String text) {
-        return Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
+        return MinecraftClient.getInstance().textRenderer.getStringWidth(text);
     }
 
     @Override
     public int getTextHeight() {
-        return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
+        return MinecraftClient.getInstance().textRenderer.fontHeight;
     }
 
     @Override
     public void image(String path, int x, int y, int width, int height) {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(path));
-        gui.drawTexturedModalRect(x, y, 0, 0, width, height);
+        MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier(path));
+        gui.drawTexture(x, y, 0, 0, width, height);
     }
 
     @Override
     public int getWindowWidth() {
-        return Minecraft.getMinecraft().displayWidth;
+        return MinecraftClient.getInstance().width;
     }
 
     @Override
     public int getWindowHeight() {
-        return Minecraft.getMinecraft().displayHeight;
+        return MinecraftClient.getInstance().height;
     }
 
     @Override
     public int getScaleFactor() {
-        return new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
+        return new Window(MinecraftClient.getInstance()).getScaleFactor();
     }
 
     @Getter
@@ -87,7 +90,7 @@ public class Renderer implements IRenderer {
     public void setCurrentScreen(MCScreen screen) {
         this.currentScreen = screen.getType();
 
-        Minecraft.getMinecraft().displayGuiScreen(toGuiScreen(screen));
+        MinecraftClient.getInstance().setScreen(toGuiScreen(screen));
     }
 
     @Override
@@ -112,7 +115,7 @@ public class Renderer implements IRenderer {
 
             // Special condition for the options screen because it requires the game settings
             if (screen == GuiScreens.OPTIONS_SCREEN) {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiOptions((GuiScreen) arguments.get(0), Minecraft.getMinecraft().gameSettings));
+                MinecraftClient.getInstance().setScreen(new SettingsScreen((Screen) arguments.get(0), MinecraftClient.getInstance().options));
                 return;
             }
 
@@ -122,7 +125,7 @@ public class Renderer implements IRenderer {
                 Class<?> clazz = arguments.get(i).getClass();
 
                 // If the class is a subclass of GuiScreen, set it to GuiScreen
-                if (clazz.getSuperclass() != null && clazz.getSuperclass() == GuiScreen.class) {
+                if (clazz.getSuperclass() != null && clazz.getSuperclass().equals(Screen.class)) {
                     clazz = clazz.getSuperclass();
                 }
 
@@ -133,44 +136,44 @@ public class Renderer implements IRenderer {
             Class<?> clazz = (Class<?>) ClientStartup.getInstance().getBridge().getGame().getGuiScreens().get(screen);
 
             // Here is the instance of the GuiScreen, with the passed arguments
-            GuiScreen instance = (GuiScreen) clazz.getConstructor(argTypes).newInstance(arguments.toArray());
+            Screen instance = (Screen) clazz.getConstructor(argTypes).newInstance(arguments.toArray());
 
-            Minecraft.getMinecraft().displayGuiScreen(instance);
+            MinecraftClient.getInstance().setScreen(instance);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public GuiScreen toGuiScreen(MCScreen screen) {
-        return new GuiScreen() {
+    public Screen toGuiScreen(MCScreen screen) {
+        return new Screen() {
             @Override
-            public void drawScreen(int i, int j, float f) {
+            public void render(int i, int j, float f) {
                 screen.render(i, j, f);
-                super.drawScreen(i, j, f);
+                super.render(i, j, f);
             }
 
             @Override
-            public void initGui() {
+            public void init(MinecraftClient minecraftClient, int i, int j) {
                 screen.init();
-                super.initGui();
+                super.init(minecraftClient, i, j);
             }
 
             @Override
-            public void updateScreen() {
+            public void init() {
                 screen.update();
-                super.updateScreen();
+                super.init();
             }
 
             @Override
-            public void onGuiClosed() {
+            public void removed() {
                 screen.onClosed();
-                super.onGuiClosed();
+                super.removed();
             }
 
             @Override
-            public void onResize(Minecraft minecraft, int i, int j) {
+            public void resize(MinecraftClient MinecraftClient, int i, int j) {
                 screen.onResize(i, j);
-                super.onResize(minecraft, i, j);
+                super.resize(MinecraftClient, i, j);
             }
 
             @Override
@@ -180,9 +183,9 @@ public class Renderer implements IRenderer {
             }
 
             @Override
-            protected void mouseClickMove(int i, int j, int k, long l) {
+            protected void mouseDragged(int i, int j, int k, long l) {
                 screen.mouseClickedMoved(i, j);
-                super.mouseClickMove(i, j, k, l);
+                super.mouseDragged(i, j, k, l);
             }
 
             @Override
@@ -192,9 +195,9 @@ public class Renderer implements IRenderer {
             }
 
             @Override
-            protected void keyTyped(char c, int i) {
+            protected void keyPressed(char c, int i) {
                 screen.keyTyped(c, i);
-                super.keyTyped(c, i);
+                super.keyPressed(c, i);
             }
         };
     }

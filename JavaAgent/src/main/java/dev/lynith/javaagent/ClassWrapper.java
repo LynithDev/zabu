@@ -22,7 +22,6 @@ public class ClassWrapper extends URLClassLoader {
         this.upstream = getSystemClassLoader();
         instance = this;
         Thread.currentThread().setContextClassLoader(this);
-        MixinBootstrap.init();
     }
 
     private static final String[] EXCLUDED_PACKAGES = {
