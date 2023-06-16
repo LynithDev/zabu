@@ -5,17 +5,12 @@ import dev.lynith.core.Logger;
 import dev.lynith.core.versions.IVersion;
 import dev.lynith.core.versions.IVersionMain;
 import dev.lynith.javaagent.mixin.ClientMixinTransformer;
-import org.apache.commons.io.IOUtils;
-import org.objectweb.asm.*;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 
 public class AgentMain {
@@ -33,9 +28,6 @@ public class AgentMain {
 //
 //            }
 
-            MixinBootstrap.init();
-            MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
-
             hook(inst);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -45,6 +37,8 @@ public class AgentMain {
     public static void hook(Instrumentation inst) {
         logger.log("Hooking");
         try {
+            MixinBootstrap.init();
+            MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
             Mixins.addConfiguration("client.mixins.json");
 
             inst.addTransformer(new ClientMixinTransformer(), true);

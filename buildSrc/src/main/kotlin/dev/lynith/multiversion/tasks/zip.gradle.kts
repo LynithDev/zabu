@@ -3,9 +3,11 @@ package dev.lynith.multiversion.tasks
 tasks.register("clean-${project.name}") {
     group = ""
 
-    val mergedFile = "$rootDir/build/Versions/${project.name}/merged"
-    println("Deleting $mergedFile")
-    delete(mergedFile)
+    doLast {
+        val mergedFile = "$rootDir/build/Versions/${project.name}/merged"
+        println("Deleting $mergedFile")
+        delete(mergedFile)
+    }
 }
 
 tasks.register("zip-${project.name}", Zip::class.java) {

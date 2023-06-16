@@ -3,22 +3,19 @@ package dev.lynith.multiversion.tasks
 tasks.register<Copy>("merge-${project.name}") {
     group = "multiversion ${project.name}"
 
-    doLast {
-        val versionFile = "$rootDir/build/Versions/${project.name}/${project.name}.jar"
-        val coreFile = "$rootDir/build/Core.jar"
-        val agentFile = "$rootDir/build/JavaAgent.jar"
+    val versionFile = "$rootDir/build/Versions/${project.name}/${project.name}.jar"
+    val coreFile = "$rootDir/build/Core.jar"
+    val agentFile = "$rootDir/build/JavaAgent.jar"
 
-        val mergedFile = "$rootDir/build/Versions/${project.name}/merged"
-        println("Merging '${project.name}.jar', 'Core.jar' and 'JavaAgent.jar' to $mergedFile")
+    val mergedFile = "$rootDir/build/Versions/${project.name}/merged"
+    println("Merging '${project.name}.jar', 'Core.jar' and 'JavaAgent.jar' to $mergedFile")
 
-        copy {
-            from(zipTree(agentFile))
-            from(zipTree(coreFile))
-            from(zipTree(versionFile))
+    from(zipTree(agentFile))
+    from(zipTree(coreFile))
+    from(zipTree(versionFile))
 
-            into(mergedFile)
+    into(mergedFile)
 
-            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        }
-    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
 }

@@ -6,13 +6,19 @@ import net.fabricmc.loom.bootstrap.LoomGradlePluginBootstrap
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
-import org.gradle.kotlin.dsl.add
-import org.gradle.kotlin.dsl.exclude
-import org.gradle.kotlin.dsl.maven
 
 import dev.lynith.multiversion.tasks.*
 import net.fabricmc.loom.task.RemapJarTask
-import org.gradle.kotlin.dsl.get
+import net.fabricmc.loom.util.kotlin.KotlinPluginUtils
+import org.gradle.api.plugins.JavaPlatformExtension
+import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.toolchain.management.ToolchainManagement
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.jvm.toolchain.JavaLauncher
+import org.gradle.jvm.toolchain.JavaToolchainService
+import org.gradle.kotlin.dsl.*
 
 class VersionPlugin : Plugin<Project> {
 
@@ -24,6 +30,17 @@ class VersionPlugin : Plugin<Project> {
         val extension = target.extensions.create("multiversion", VersionExtension::class.java, target)
 
         target.afterEvaluate {
+            val toolchainService = target.extensions.getByType(JavaToolchainService::class.java)
+            val launcher = toolchainService.launcherFor { languageVersion.set(JavaLanguageVersion.of(extension.javaVersion.majorVersion)) }
+            target.tasks.withType(JavaExec::class.java).configureEach {
+                setExecutable(launcher.get().executablePath)
+            }
+
+            val compiler = toolchainService.compilerFor { languageVersion.set(JavaLanguageVersion.of(extension.javaVersion.majorVersion)) }
+            target.tasks.withType(JavaCompile::class.java).configureEach {
+                javaCompiler.set(compiler.get())
+            }
+
             target.apply {
                 plugin(LoomGradlePluginBootstrap::class.java)
 
@@ -39,9 +56,6 @@ class VersionPlugin : Plugin<Project> {
             target.dependencies.apply {
                 add("compileOnly", target.rootProject.project(":Core"))
 
-                add("implementation", "net.fabricmc:fabric-loom:1.2.5")
-                add("implementation", "net.fabricmc:tiny-remapper:0.8.6")
-
                 add("compileOnly", "org.projectlombok:lombok:1.18.20")
                 add("annotationProcessor", "org.projectlombok:lombok:1.18.20")
 
@@ -52,7 +66,7 @@ class VersionPlugin : Plugin<Project> {
                     exclude("commons-io")
                 }
 
-                println("Minecraft version: ${extension.minecraftVersion}")
+                println("Minecraft: ${extension.minecraftVersion}")
                 add("minecraft", "com.mojang:minecraft:${extension.minecraftVersion}")
                 add("mappings",
                     if (extension.isLegacy) "net.legacyfabric:yarn:${extension.minecraftVersion}+build.+"
@@ -72,16 +86,15 @@ class VersionPlugin : Plugin<Project> {
                 mixin.useLegacyMixinAp.set(false)
 
                 extension.buildTargets.forEach { target ->
-                    runs.register("-${target.key}-${extension.minecraftVersion}") {
+                    runConfigs.register("-${target.key}-${extension.minecraftVersion}") {
                         group = "multiversion ${extension.minecraftVersion}"
-                        runDir("run-${target.key}")
+
+                        runDir("run")
                         vmArgs("-javaagent:${rootDir}/build/Versions/${extension.minecraftVersion}/${target.value}.jar")
 
                         environment = "client"
-                        defaultMainClass = "net.minecraft.client.main.Main"
+                        mainClass.set("net.minecraft.client.main.Main")
                         ideConfigGenerated(true)
-
-    //                        defaultMainClass = "net.fabricmc.loader.launch.knot.KnotClient"
 
                         programArgs("--version=${extension.minecraftVersion}")
                         programArgs("--accessToken=0")

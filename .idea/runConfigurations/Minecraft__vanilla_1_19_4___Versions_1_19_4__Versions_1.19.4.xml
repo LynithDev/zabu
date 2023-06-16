@@ -3,8 +3,8 @@
     <option name="MAIN_CLASS_NAME" value="net.fabricmc.devlaunchinjector.Main"/>
     <module name="zabu-client.Versions.1.19.4.main"/>
     <option name="PROGRAM_PARAMETERS" value="--version=1.19.4 --accessToken=0"/>
-    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=/home/lynith/Documents/Projects/Java/utility-client/Versions/1.19.4/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -javaagent:/home/lynith/Documents/Projects/Java/utility-client/build/Versions/1.19.4/official.jar -Dfabric.dli.main=net.minecraft.client.main.Main"/>
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Versions/1.19.4/run-vanilla/"/>
+    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=/home/lynith/Documents/Projects/Java/utility-client/Versions/1.19.4/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.minecraft.client.main.Main"/>
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Versions/1.19.4/run/"/>
     <method v="2">
       <option enabled="true" name="Make"/>
     </method>

@@ -4,15 +4,13 @@ import dev.lynith.multiversion.VersionExtension
 import net.fabricmc.loom.LoomGradleExtension
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.task.RunGameTask
+import org.gradle.jvm.toolchain.internal.JavaToolchain
 
 val extension = project.extensions.getByType(VersionExtension::class.java)
 
 extension.buildTargets.forEach { target ->
     tasks.register("start-${target.key}-${project.name}") {
         group = "multiversion ${project.name}"
-
-        val test= file("${rootDir}/build/Versions/${project.name}/merged")
-        println("${test.exists()} ${test.absolutePath}")
 
         val coreExport = rootProject.project("Core").tasks.named("export-Core").get()
         val agentExport = rootProject.project("JavaAgent").tasks.named("export-JavaAgent").get()
@@ -24,15 +22,15 @@ extension.buildTargets.forEach { target ->
 
         agentExport.dependsOn(coreExport)
         versionExport.dependsOn(agentExport)
-
         mergeTask.dependsOn(versionExport)
 
-        println("${test.exists()} ${test.absolutePath}")
         zipTask.finalizedBy(cleanTask)
         mergeTask.finalizedBy(zipTask)
+        zipTask.finalizedBy(cleanTask)
+        cleanTask.finalizedBy(remapTask)
 
-//        remapTask.dependsOn(cleanTask)
+        dependsOn(coreExport, agentExport, versionExport, mergeTask, zipTask, cleanTask, remapTask)
 
-        dependsOn(coreExport, agentExport, versionExport, mergeTask, zipTask, cleanTask)
+        finalizedBy(project.tasks.named("run-${target.key}-${project.name}"))
     }
 }
