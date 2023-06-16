@@ -10,8 +10,11 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.IOException;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
+import java.security.ProtectionDomain;
 
 public class AgentMain {
 
@@ -42,6 +45,7 @@ public class AgentMain {
             Mixins.addConfiguration("client.mixins.json");
 
             inst.addTransformer(new ClientMixinTransformer(), true);
+            inst.addTransformer(new ZabuTransformer(), true);
 
             Class<?> versionMain = Class.forName("%gradle.package%.start.VersionMain");
             IVersionMain versionMainInstance = (IVersionMain) versionMain.getConstructor().newInstance();
