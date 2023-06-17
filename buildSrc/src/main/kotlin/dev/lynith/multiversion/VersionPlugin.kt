@@ -15,6 +15,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.toolchain.management.ToolchainManagement
+import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
@@ -26,6 +27,8 @@ class VersionPlugin : Plugin<Project> {
         target.apply {
             plugin(JavaPlugin::class.java)
         }
+
+        // Fabric Loader is in the jar for some reason -- please fix
 
         val extension = target.extensions.create("multiversion", VersionExtension::class.java, target)
 
@@ -53,6 +56,7 @@ class VersionPlugin : Plugin<Project> {
 
             target.repositories.maven("https://repo.legacyfabric.net/repository/legacyfabric/")
 
+            target.configurations.create("fabric").extendsFrom(target.configurations.getByName("modImplementation"))
             target.dependencies.apply {
                 add("compileOnly", target.rootProject.project(":Core"))
 
@@ -64,6 +68,10 @@ class VersionPlugin : Plugin<Project> {
                     exclude("guava")
                     exclude("gson")
                     exclude("commons-io")
+                }
+
+                if (extension.fabricVersion.isNotEmpty()) {
+                    add("modImplementation", "net.fabricmc:fabric-loader:${extension.fabricVersion}")
                 }
 
                 println("Minecraft: ${extension.minecraftVersion}")
@@ -86,6 +94,10 @@ class VersionPlugin : Plugin<Project> {
                 mixin.useLegacyMixinAp.set(false)
 
                 extension.buildTargets.forEach { target ->
+                    if (target.key == "fabric" && extension.fabricVersion.isEmpty()) {
+                        return@forEach
+                    }
+
                     runConfigs.register("-${target.key}-${extension.minecraftVersion}") {
                         group = "multiversion ${extension.minecraftVersion}"
 
@@ -93,11 +105,16 @@ class VersionPlugin : Plugin<Project> {
                         vmArgs("-javaagent:${rootDir}/build/Versions/${extension.minecraftVersion}/${target.value}.jar")
 
                         environment = "client"
-                        mainClass.set("net.minecraft.client.main.Main")
-                        ideConfigGenerated(true)
 
-                        programArgs("--version=${extension.minecraftVersion}")
-                        programArgs("--accessToken=0")
+                        if (target.key == "fabric") {
+                            mainClass.set("net.fabricmc.loader.launch.knot.KnotClient")
+                        } else {
+                            mainClass.set("net.minecraft.client.main.Main")
+                            programArgs("--version=${extension.minecraftVersion}")
+                            programArgs("--accessToken=0")
+                        }
+
+                        ideConfigGenerated(true)
                     }
                 }
             }

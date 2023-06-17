@@ -27,11 +27,11 @@ public class ClientStartup {
     @Getter
     private static ClientStartup instance;
 
-    public static void start(IVersion version, Instrumentation inst) {
-        instance = new ClientStartup(version, inst);
+    public static void start(IVersion version) {
+        instance = new ClientStartup(version);
     }
 
-    public ClientStartup(IVersion version, Instrumentation inst) {
+    public ClientStartup(IVersion version) {
         if (instance == null) instance = this;
         this.logger = new Logger("main");
         logger.log("Client Startup");

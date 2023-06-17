@@ -1,5 +1,4 @@
 plugins {
-    id "net.kyori.blossom" version "1.2.0"
     id "dev.lynith.multiversion.part"
 }
 
@@ -19,10 +18,6 @@ repositories {
         url = uri("https://maven.fabricmc.net/")
     }
     mavenCentral()
-}
-
-blossom {
-    replaceToken("%gradle.package%", rootProject.group)
 }
 
 dependencies {

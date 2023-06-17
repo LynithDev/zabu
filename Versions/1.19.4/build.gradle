@@ -7,4 +7,10 @@ multiversion {
     minecraftVersion = "1.19.4"
     legacy = false
     javaVersion = JavaVersion.VERSION_17
+    // TODO: Figure out how to dynamically add a dependency using the configuration modImplementation to add fabric-loader
+//    fabricVersion = "0.14.21"
+//    buildTargets = [
+//        "vanilla": "official",
+//        "fabric": "intermediary",
+//    ]
 }

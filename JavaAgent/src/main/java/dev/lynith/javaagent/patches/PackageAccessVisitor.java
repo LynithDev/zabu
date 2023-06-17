@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.lynith.javaagent;
+package dev.lynith.javaagent.patches;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -26,7 +26,7 @@ import org.objectweb.asm.Opcodes;
  * In a development environment, Minecraft classes may be mapped into a package structure with invalid access across
  * packages. The class verifier will complain unless we simply change package-private and protected to public.
  */
-public class PackageAccessFixer extends ClassVisitor {
+public class PackageAccessVisitor extends ClassVisitor {
     private static int modAccess(int access) {
         if ((access & 0x7) != Opcodes.ACC_PRIVATE) {
             return (access & (~0x7)) | Opcodes.ACC_PUBLIC;
@@ -35,7 +35,7 @@ public class PackageAccessFixer extends ClassVisitor {
         }
     }
 
-    public PackageAccessFixer(int api, ClassVisitor classVisitor) {
+    public PackageAccessVisitor(int api, ClassVisitor classVisitor) {
         super(api, classVisitor);
     }
 
