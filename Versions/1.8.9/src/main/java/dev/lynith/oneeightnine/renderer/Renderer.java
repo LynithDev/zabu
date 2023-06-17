@@ -158,11 +158,11 @@ public class Renderer implements IRenderer {
                 super.init(minecraftClient, i, j);
             }
 
-            @Override
-            public void init() {
-                screen.update();
-                super.init();
-            }
+//            @Override
+//            public void init() {
+//                screen.update();
+//                super.init();
+//            }
 
             @Override
             public void removed() {

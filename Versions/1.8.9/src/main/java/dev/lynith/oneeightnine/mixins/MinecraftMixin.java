@@ -24,7 +24,7 @@ import java.util.Map;
 @Mixin(MinecraftClient.class)
 public class MinecraftMixin {
 
-    @Inject(method = "run", at = @At("RETURN"))
+    @Inject(method = "initializeGame", at = @At("RETURN"))
     public void startGame(CallbackInfo ci) {
         EventBus.getEventBus().post(new MinecraftInitEvent());
     }
@@ -39,10 +39,14 @@ public class MinecraftMixin {
         GuiScreens screenType = GuiScreens.UNKNOWN;
 
         for (Map.Entry<GuiScreens, Object> entry : ClientStartup.getInstance().getBridge().getGame().getGuiScreens().entrySet()) {
-            if (entry.getValue().equals(screen.getClass())) {
+            if (entry != null && screen != null && entry.getValue().equals(screen.getClass())) {
                 screenType = entry.getKey();
                 break;
             }
+        }
+
+        if (screenType == null) {
+            screenType = GuiScreens.UNKNOWN;
         }
 
         EventBus.getEventBus().post(new GuiScreenChangedEvent(screenType));

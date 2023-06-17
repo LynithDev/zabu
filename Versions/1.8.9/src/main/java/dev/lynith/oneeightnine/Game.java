@@ -41,7 +41,7 @@ public class Game implements IGame {
         map.put(GuiScreens.LANGUAGE_SELECT, LanguageOptionsScreen.class);
         map.put(GuiScreens.PAUSE_MENU, GameMenuScreen.class);
         map.put(GuiScreens.REALMS_SCREEN, RealmsMainScreen.class);
-        map.put(GuiScreens.IN_GAME, InGameHud.class);
+//        map.put(GuiScreens.IN_GAME, InGameHud.class);
 
         return map;
     }
