@@ -5,7 +5,6 @@ import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.Subscribe;
 import dev.lynith.core.events.impl.GuiScreenChangedEvent;
 import dev.lynith.core.events.impl.MinecraftInitEvent;
-import dev.lynith.core.events.impl.MinecraftShutdownEvent;
 import dev.lynith.core.events.impl.ShutdownEvent;
 import dev.lynith.core.modules.ModuleManager;
 import dev.lynith.core.ui.hud.HudManager;
@@ -14,8 +13,6 @@ import dev.lynith.core.ui.impl.screens.ZabuMainMenu;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.versions.IVersion;
 import lombok.Getter;
-
-import java.lang.instrument.Instrumentation;
 
 public class ClientStartup {
 
@@ -42,9 +39,7 @@ public class ClientStartup {
         EventBus.getEventBus().register(this);
         logger.log("Registered event bus");
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            EventBus.getEventBus().post(new ShutdownEvent());
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> EventBus.getEventBus().post(new ShutdownEvent())));
 
         EventBus.getEventBus().register(ModuleManager.getInstance());
         EventBus.getEventBus().register(HudManager.getInstance());

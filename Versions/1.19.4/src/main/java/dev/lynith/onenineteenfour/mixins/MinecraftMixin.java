@@ -3,7 +3,6 @@ package dev.lynith.onenineteenfour.mixins;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.impl.GuiScreenChangedEvent;
 import dev.lynith.core.events.impl.MinecraftInitEvent;
-import dev.lynith.core.events.impl.MinecraftShutdownEvent;
 import dev.lynith.core.utils.GuiScreens;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -30,11 +29,6 @@ public class MinecraftMixin {
         }
 
         EventBus.getEventBus().post(new GuiScreenChangedEvent(type));
-    }
-
-    @Inject(method = "stop", at = @At("HEAD"))
-    public void shutdown(CallbackInfo ci) {
-        EventBus.getEventBus().post(new MinecraftShutdownEvent());
     }
 
 }

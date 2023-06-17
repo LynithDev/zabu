@@ -44,6 +44,10 @@ public abstract class Component {
     @Getter @Setter
     protected int x, y;
 
+    /**
+     * Whether or not the component should fill the width or height of it's parent component.
+     * Used for things like a flex layout.
+     */
     @Getter
     protected boolean fillWidth, fillHeight;
 
@@ -96,6 +100,10 @@ public abstract class Component {
         setHeight(height);
     }
 
+    /**
+     * Mostly internal use. Used to set the width of the parent component.
+     * @param fillWidth whether to fill the width with the parent component
+     */
     public void setFillWidth(boolean fillWidth) {
         this.fillWidth = fillWidth;
         if (fillWidth && parent != null) {
@@ -103,6 +111,10 @@ public abstract class Component {
         }
     }
 
+    /**
+     * Mostly internal use. Used to set the height of the parent component.
+     * @param fillHeight whether to fill the height with the parent component
+     */
     public void setFillHeight(boolean fillHeight) {
         this.fillHeight = fillHeight;
         if (fillHeight && parent != null) {
