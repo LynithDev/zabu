@@ -15,7 +15,7 @@ A multi-version Minecraft client.
 - [ ] Multiple build targets
     - [x] Vanilla (Obfuscated environment)
     - [ ] [Forge](https://files.minecraftforge.net/) (SRG Mappings)
-    - [ ] [Fabric](https://fabricmc.net/) (Yarn Mappings)
+    - [x] [Fabric](https://fabricmc.net/) (Intermediary Mappings)
     - [ ] [Lunar Client](https://lunarclient.com/) (Custom mappings)
     - [ ] [Badlion Client](https://client.badlion.net/) (Custom mappings)
     - [ ] Others?
