@@ -14,7 +14,7 @@ public abstract class Event {
     private boolean cancelled = false;
 
     public Event() {
-        this.cancellable = true;
+        this.cancellable = false;
     }
 
     public Event(boolean cancellable) {

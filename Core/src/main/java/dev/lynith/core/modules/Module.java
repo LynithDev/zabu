@@ -2,8 +2,7 @@ package dev.lynith.core.modules;
 
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.Logger;
-import dev.lynith.core.utils.Key;
-import dev.lynith.core.utils.KeyboardHelper;
+import dev.lynith.core.input.Key;
 import dev.lynith.core.versions.IVersion;
 import lombok.Getter;
 import lombok.Setter;

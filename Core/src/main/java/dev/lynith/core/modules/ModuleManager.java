@@ -1,11 +1,10 @@
 package dev.lynith.core.modules;
 
 import dev.lynith.core.Logger;
-import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.Subscribe;
 import dev.lynith.core.events.impl.KeyPressEvent;
-import dev.lynith.core.modules.impl.ConsoleSpammerModule;
-import dev.lynith.core.utils.Key;
+import dev.lynith.core.modules.impl.WebsocketChatModule;
+import dev.lynith.core.input.Key;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class ModuleManager {
     public ModuleManager() {}
 
     public void init() {
-        register(new ConsoleSpammerModule());
+        register(new WebsocketChatModule());
 
         for (Module module : modules) {
             if (module.isEnabled()) {

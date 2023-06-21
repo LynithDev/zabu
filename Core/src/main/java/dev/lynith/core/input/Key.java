@@ -1,8 +1,7 @@
-package dev.lynith.core.utils;
+package dev.lynith.core.input;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.Objects;
 

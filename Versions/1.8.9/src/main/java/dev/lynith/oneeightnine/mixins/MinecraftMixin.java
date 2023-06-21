@@ -6,6 +6,7 @@ import dev.lynith.core.events.impl.GuiScreenChangedEvent;
 import dev.lynith.core.events.impl.MinecraftInitEvent;
 import dev.lynith.core.utils.GuiScreens;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -3,6 +3,7 @@ package dev.lynith.core.events;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventBus {
 
@@ -14,7 +15,7 @@ public class EventBus {
         return instance;
     }
 
-    private final List<Object> clazzes = new ArrayList<>();
+    private final CopyOnWriteArrayList<Object> clazzes = new CopyOnWriteArrayList<>();
 
     public void register(Object clazz) {
         if (!clazzes.contains(clazz))

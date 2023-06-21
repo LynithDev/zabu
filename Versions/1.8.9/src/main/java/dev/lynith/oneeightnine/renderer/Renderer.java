@@ -8,6 +8,8 @@ import dev.lynith.core.versions.renderer.MCScreen;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.hud.ChatHud;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.SettingsScreen;
 import net.minecraft.client.util.Window;
@@ -33,18 +35,12 @@ public class Renderer implements IRenderer {
 
     @Override
     public void line(int x1, int y1, int x2, int y2, ZabuColor color) {
-//        Tessellator tessellator = Tessellator.getInstance();
-//        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
-//        GlStateManager.enableBlend();
-//        GlStateManager.disableTexture2D();
-//        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-//        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-//        worldRenderer.begin(1, DefaultVertexFormats.POSITION);
-//        worldRenderer.pos(x1, y1, 0.0D).endVertex();
-//        worldRenderer.pos(x2, y2, 0.0D).endVertex();
-//        tessellator.draw();
-//        GlStateManager.enableTexture2D();
-//        GlStateManager.disableBlend();
+
+    }
+
+    @Override
+    public void textf(String text, int x, int y, ZabuColor color) {
+        MinecraftClient.getInstance().textRenderer.draw(text, x, y, color.toHex());
     }
 
     @Override

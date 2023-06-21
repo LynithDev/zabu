@@ -24,20 +24,20 @@ public class Logger {
         this("unknown");
     }
 
-    public void log(String message) {
-        System.out.println(getString(message));
+    public void log(Object message) {
+        System.out.println(getString(message.toString()));
     }
 
-    public void log(String message, Object... args) {
-        System.out.println(String.format(getString(message), args));
+    public void log(Object message, Object... args) {
+        System.out.printf((getString(message.toString())) + "%n", args);
     }
 
-    public void error(String message) {
-        System.err.println(getString(message));
+    public void error(Object message) {
+        System.err.println(getString(message.toString()));
     }
 
-    public void error(String message, Object... args) {
-        System.err.println(String.format(getString(message), args));
+    public void error(Object message, Object... args) {
+        System.err.printf((getString(message.toString())) + "%n", args);
     }
 
     private String getString(String message) {

@@ -1,6 +1,6 @@
-package dev.lynith.core.utils;
+package dev.lynith.core.input;
 
-public class KeyboardHelper {
+public class Keyboard {
 
     public static final Key KEY_0 = new Key(48);
     public static final Key KEY_1 = new Key(49);

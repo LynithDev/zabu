@@ -4,7 +4,14 @@ tasks.register<Copy>("export-${project.name}")  {
     group = "multiversion ${project.name}"
 
     dependsOn(tasks.named("build").getOrElse(tasks.named("jar").get()))
-    val inFile = "$projectDir/build/libs/${project.name}.jar"
+
+    var inFile = "$projectDir/build/libs/${project.name}.jar"
+    val inFileAll = "$projectDir/build/libs/${project.name}-all.jar"
+
+    if (file(inFileAll).exists()) {
+        inFile = inFileAll
+    }
+
     var outDir = "$rootDir/build/"
 
     if (project.parent != null && project.parent!!.name == "Versions") {

@@ -8,6 +8,8 @@ public interface IVersion {
 
     IRenderer getRenderer();
 
+    IProfile getProfile();
+
     String getVersion();
 
 }

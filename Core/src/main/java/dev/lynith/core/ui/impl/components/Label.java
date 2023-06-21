@@ -41,7 +41,15 @@ public class Label extends Component implements TextFeature {
 
     @Override
     public void setText(String text, boolean updateSize) {
-
+        this.text = text;
+        if (updateSize) {
+            width = bridge.getRenderer().getTextWidth(this.text);
+            height = bridge.getRenderer().getTextHeight();
+        }
     }
 
+    @Override
+    public void setText(String text) {
+        setText(text, true);
+    }
 }

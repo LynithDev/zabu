@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "dev.lynith.multiversion.part"
+    id "com.github.johnrengelman.shadow" version "8.0.0"
 }
 
 compileJava {
@@ -8,6 +9,18 @@ compileJava {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+configurations {
+    fat
+    implementation.extendsFrom(fat)
+}
+
+jar {
+    from {
+        configurations.fat.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
+    fat("org.java-websocket:Java-WebSocket:1.5.3")
 }

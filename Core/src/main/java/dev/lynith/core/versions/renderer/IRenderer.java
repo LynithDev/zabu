@@ -83,6 +83,16 @@ public interface IRenderer {
      */
     void line(int x1, int y1, int x2, int y2, ZabuColor color);
 
+
+    /**
+     * Draws text with Minecraft's font + formatting codes
+     * @param text The text to draw
+     * @param x The x position of the text
+     * @param y The y position of the text
+     * @param color The default color of the text
+     */
+    void textf(String text, int x, int y, ZabuColor color);
+
     /**
      * Draws text on the screen
      * @param text The text to draw

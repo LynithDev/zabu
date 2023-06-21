@@ -2,7 +2,6 @@ package dev.lynith.core.ui;
 
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.Logger;
-import dev.lynith.core.utils.MutableTuple;
 import dev.lynith.core.utils.Tuple;
 import dev.lynith.core.versions.IVersion;
 import dev.lynith.core.versions.renderer.IRenderer;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import dev.lynith.core.utils.ZabuColor;
 
 /**
  * The base class for everything in the UI. This is where you should start when creating a new component.
@@ -137,6 +137,19 @@ public abstract class Component {
      */
     public void update() {}
 
+    public ZabuColor from(int color) {
+        return new ZabuColor(color);
+    }
+
+    public ZabuColor from(int r, int g, int b) {
+        return new ZabuColor(r, g, b);
+    }
+
+    public ZabuColor from(int r, int g, int b, int a) {
+        return new ZabuColor(r, g, b, a);
+    }
+
+    // Callbacks
     private final List<Tuple<Class<? extends CallbackInterface>, CallbackInterface>> callbacks = new ArrayList<>();
 
     protected interface CallbackInterface {}
@@ -146,8 +159,6 @@ public abstract class Component {
     }
 
     public <T extends CallbackInterface> void callCallbacks(Class<T> callback, Object... args) {
-        boolean antiSpam = !callback.getSimpleName().equals("EnterCallback") && !callback.getSimpleName().equals("ExitCallback");
-
         for (Tuple<Class<? extends CallbackInterface>, CallbackInterface> entry : callbacks) {
             Class<? extends CallbackInterface> callbackClass = entry.getKey();
             CallbackInterface callbackInstance = entry.getValue();
