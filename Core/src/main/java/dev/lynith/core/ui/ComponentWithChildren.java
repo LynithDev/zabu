@@ -22,6 +22,22 @@ public class ComponentWithChildren<C extends Component<C, S>, S extends Componen
     }
 
     @Override
+    public void init() {
+        for (Component<?, ?> child : children) {
+            child.init();
+        }
+        super.init();
+    }
+
+    @Override
+    public void update() {
+        for (Component<?, ?> child : children) {
+            child.update();
+        }
+        super.update();
+    }
+
+    @Override
     public <CB extends ComponentCallbacks.CallbackInterface> C listener(Class<CB> callback, CB callbackInstance) {
         for (Component<?, ?> child : children) {
             child.listener(callback, callbackInstance);

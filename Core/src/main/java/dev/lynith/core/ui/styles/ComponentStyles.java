@@ -4,7 +4,7 @@ import dev.lynith.core.ui.Component;
 import dev.lynith.core.utils.ZabuColor;
 import lombok.Getter;
 
-public class ComponentStyles<C extends Component<C, ?>, S extends ComponentStyles<C, S>> {
+public class ComponentStyles<C extends Component<C, S>, S extends ComponentStyles<C, S>> {
 
     @Getter
     private final C component;
