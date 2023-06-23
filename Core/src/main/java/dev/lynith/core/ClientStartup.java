@@ -8,6 +8,7 @@ import dev.lynith.core.events.impl.MinecraftInitEvent;
 import dev.lynith.core.events.impl.ShutdownEvent;
 import dev.lynith.core.input.KeyConfig;
 import dev.lynith.core.modules.ModuleManager;
+import dev.lynith.core.ui.callbacks.impl.MouseEnter;
 import dev.lynith.core.ui.components.Text;
 import dev.lynith.core.ui.styles.Spacing;
 import dev.lynith.core.uiOld.hud.HudManager;
@@ -49,13 +50,6 @@ public class ClientStartup {
         EventBus.getEventBus().register(ModuleManager.getInstance());
         EventBus.getEventBus().register(HudManager.getInstance());
         EventBus.getEventBus().register(KeyConfig.getInstance());
-
-        Text text = new Text("Hello World");
-
-        text.style(styles -> {
-            styles.textColor = ZabuColor.from(255);
-            styles.padding = Spacing.none();
-        });
 
         if (!ZabuWS.getInstance().isOpen() || ZabuWS.getInstance().isClosed()) {
             ZabuWS.getInstance().connect();

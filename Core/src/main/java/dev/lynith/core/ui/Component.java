@@ -6,13 +6,18 @@ import dev.lynith.core.ui.callbacks.impl.MouseClick;
 import dev.lynith.core.ui.callbacks.impl.MouseEnter;
 import dev.lynith.core.ui.callbacks.impl.MouseLeave;
 import dev.lynith.core.ui.styles.ComponentStyles;
+import dev.lynith.core.utils.MathHelper;
 import dev.lynith.core.versions.renderer.IRenderer;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public class Component<C extends Component<C, S>, S extends ComponentStyles<C, S>> {
 
-    public int x, y, width, height;
-    private final ComponentCallbacks callbacks = new ComponentCallbacks();
+    @Accessors(fluent = true)
+    @Getter @Setter
+    private int x, y, width, height;
+    private final ComponentCallbacks callbacks;
 
     private S activeStyle;
 
@@ -35,7 +40,10 @@ public class Component<C extends Component<C, S>, S extends ComponentStyles<C, S
 
     protected final Logger logger = new Logger(this.getClass().getSimpleName());
 
-    public Component() {}
+    public Component() {
+        this.callbacks = new ComponentCallbacks(this);
+        this.activeStyle = styles;
+    }
 
     public void render(IRenderer ctx) {}
     public void update() {}
@@ -80,6 +88,15 @@ public class Component<C extends Component<C, S>, S extends ComponentStyles<C, S
     public <CB extends ComponentCallbacks.CallbackInterface> C listener(CB callbackInstance) {
         callbacks.addCallback(callbackInstance);
         return (C) this;
+    }
+
+    public void callCallbacks(Class<? extends ComponentCallbacks.CallbackInterface> callback, Object... args) {
+        callbacks.callCallbacks(callback, args);
+    }
+
+    // --- Helpers ---
+    public static boolean intersecting(Component<?, ?> component, int x, int y) {
+        return MathHelper.intersecting(component.x, component.y, component.x + component.width, component.y + component.height, x, y);
     }
 
 }

@@ -31,6 +31,7 @@ public class Game implements IGame {
 
     @Override
     public Map<GuiScreens, Object> getGuiScreens() {
+
         Map<GuiScreens, Object> map = new HashMap<>();
 
         map.put(GuiScreens.OPTIONS_SCREEN, SettingsScreen.class);
