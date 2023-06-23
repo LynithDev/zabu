@@ -1,7 +1,7 @@
 package dev.lynith.onenineteenfour.mixins;
 
 import dev.lynith.core.ClientStartup;
-import dev.lynith.core.ui.hud.HudManager;
+import dev.lynith.core.uiOld.hud.HudManager;
 import dev.lynith.onenineteenfour.renderer.Renderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;

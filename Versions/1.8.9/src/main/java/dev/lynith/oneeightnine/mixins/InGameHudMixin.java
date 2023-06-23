@@ -1,7 +1,7 @@
 package dev.lynith.oneeightnine.mixins;
 
 import dev.lynith.core.ClientStartup;
-import dev.lynith.core.ui.hud.HudManager;
+import dev.lynith.core.uiOld.hud.HudManager;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
