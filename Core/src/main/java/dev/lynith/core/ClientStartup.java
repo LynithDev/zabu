@@ -6,6 +6,7 @@ import dev.lynith.core.events.Subscribe;
 import dev.lynith.core.events.impl.GuiScreenChangedEvent;
 import dev.lynith.core.events.impl.MinecraftInitEvent;
 import dev.lynith.core.events.impl.ShutdownEvent;
+import dev.lynith.core.hud.HudManager;
 import dev.lynith.core.input.KeyConfig;
 import dev.lynith.core.modules.ModuleManager;
 import dev.lynith.core.ui.ScreenWrapper;
@@ -44,7 +45,7 @@ public class ClientStartup {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> EventBus.getEventBus().post(new ShutdownEvent())));
 
         EventBus.getEventBus().register(ModuleManager.getInstance());
-//        EventBus.getEventBus().register(HudManager.getInstance());
+        EventBus.getEventBus().register(HudManager.getInstance());
         EventBus.getEventBus().register(KeyConfig.getInstance());
 
         if (!ZabuWS.getInstance().isOpen() || ZabuWS.getInstance().isClosed()) {
@@ -57,7 +58,7 @@ public class ClientStartup {
     private void onMinecraftInit(MinecraftInitEvent event) {
         ConfigManager.getInstance().init();
         ModuleManager.getInstance().init();
-//        HudManager.getInstance().init();
+        HudManager.getInstance().init();
     }
 
     @Subscribe

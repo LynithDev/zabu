@@ -3,10 +3,9 @@ package dev.lynith.core.ui;
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.Logger;
 import dev.lynith.core.ui.callbacks.ComponentCallbacks;
-import dev.lynith.core.ui.callbacks.impl.MouseClick;
-import dev.lynith.core.ui.callbacks.impl.MouseEnter;
-import dev.lynith.core.ui.callbacks.impl.MouseLeave;
+import dev.lynith.core.ui.callbacks.impl.*;
 import dev.lynith.core.ui.styles.AbstractComponentStyles;
+import dev.lynith.core.utils.ExtendedHashMap;
 import dev.lynith.core.utils.MathHelper;
 import dev.lynith.core.versions.IVersion;
 import dev.lynith.core.versions.renderer.IRenderer;
@@ -14,6 +13,9 @@ import dev.lynith.core.ui.styles.ComponentStyles;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base class for all UI components
@@ -29,6 +31,16 @@ public class Component<C extends Component<C, S>, S extends AbstractComponentSty
      */
     @Setter
     private int x = 0, y = 0, width = 0, height = 0;
+
+    /**
+     * Used internally to store the offset of the component.
+     * For now this is only used for dragging components
+     */
+    private int offX, offY;
+
+    // Used for anything special which doesn't deserve its own field.
+    @Getter
+    private final ExtendedHashMap<Object> properties = new ExtendedHashMap<>();
 
     private final ComponentCallbacks callbacks;
     @Setter @Accessors(fluent = false)
@@ -59,6 +71,24 @@ public class Component<C extends Component<C, S>, S extends AbstractComponentSty
     public void init() {
         listener(MouseEnter.class, (mouseX, mouseY) -> {
             setActiveStyle(hoverStyles);
+        });
+
+        listener(MousePress.class, (mouseX, mouseY) -> {
+            offX = mouseX - x;
+            offY = mouseY - y;
+            properties.put("focused", true);
+        });
+
+        listener(MouseDrag.class, (mouseX, mouseY) -> {
+            if (properties.getBoolean("dragging")) {
+                x(mouseX - offX);
+                y(mouseY - offY);
+            }
+        });
+
+        listener(MouseRelease.class, (mouseX, mouseY) -> {
+            properties.put("dragging", false);
+            properties.put("focused", false);
         });
 
         listener(MouseClick.class, (mouseX, mouseY) -> {

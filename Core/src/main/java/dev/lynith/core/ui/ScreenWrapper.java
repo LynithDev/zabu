@@ -89,7 +89,6 @@ public class ScreenWrapper extends MCScreen {
 
     @Override
     public void mouseClickedMoved(int mouseX, int mouseY) {
-        // Replaced with custom drag implementation. This one is choppier as it gets called less often
-//        this.screen.callCallbacks(MouseDrag.class, mouseX, mouseY);
+        // Do not call Drag callback here, unless you want something running at 20 updates a second :D
     }
 }

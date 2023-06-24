@@ -61,4 +61,17 @@ public class ZabuColor {
     public String toString() {
         return "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
     }
+
+    // --- CONSTANTS ---
+
+    public static final ZabuColor BLACK = new ZabuColor(0, 0, 0);
+    public static final ZabuColor WHITE = new ZabuColor(255, 255, 255);
+    public static final ZabuColor RED = new ZabuColor(255, 0, 0);
+    public static final ZabuColor GREEN = new ZabuColor(0, 255, 0);
+    public static final ZabuColor BLUE = new ZabuColor(0, 0, 255);
+    public static final ZabuColor YELLOW = new ZabuColor(255, 255, 0);
+    public static final ZabuColor CYAN = new ZabuColor(0, 255, 255);
+    public static final ZabuColor MAGENTA = new ZabuColor(255, 0, 255);
+
+    public static final ZabuColor TRANSPARENT = new ZabuColor(0, 0, 0, 0);
 }

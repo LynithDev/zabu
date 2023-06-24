@@ -1,6 +1,7 @@
 package dev.lynith.onenineteenfour.mixins;
 
 import dev.lynith.core.ClientStartup;
+import dev.lynith.core.hud.HudManager;
 import dev.lynith.onenineteenfour.Renderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
@@ -16,12 +17,12 @@ public class InGameHudMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void render(MatrixStack poseStack, float f, CallbackInfo ci) {
-//        Renderer.matrixStack = poseStack;
-//        if (!customHudInit) {
-//            HudManager.getInstance().getInGameHud().init();
-//            customHudInit = true;
-//        }
-//        HudManager.getInstance().getInGameHud().render(ClientStartup.getInstance().getBridge().getRenderer());
+        Renderer.matrixStack = poseStack;
+        if (!customHudInit) {
+            HudManager.getInstance().getInGameHud().init();
+            customHudInit = true;
+        }
+        HudManager.getInstance().getInGameHud().render(ClientStartup.getInstance().getBridge().getRenderer());
     }
 
 }

@@ -78,7 +78,7 @@ public class ComponentWithChildren<C extends Component<C, S>, S extends Abstract
         return (C) this;
     }
 
-    public C add(List<Component<?, ?>> children) {
+    public <E extends Component<?,?>> C add(List<E> children) {
         for (Component<?, ?> child : children) {
             add(child);
         }
@@ -92,7 +92,7 @@ public class ComponentWithChildren<C extends Component<C, S>, S extends Abstract
         return (C) this;
     }
 
-    public C remove(List<Component<?, ?>> children) {
+    public <E extends Component<?,?>> C remove(List<E> children) {
         for (Component<?, ?> child : children) {
             remove(child);
         }

@@ -82,4 +82,8 @@ public abstract class AbstractComponentStyles<C extends Component<C, S>, S exten
      */
     private ZabuColor background = ZabuColor.from(0);
 
+    /**
+     * Declares whether the component is draggable or not
+     */
+    private boolean draggable = false;
 }
