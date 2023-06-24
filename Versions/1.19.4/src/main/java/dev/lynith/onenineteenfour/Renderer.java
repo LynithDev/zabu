@@ -1,4 +1,4 @@
-package dev.lynith.onenineteenfour.renderer;
+package dev.lynith.onenineteenfour;
 
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.utils.GuiScreens;
@@ -111,7 +111,7 @@ public class Renderer implements IRenderer {
             }
 
             // Special condition for the options screen because it requires the game settings
-            if (screen == GuiScreens.OPTIONS_SCREEN) {
+            if (screen == GuiScreens.OPTIONS) {
                 MinecraftClient.getInstance().setScreen(new OptionsScreen((Screen) arguments.get(0), MinecraftClient.getInstance().options));
                 return;
             }

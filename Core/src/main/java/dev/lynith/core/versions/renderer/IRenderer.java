@@ -1,7 +1,7 @@
 package dev.lynith.core.versions.renderer;
 
-import dev.lynith.core.ui.screen.Screen;
-import dev.lynith.core.ui.screen.ScreenWrapper;
+import dev.lynith.core.ui.Screen;
+import dev.lynith.core.ui.ScreenWrapper;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.ZabuColor;
 

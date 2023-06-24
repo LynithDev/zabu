@@ -3,8 +3,6 @@ package dev.lynith.core.input;
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.events.Subscribe;
 import dev.lynith.core.events.impl.KeyPressEvent;
-import dev.lynith.core.ui.screen.TestScreen;
-import dev.lynith.core.uiOld.impl.screens.menu.ModMenu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +11,7 @@ public class KeyConfig {
 
     public KeyConfig() {
         addCallback(Keyboard.KEY_RSHIFT, key -> {
-            ClientStartup.getInstance().getBridge().getRenderer().setCurrentScreen(new TestScreen());
+//            ClientStartup.getInstance().getBridge().getRenderer().setCurrentScreen(new TestScreen());
         });
     }
 

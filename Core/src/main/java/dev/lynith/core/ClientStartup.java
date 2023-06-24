@@ -8,19 +8,13 @@ import dev.lynith.core.events.impl.MinecraftInitEvent;
 import dev.lynith.core.events.impl.ShutdownEvent;
 import dev.lynith.core.input.KeyConfig;
 import dev.lynith.core.modules.ModuleManager;
-import dev.lynith.core.ui.callbacks.impl.MouseEnter;
-import dev.lynith.core.ui.components.Text;
-import dev.lynith.core.ui.screen.Screen;
-import dev.lynith.core.ui.screen.TestScreen;
-import dev.lynith.core.ui.styles.Spacing;
-import dev.lynith.core.uiOld.hud.HudManager;
-import dev.lynith.core.uiOld.impl.ScreenWrapper;
-import dev.lynith.core.uiOld.impl.screens.ZabuMainMenu;
+import dev.lynith.core.ui.ScreenWrapper;
+import dev.lynith.core.ui.screen.MainMenu;
 import dev.lynith.core.utils.GuiScreens;
-import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.IVersion;
 import dev.lynith.core.websocket.ZabuWS;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class ClientStartup {
 
@@ -50,7 +44,7 @@ public class ClientStartup {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> EventBus.getEventBus().post(new ShutdownEvent())));
 
         EventBus.getEventBus().register(ModuleManager.getInstance());
-        EventBus.getEventBus().register(HudManager.getInstance());
+//        EventBus.getEventBus().register(HudManager.getInstance());
         EventBus.getEventBus().register(KeyConfig.getInstance());
 
         if (!ZabuWS.getInstance().isOpen() || ZabuWS.getInstance().isClosed()) {
@@ -63,7 +57,7 @@ public class ClientStartup {
     private void onMinecraftInit(MinecraftInitEvent event) {
         ConfigManager.getInstance().init();
         ModuleManager.getInstance().init();
-        HudManager.getInstance().init();
+//        HudManager.getInstance().init();
     }
 
     @Subscribe
@@ -75,7 +69,7 @@ public class ClientStartup {
     @Subscribe
     private void onGuiScreen(GuiScreenChangedEvent event) {
         if (event.getScreenType() == GuiScreens.MAIN_MENU) {
-            event.getBridge().getRenderer().setCurrentScreen(new ScreenWrapper(GuiScreens.MAIN_MENU, new ZabuMainMenu()));
+            event.getBridge().getRenderer().setCurrentScreen(new ScreenWrapper(GuiScreens.MAIN_MENU, new MainMenu()));
         }
     }
 

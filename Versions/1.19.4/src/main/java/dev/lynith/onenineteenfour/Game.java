@@ -33,7 +33,7 @@ public class Game implements IGame {
         return Map.of(
                 GuiScreens.MAIN_MENU, TitleScreen.class,
                 GuiScreens.INVENTORY, InventoryScreen.class,
-                GuiScreens.OPTIONS_SCREEN, OptionsScreen.class,
+                GuiScreens.OPTIONS, OptionsScreen.class,
                 GuiScreens.MULTIPLAYER_SELECT, MultiplayerScreen.class,
                 GuiScreens.SINGLEPLAYER_SELECT, SelectWorldScreen.class,
                 GuiScreens.LANGUAGE_SELECT, LanguageOptionsScreen.class,

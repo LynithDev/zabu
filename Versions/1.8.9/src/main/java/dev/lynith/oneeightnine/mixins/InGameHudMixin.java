@@ -1,7 +1,6 @@
 package dev.lynith.oneeightnine.mixins;
 
 import dev.lynith.core.ClientStartup;
-import dev.lynith.core.uiOld.hud.HudManager;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,11 +15,11 @@ public class InGameHudMixin {
     @Inject(method = "renderBossBar", at = @At("RETURN"))
     private void renderGameOverlay(CallbackInfo ci) {
         // No proper init method in Gui so have to resort to this
-        if (!customHudInit) {
-            HudManager.getInstance().getInGameHud().init();
-            customHudInit = true;
-        }
-        HudManager.getInstance().getInGameHud().render(ClientStartup.getInstance().getBridge().getRenderer());
+//        if (!customHudInit) {
+//            HudManager.getInstance().getInGameHud().init();
+//            customHudInit = true;
+//        }
+//        HudManager.getInstance().getInGameHud().render(ClientStartup.getInstance().getBridge().getRenderer());
     }
 
 }

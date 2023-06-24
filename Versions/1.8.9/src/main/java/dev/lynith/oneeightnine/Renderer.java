@@ -108,7 +108,7 @@ public class Renderer implements IRenderer {
             }
 
             // Special condition for the options screen because it requires the game settings
-            if (screen == GuiScreens.OPTIONS_SCREEN) {
+            if (screen == GuiScreens.OPTIONS) {
                 MinecraftClient.getInstance().setScreen(new SettingsScreen((Screen) arguments.get(0), MinecraftClient.getInstance().options));
                 return;
             }

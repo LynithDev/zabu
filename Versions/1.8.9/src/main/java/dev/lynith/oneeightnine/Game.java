@@ -4,7 +4,6 @@ import com.mojang.realmsclient.RealmsMainScreen;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.versions.IGame;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.SettingsScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -34,7 +33,7 @@ public class Game implements IGame {
 
         Map<GuiScreens, Object> map = new HashMap<>();
 
-        map.put(GuiScreens.OPTIONS_SCREEN, SettingsScreen.class);
+        map.put(GuiScreens.OPTIONS, SettingsScreen.class);
         map.put(GuiScreens.MAIN_MENU, TitleScreen.class);
         map.put(GuiScreens.INVENTORY, InventoryScreen.class);
         map.put(GuiScreens.SINGLEPLAYER_SELECT, SelectWorldScreen.class);

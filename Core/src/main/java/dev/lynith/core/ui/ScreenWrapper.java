@@ -1,15 +1,14 @@
-package dev.lynith.core.ui.screen;
+package dev.lynith.core.ui;
 
-import dev.lynith.core.ClientStartup;
 import dev.lynith.core.ui.callbacks.impl.*;
-import dev.lynith.core.uiOld.Component;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.versions.renderer.MCScreen;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class ScreenWrapper extends MCScreen {
 
-    @Getter
+    @Getter @Accessors(fluent = false)
     private final GuiScreens type;
 
     @Getter

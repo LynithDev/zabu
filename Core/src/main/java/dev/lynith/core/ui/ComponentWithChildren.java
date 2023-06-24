@@ -5,14 +5,16 @@ import dev.lynith.core.ui.callbacks.impl.Destroyed;
 import dev.lynith.core.ui.styles.AbstractComponentStyles;
 import dev.lynith.core.versions.renderer.IRenderer;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ComponentWithChildren<C extends Component<C, S>, S extends AbstractComponentStyles<C, S>> extends Component<C, S> {
 
-    @Getter
-    private final List<Component<?, ?>> children = new ArrayList<>();
+    @Getter @Accessors(fluent = false)
+    private final CopyOnWriteArrayList<Component<?, ?>> children = new CopyOnWriteArrayList<>();
 
     @Override
     public void render(IRenderer ctx) {
@@ -40,22 +42,6 @@ public class ComponentWithChildren<C extends Component<C, S>, S extends Abstract
         }
         super.update();
     }
-
-//    @Override
-//    public <CB extends ComponentCallbacks.CallbackInterface> C listener(Class<CB> callback, CB callbackInstance) {
-//        for (Component<?, ?> child : children) {
-//            child.listener(callback, callbackInstance);
-//        }
-//        return super.listener(callback, callbackInstance);
-//    }
-//
-//    @Override
-//    public <CB extends ComponentCallbacks.CallbackInterface> C listener(CB callbackInstance) {
-//        for (Component<?, ?> child : children) {
-//            child.listener(callbackInstance);
-//        }
-//        return super.listener(callbackInstance);
-//    }
 
     @Override
     public void callCallbacks(Class<? extends ComponentCallbacks.CallbackInterface> callback, Object... args) {
