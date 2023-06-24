@@ -1,7 +1,7 @@
 package dev.lynith.core.versions.renderer;
 
-import dev.lynith.core.uiOld.impl.Screen;
-import dev.lynith.core.uiOld.impl.ScreenWrapper;
+import dev.lynith.core.ui.screen.Screen;
+import dev.lynith.core.ui.screen.ScreenWrapper;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.ZabuColor;
 
@@ -22,11 +22,11 @@ public interface IRenderer {
      * Sets the current UI Screen to be rendered
      * @param screen The screen to render
      */
-    default void setCurrentScreen(Screen screen) {
+    default void setCurrentScreen(Screen<?, ?> screen) {
         setCurrentScreen(new ScreenWrapper(screen));
     }
 
-    default void setCurrentScreen(GuiScreens type, Screen screen) {
+    default void setCurrentScreen(GuiScreens type, Screen<?, ?> screen) {
         setCurrentScreen(new ScreenWrapper(type, screen));
     }
 

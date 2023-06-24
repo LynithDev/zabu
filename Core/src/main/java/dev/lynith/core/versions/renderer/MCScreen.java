@@ -9,17 +9,17 @@ public abstract class MCScreen {
 
     public abstract GuiScreens getType();
 
-    public void render(int mouseX, int mouseY, float partialTicks) {};
-    public void init() {}
-    public void update() {}
+    abstract public void render(int mouseX, int mouseY, float partialTicks);
+    abstract public void init();
+    abstract public void update();
 
-    public void onClosed() {}
-    public void onResize(int width, int height) {}
+    abstract public void onClosed();
+    abstract public void onResize(int width, int height);
 
-    public void keyTyped(char typedChar, int keyCode) {};
+    abstract public void keyTyped(char typedChar, int keyCode);
 
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {};
-    public void mouseReleased(int mouseX, int mouseY, int mouseButton) {};
-    public void mouseClickedMoved(int mouseX, int mouseY) {};
+    abstract public void mouseClicked(int mouseX, int mouseY, int mouseButton);
+    abstract public void mouseReleased(int mouseX, int mouseY, int mouseButton);
+    abstract public void mouseClickedMoved(int mouseX, int mouseY);
 
 }

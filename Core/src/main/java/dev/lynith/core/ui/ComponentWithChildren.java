@@ -1,6 +1,7 @@
 package dev.lynith.core.ui;
 
 import dev.lynith.core.ui.callbacks.ComponentCallbacks;
+import dev.lynith.core.ui.callbacks.impl.Destroyed;
 import dev.lynith.core.ui.styles.AbstractComponentStyles;
 import dev.lynith.core.versions.renderer.IRenderer;
 import lombok.Getter;
@@ -23,9 +24,12 @@ public class ComponentWithChildren<C extends Component<C, S>, S extends Abstract
 
     @Override
     public void init() {
+        listener(Destroyed.class, () -> getChildren().clear());
+
         for (Component<?, ?> child : children) {
             child.init();
         }
+
         super.init();
     }
 
@@ -37,20 +41,28 @@ public class ComponentWithChildren<C extends Component<C, S>, S extends Abstract
         super.update();
     }
 
-    @Override
-    public <CB extends ComponentCallbacks.CallbackInterface> C listener(Class<CB> callback, CB callbackInstance) {
-        for (Component<?, ?> child : children) {
-            child.listener(callback, callbackInstance);
-        }
-        return super.listener(callback, callbackInstance);
-    }
+//    @Override
+//    public <CB extends ComponentCallbacks.CallbackInterface> C listener(Class<CB> callback, CB callbackInstance) {
+//        for (Component<?, ?> child : children) {
+//            child.listener(callback, callbackInstance);
+//        }
+//        return super.listener(callback, callbackInstance);
+//    }
+//
+//    @Override
+//    public <CB extends ComponentCallbacks.CallbackInterface> C listener(CB callbackInstance) {
+//        for (Component<?, ?> child : children) {
+//            child.listener(callbackInstance);
+//        }
+//        return super.listener(callbackInstance);
+//    }
 
     @Override
-    public <CB extends ComponentCallbacks.CallbackInterface> C listener(CB callbackInstance) {
+    public void callCallbacks(Class<? extends ComponentCallbacks.CallbackInterface> callback, Object... args) {
         for (Component<?, ?> child : children) {
-            child.listener(callbackInstance);
+            child.callCallbacks(callback, args);
         }
-        return super.listener(callbackInstance);
+        super.callCallbacks(callback, args);
     }
 
     public C add(Component<?, ?> child) {

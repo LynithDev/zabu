@@ -6,6 +6,7 @@ import dev.lynith.core.ui.callbacks.impl.MouseClick;
 import dev.lynith.core.ui.callbacks.impl.MouseEnter;
 import dev.lynith.core.ui.callbacks.impl.MouseLeave;
 import dev.lynith.core.ui.styles.AbstractComponentStyles;
+import dev.lynith.core.ui.styles.ComponentStyles;
 import dev.lynith.core.utils.MathHelper;
 import dev.lynith.core.versions.renderer.IRenderer;
 import lombok.Getter;
@@ -16,9 +17,10 @@ public class Component<C extends Component<C, S>, S extends AbstractComponentSty
 
     @Accessors(fluent = true)
     @Getter @Setter
-    private int x, y, width, height;
+    private int x = 0, y = 0, width = 0, height = 0;
     private final ComponentCallbacks callbacks;
 
+    @Setter
     private S activeStyle;
 
     public S getStyle() {
@@ -37,21 +39,17 @@ public class Component<C extends Component<C, S>, S extends AbstractComponentSty
         this.styles = styles;
         this.hoverStyles = hoverStyles;
         this.clickStyles = clickStyles;
+        setActiveStyle(styles);
     }
 
     protected void setStyles(S styles) {
         setStyles(styles, styles, styles);
     }
 
-    protected void setActiveStyle(S activeStyle) {
-        this.activeStyle = activeStyle;
-    }
-
     protected final Logger logger = new Logger(this.getClass().getSimpleName());
 
     public Component() {
         this.callbacks = new ComponentCallbacks(this);
-        this.activeStyle = styles;
     }
 
     /**

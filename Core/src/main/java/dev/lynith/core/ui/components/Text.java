@@ -13,6 +13,7 @@ public class Text extends Component<Text, Text.TextStyles> {
     private String text;
 
     public Text(String text) {
+        super();
         this.text = text;
         setStyles(new TextStyles(this));
     }

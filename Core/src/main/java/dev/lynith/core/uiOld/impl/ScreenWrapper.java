@@ -52,6 +52,11 @@ public class ScreenWrapper extends MCScreen {
     }
 
     @Override
+    public void update() {
+
+    }
+
+    @Override
     public void onClosed() {
         this.screen.callCallbacks(Component.DestroyCallback.class);
         ClientStartup.getInstance().getBridge().getRenderer().setCurrentScreen(GuiScreens.UNKNOWN);
@@ -85,6 +90,11 @@ public class ScreenWrapper extends MCScreen {
         }
         this.dragging = false;
         this.screen.callCallbacks(Component.ReleaseCallback.class, mouseX, mouseY);
+    }
+
+    @Override
+    public void mouseClickedMoved(int mouseX, int mouseY) {
+
     }
 
 }

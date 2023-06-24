@@ -16,5 +16,4 @@ public abstract class Screen<C extends Screen<C, S>, S extends AbstractComponent
     public Screen() {
         this("Unknown");
     }
-
 }

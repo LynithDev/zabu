@@ -3,7 +3,9 @@ package dev.lynith.core.ui.styles;
 import dev.lynith.core.ui.Component;
 import dev.lynith.core.utils.ZabuColor;
 import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 public abstract class AbstractComponentStyles<C extends Component<C, S>, S extends AbstractComponentStyles<C, S>> {
 
     @Getter
@@ -17,28 +19,28 @@ public abstract class AbstractComponentStyles<C extends Component<C, S>, S exten
      * The padding of the component
      * @see Spacing
      */
-    public Spacing padding = new Spacing();
+    private Spacing padding = new Spacing();
 
     /**
      * The margin of the component
      * @see Spacing
      */
-    public Spacing margin = new Spacing();
+    private Spacing margin = new Spacing();
 
     /**
      * The border of the component
      * @see Border
      */
-    public Border border = new Border();
+    private Border border = new Border();
 
     /**
      * Whether the border should affect the bounding box of the component
      */
-    public boolean borderBoundingBox = false;
+    private boolean borderBoundingBox = false;
 
     /**
      * The background color of the component
      */
-    public ZabuColor background = ZabuColor.from(0);
+    private ZabuColor background = ZabuColor.from(0);
 
 }

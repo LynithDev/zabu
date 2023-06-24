@@ -7,6 +7,11 @@ public interface MouseEnter extends ComponentCallbacks.CallbackInterface {
     void handle(int mouseX, int mouseY);
 
     default boolean allowed(Component<?,?> component, int x, int y) {
-        return Component.intersecting(component, x, y);
+        if (Component.intersecting(component, x, y)) {
+            return true;
+        } else {
+            component.callCallbacks(MouseLeave.class, x, y);
+            return false;
+        }
     }
 }

@@ -59,9 +59,10 @@ public class ComponentCallbacks {
                     Method handleMethod = null;
                     Method allowedMethod = null;
 
+                    inner:
                     for (Method method : callbackClass.getMethods()) {
                         if (handleMethod != null && allowedMethod != null) {
-                            break;
+                            break inner;
                         }
 
                         if (method.getName().equalsIgnoreCase("handle")) {

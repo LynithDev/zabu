@@ -1,4 +1,4 @@
-package dev.lynith.oneeightnine.renderer;
+package dev.lynith.oneeightnine;
 
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.utils.GuiScreens;
@@ -8,8 +8,6 @@ import dev.lynith.core.versions.renderer.MCScreen;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.SettingsScreen;
 import net.minecraft.client.util.Window;
@@ -153,12 +151,6 @@ public class Renderer implements IRenderer {
                 screen.init();
                 super.init(minecraftClient, i, j);
             }
-
-//            @Override
-//            public void init() {
-//                screen.update();
-//                super.init();
-//            }
 
             @Override
             public void removed() {
