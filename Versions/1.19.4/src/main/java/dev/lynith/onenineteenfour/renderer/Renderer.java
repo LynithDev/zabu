@@ -37,6 +37,11 @@ public class Renderer implements IRenderer {
     }
 
     @Override
+    public void textf(String text, int x, int y, ZabuColor color) {
+        MinecraftClient.getInstance().textRenderer.draw(matrixStack, text, x, y, color.toHex());
+    }
+
+    @Override
     public void text(String text, int x, int y, ZabuColor color, boolean shadow) {
         if (shadow) {
             MinecraftClient.getInstance().textRenderer.drawWithShadow(matrixStack, text, x, y, color.toHex());
