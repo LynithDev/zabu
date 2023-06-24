@@ -1,7 +1,7 @@
 package dev.lynith.core.ui.components;
 
 import dev.lynith.core.ui.Component;
-import dev.lynith.core.ui.styles.ComponentStyles;
+import dev.lynith.core.ui.styles.AbstractComponentStyles;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;
 import lombok.Getter;
@@ -23,12 +23,12 @@ public class Text extends Component<Text, Text.TextStyles> {
 
     @Override
     public void render(IRenderer ctx) {
-
+        ctx.text(text, x(),  y());
 
         super.render(ctx);
     }
 
-    public static class TextStyles extends ComponentStyles<Text, TextStyles> {
+    public static class TextStyles extends AbstractComponentStyles<Text, TextStyles> {
 
         public TextStyles(Text component) {
             super(component);

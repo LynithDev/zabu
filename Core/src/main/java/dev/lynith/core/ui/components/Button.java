@@ -2,8 +2,7 @@ package dev.lynith.core.ui.components;
 
 import dev.lynith.core.ui.Component;
 import dev.lynith.core.ui.callbacks.impl.MouseClick;
-import dev.lynith.core.ui.callbacks.impl.MouseDrag;
-import dev.lynith.core.ui.styles.ComponentStyles;
+import dev.lynith.core.ui.styles.AbstractComponentStyles;
 import dev.lynith.core.versions.renderer.IRenderer;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +23,8 @@ public class Button extends Component<Button, Button.ButtonStyles> {
 
     @Override
     public void render(IRenderer ctx) {
+        ctx.rect(x(), y(), width(), height(), getStyle().background);
+        ctx.text(text, x(),  y());
         super.render(ctx);
     }
 
@@ -36,7 +37,7 @@ public class Button extends Component<Button, Button.ButtonStyles> {
         super.init();
     }
 
-    public static class ButtonStyles extends ComponentStyles<Button, ButtonStyles> {
+    public static class ButtonStyles extends AbstractComponentStyles<Button, ButtonStyles> {
 
         public ButtonStyles(Button component) {
             super(component);

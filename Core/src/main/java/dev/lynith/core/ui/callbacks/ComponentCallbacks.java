@@ -12,6 +12,12 @@ public class ComponentCallbacks {
 
     private final List<Tuple<Class<? extends CallbackInterface>, CallbackInterface>> callbacks = new ArrayList<>();
 
+    /**
+     * Callback interface for components.
+     * Every callback interface must have methods called
+     * <pre>void handle(...args)</pre>
+     * <pre>boolean allowed(Component component, ...args)</pre>
+     */
     public interface CallbackInterface {}
 
     private final Component<?, ?> component;
@@ -20,14 +26,28 @@ public class ComponentCallbacks {
         this.component = component;
     }
 
+    /**
+     * Add a callback to the component
+     * @param callback The callback interface
+     * @param callbackInstance The callback instance
+     */
     public <T extends CallbackInterface> void addCallback(Class<T> callback, T callbackInstance) {
         callbacks.add(new Tuple<>(callback, callbackInstance));
     }
 
+    /**
+     * Add a callback to the component
+     * @param callbackInstance The callback instance
+     */
     public <T extends CallbackInterface> void addCallback(T callbackInstance) {
         callbacks.add(new Tuple<>(callbackInstance.getClass(), callbackInstance));
     }
 
+    /**
+     * Call all callbacks of a specific type
+     * @param callback The callback interface
+     * @param args The arguments to pass to the callback
+     */
     public <T extends CallbackInterface> void callCallbacks(Class<T> callback, Object... args) {
         for (Tuple<Class<? extends CallbackInterface>, CallbackInterface> entry : callbacks) {
 

@@ -1,14 +1,14 @@
 package dev.lynith.core.ui;
 
 import dev.lynith.core.ui.callbacks.ComponentCallbacks;
-import dev.lynith.core.ui.styles.ComponentStyles;
+import dev.lynith.core.ui.styles.AbstractComponentStyles;
 import dev.lynith.core.versions.renderer.IRenderer;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComponentWithChildren<C extends Component<C, S>, S extends ComponentStyles<C, S>> extends Component<C, S> {
+public class ComponentWithChildren<C extends Component<C, S>, S extends AbstractComponentStyles<C, S>> extends Component<C, S> {
 
     @Getter
     private final List<Component<?, ?>> children = new ArrayList<>();
