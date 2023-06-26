@@ -13,7 +13,7 @@ public class InGameHudMixin {
 
     private boolean customHudInit = false;
 
-    @Inject(method = "renderBossBar", at = @At("RETURN"))
+    @Inject(method = "render", at = @At("RETURN"))
     private void renderGameOverlay(CallbackInfo ci) {
         // No proper init method in Gui so have to resort to this
         if (!customHudInit) {

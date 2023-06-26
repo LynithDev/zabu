@@ -57,7 +57,7 @@ public class ConfigManager {
         } catch (Exception ignored) {}
     }
 
-    private void loadToClass(Object o) {
+    public void loadToClass(Object o) {
         if (configJson == null) configJson = new JsonObject();
 
         Class<?> clazz = o.getClass();
@@ -84,6 +84,10 @@ public class ConfigManager {
                             field.set(o, JsonUtils.getAsObject(field.get(o), element.getAsJsonPrimitive()));
                         }
 
+                        if (element.isJsonArray()) {
+                            field.set(o, gson.fromJson(element.getAsJsonArray(), field.getType()));
+                        }
+
                         if (element.isJsonObject() && element.getAsJsonObject().has("config_type_name")) {
                             String className = element.getAsJsonObject().get("config_type_name").getAsString();
                             Class<?> type = Class.forName(className);
@@ -95,16 +99,22 @@ public class ConfigManager {
                         continue;
                     }
 
-                    if (JsonUtils.isPrimitive(field.get(o))) {
+                    if (JsonUtils.isPrimitive(field.get(o)) || JsonUtils.isPrimitiveArray(field.get(o))) {
                         classJson.add(name, gson.toJsonTree(field.get(o)));
                         continue;
                     }
 
-                    JsonObject obj = gson.toJsonTree(field.get(o)).getAsJsonObject();
-                    obj.addProperty("config_type_name", field.get(o).getClass().getName());
+                    JsonElement obj = gson.toJsonTree(field.get(o));
+
+                    if (obj.isJsonObject()) {
+                        obj.getAsJsonObject().addProperty("config_type_name", field.get(o).getClass().getName());
+                    }
+
                     classJson.add(name, obj);
 
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
             }
         }
         configJson.add(clazz.getName(), classJson);
@@ -128,13 +138,17 @@ public class ConfigManager {
                 try {
                     field.setAccessible(true);
 
-                    if (JsonUtils.isPrimitive(field.get(o))) {
+                    if (JsonUtils.isPrimitive(field.get(o)) || JsonUtils.isPrimitiveArray(field.get(o))) {
                         classJson.add(name, gson.toJsonTree(field.get(o)));
                         continue;
                     }
 
-                    JsonObject obj = gson.toJsonTree(field.get(o)).getAsJsonObject();
-                    obj.addProperty("config_type_name", field.get(o).getClass().getName());
+                    JsonElement obj = gson.toJsonTree(field.get(o));
+
+                    if (obj.isJsonObject()) {
+                        obj.getAsJsonObject().addProperty("config_type_name", field.get(o).getClass().getName());
+                    }
+
                     classJson.add(name, obj);
 
                 } catch (Exception e) {
@@ -145,13 +159,13 @@ public class ConfigManager {
         configJson.add(clazz.getName(), classJson);
     }
 
-    public void forceSave() {
+    public void save() {
         for (Object clazz : classes)
             loadToRAM(clazz);
-        save();
+        saveToFile();
     }
 
-    public void save() {
+    public void saveToFile() {
         try {
             configFile.getParentFile().createNewFile();
             FileWriter fw = new FileWriter(configFile);

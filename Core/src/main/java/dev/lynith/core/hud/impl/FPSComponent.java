@@ -8,8 +8,7 @@ public class FPSComponent extends PvpHudComponent {
 
     @Override
     public void render(IRenderer ctx) {
-        ctx.rect(x(), y(), width(), height(), ZabuColor.from(0));
-        ctx.text("FPS: " + bridge().getGame().getFps(), x(), y());
+        renderAverageLook(ctx, "FPS: " + bridge().getGame().getFps());
 
         super.render(ctx);
     }

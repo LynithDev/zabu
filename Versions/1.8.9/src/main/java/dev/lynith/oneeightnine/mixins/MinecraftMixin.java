@@ -6,7 +6,6 @@ import dev.lynith.core.events.impl.GuiScreenChangedEvent;
 import dev.lynith.core.events.impl.MinecraftInitEvent;
 import dev.lynith.core.utils.GuiScreens;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,10 +26,13 @@ public class MinecraftMixin {
     public void displayGuiScreen(Screen screen, CallbackInfo ci) {
         GuiScreens screenType = GuiScreens.UNKNOWN;
 
-        for (Map.Entry<GuiScreens, Object> entry : ClientStartup.getInstance().getBridge().getGame().getGuiScreens().entrySet()) {
-            if (entry != null && screen != null && entry.getValue().equals(screen.getClass())) {
-                screenType = entry.getKey();
-                break;
+        if (screen != null) {
+            for (Map.Entry<GuiScreens, Object> entry : ClientStartup.getInstance().getBridge().getGame().getGuiScreens().entrySet()) {
+                if (entry != null && entry.getValue().equals(screen.getClass())) {
+                    screenType = entry.getKey();
+                    ClientStartup.getInstance().getBridge().getRenderer().setCurrentScreenType(screenType);
+                    break;
+                }
             }
         }
 

@@ -207,14 +207,14 @@ public class Component<C extends Component<C, S>, S extends AbstractComponentSty
     }
 
     public C position(int x, int y) {
-        this.x = x;
-        this.y = y;
+        x(x);
+        y(y);
         return (C) this;
     }
 
     public C size(int width, int height) {
-        this.width = width;
-        this.height = height;
+        width(width);
+        height(height);
         return (C) this;
     }
 

@@ -9,6 +9,10 @@ import dev.lynith.core.utils.GuiScreens;
 
 public class MainMenu extends Screen<MainMenu, ComponentStyles<MainMenu>> {
 
+    public MainMenu() {
+        super(GuiScreens.MAIN_MENU);
+    }
+
     @Override
     public void init() {
         style(styles -> {

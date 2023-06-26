@@ -1,5 +1,6 @@
 package dev.lynith.core.ui;
 
+import dev.lynith.core.ClientStartup;
 import dev.lynith.core.ui.callbacks.impl.*;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.versions.renderer.MCScreen;
@@ -15,7 +16,13 @@ public class ScreenWrapper extends MCScreen {
     private final Screen<?, ?> screen;
 
     public ScreenWrapper(Screen<?, ?> screen) {
-        this(GuiScreens.UNKNOWN, screen);
+        GuiScreens type = screen.type();
+        if (type == null) {
+            type = GuiScreens.UNKNOWN;
+        }
+
+        this.type = type;
+        this.screen = screen;
     }
 
     public ScreenWrapper(GuiScreens type, Screen<?, ?> screen) {
@@ -55,6 +62,9 @@ public class ScreenWrapper extends MCScreen {
     @Override
     public void onClosed() {
         this.screen.callCallbacks(Destroyed.class);
+        if (this.screen.type() == ClientStartup.getInstance().getBridge().getRenderer().getCurrentScreenType()) {
+            ClientStartup.getInstance().getBridge().getRenderer().setCurrentScreenType(GuiScreens.UNKNOWN);
+        }
     }
 
     @Override

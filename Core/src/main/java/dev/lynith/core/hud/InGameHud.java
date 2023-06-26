@@ -10,7 +10,7 @@ public class InGameHud extends Screen<InGameHud, ComponentStyles<InGameHud>> {
 
     @Override
     public void render(IRenderer ctx) {
-        if (ctx.getCurrentScreen() != GuiScreens.HUD_CONFIG_SCREEN) {
+        if (ctx.getCurrentScreenType() != GuiScreens.HUD_CONFIG_SCREEN) {
             super.render(ctx);
         }
     }

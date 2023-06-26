@@ -1,6 +1,7 @@
 package dev.lynith.onenineteenfour;
 
 import dev.lynith.core.ClientStartup;
+import dev.lynith.core.ui.ScreenWrapper;
 import dev.lynith.core.utils.GuiScreens;
 import dev.lynith.core.utils.ZabuColor;
 import dev.lynith.core.versions.renderer.IRenderer;
@@ -80,14 +81,23 @@ public class Renderer implements IRenderer {
         return (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
     }
 
-    @Getter
     private GuiScreens currentScreen;
 
     @Override
-    public void setCurrentScreen(MCScreen screen) {
-        this.currentScreen = screen.getType();
+    public GuiScreens getCurrentScreenType() {
+        return this.currentScreen;
+    }
 
-        MinecraftClient.getInstance().setScreen(toGuiScreen(screen));
+    @Override
+    public void setCurrentScreenType(GuiScreens screen) {
+        this.currentScreen = screen;
+    }
+
+    @Override
+    public void setCurrentScreen(dev.lynith.core.ui.Screen<?, ?> screen) {
+        this.currentScreen = screen.type();
+
+        MinecraftClient.getInstance().setScreen(toGuiScreen(new ScreenWrapper(screen)));
     }
 
     @Override

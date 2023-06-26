@@ -64,13 +64,13 @@ public class ClientStartup {
     @Subscribe
     private void onShutdown(ShutdownEvent event) {
         logger.log("Preparing for shutdown");
-        ConfigManager.getInstance().forceSave();
+        ConfigManager.getInstance().save();
     }
 
     @Subscribe
     private void onGuiScreen(GuiScreenChangedEvent event) {
         if (event.getScreenType() == GuiScreens.MAIN_MENU) {
-            event.getBridge().getRenderer().setCurrentScreen(new ScreenWrapper(GuiScreens.MAIN_MENU, new MainMenu()));
+            event.getBridge().getRenderer().setCurrentScreen(new MainMenu());
         }
     }
 

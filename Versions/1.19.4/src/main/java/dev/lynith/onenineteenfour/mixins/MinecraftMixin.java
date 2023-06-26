@@ -1,5 +1,6 @@
 package dev.lynith.onenineteenfour.mixins;
 
+import dev.lynith.core.ClientStartup;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.impl.GuiScreenChangedEvent;
 import dev.lynith.core.events.impl.MinecraftInitEvent;
@@ -12,6 +13,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Map;
+
 @Mixin(MinecraftClient.class)
 public class MinecraftMixin {
 
@@ -22,13 +25,23 @@ public class MinecraftMixin {
 
     @Inject(method = "setScreen", at = @At("RETURN"))
     public void setScreen(Screen screen, CallbackInfo info) {
-        GuiScreens type = GuiScreens.UNKNOWN;
+        GuiScreens screenType = GuiScreens.UNKNOWN;
 
-        if (screen instanceof TitleScreen) {
-            type = GuiScreens.MAIN_MENU;
+        if (screen != null) {
+            for (Map.Entry<GuiScreens, Object> entry : ClientStartup.getInstance().getBridge().getGame().getGuiScreens().entrySet()) {
+                if (entry != null && entry.getValue().equals(screen.getClass())) {
+                    screenType = entry.getKey();
+                    ClientStartup.getInstance().getBridge().getRenderer().setCurrentScreenType(screenType);
+                    break;
+                }
+            }
         }
 
-        EventBus.getEventBus().post(new GuiScreenChangedEvent(type));
+        if (screenType == null) {
+            screenType = GuiScreens.UNKNOWN;
+        }
+
+        EventBus.getEventBus().post(new GuiScreenChangedEvent(screenType));
     }
 
 }
