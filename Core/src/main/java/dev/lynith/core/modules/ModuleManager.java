@@ -3,7 +3,6 @@ package dev.lynith.core.modules;
 import dev.lynith.core.Logger;
 import dev.lynith.core.events.Subscribe;
 import dev.lynith.core.events.impl.KeyPressEvent;
-import dev.lynith.core.modules.impl.WebsocketChatModule;
 import dev.lynith.core.input.Key;
 
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ public class ModuleManager {
     public ModuleManager() {}
 
     public void init() {
-        register(new WebsocketChatModule());
 
         for (Module module : modules) {
             if (module.isEnabled()) {
@@ -37,7 +35,7 @@ public class ModuleManager {
 
     public void enableByKeyBind(Key key) {
         for (Module module : modules) {
-            if (module.getKey().getCode() == key.getCode()) {
+            if (module.getSettings().getKey().getCode() == key.getCode()) {
                 module.setEnabled(true);
             }
         }
@@ -45,7 +43,7 @@ public class ModuleManager {
 
     public void disableByKeyBind(Key key) {
         for (Module module : modules) {
-            if (module.getKey().getCode() == key.getCode()) {
+            if (module.getSettings().getKey().getCode() == key.getCode()) {
                 module.setEnabled(false);
             }
         }
@@ -53,7 +51,7 @@ public class ModuleManager {
 
     public void toggleByKeyBind(Key key) {
         for (Module module : modules) {
-            if (module.getKey().getCode() == key.getCode()) {
+            if (module.getSettings().getKey().getCode() == key.getCode()) {
                 module.setEnabled(!module.isEnabled());
             }
         }
@@ -70,6 +68,8 @@ public class ModuleManager {
      * @apiNote The module won't be added if it's already registered
      */
     public void register(Module module) {
+        if (!module.getSettings().getIsAllowed().get()) return;
+
         if (modules.contains(module)) return;
         this.modules.add(module);
     }
@@ -80,7 +80,7 @@ public class ModuleManager {
      * @return The module, or null if it doesn't exist
      */
     public Module getModuleByName(String name) {
-        return this.modules.stream().filter(module -> module.getName().equals(name)).findFirst().orElse(null);
+        return this.modules.stream().filter(module -> module.getSettings().getName().equals(name)).findFirst().orElse(null);
     }
 
     /**

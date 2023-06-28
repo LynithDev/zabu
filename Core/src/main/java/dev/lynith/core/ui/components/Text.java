@@ -29,6 +29,7 @@ public class Text extends Component<Text, Text.TextStyles> {
         super.render(ctx);
     }
 
+    @Getter @Setter
     public static class TextStyles extends AbstractComponentStyles<Text, TextStyles> {
 
         public TextStyles(Text component) {

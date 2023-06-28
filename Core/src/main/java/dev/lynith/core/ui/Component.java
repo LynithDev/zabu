@@ -40,7 +40,7 @@ public class Component<C extends Component<C, S>, S extends AbstractComponentSty
 
     // Used for anything special which doesn't deserve its own field.
     @Getter
-    private final ExtendedHashMap<Object> properties = new ExtendedHashMap<>();
+    private final ComponentProperties properties = new ComponentProperties();
 
     private final ComponentCallbacks callbacks;
     @Setter @Accessors(fluent = false)

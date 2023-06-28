@@ -10,6 +10,8 @@ public interface IVersion {
 
     IProfile getProfile();
 
+    IModule getModule();
+
     String getVersion();
 
 }

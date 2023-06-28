@@ -42,6 +42,7 @@ public class Button extends Component<Button, Button.ButtonStyles> {
         private ZabuColor textColor = ZabuColor.from(255);
     }
 
+    @Getter @Setter
     public static class ButtonHoverStyles extends ButtonStyles {
 
         public ButtonHoverStyles(Button component) {

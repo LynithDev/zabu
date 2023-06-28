@@ -10,40 +10,17 @@ import lombok.Setter;
 public abstract class Module {
 
     @Getter
-    private final String name;
-
-    @Getter
-    private final String description;
-
-    @Getter
-    private final Key key;
-
-    @Getter
-    private boolean enabled;
+    private ModuleSettings settings;
 
     @Getter @Setter
-    private boolean showsInMenu;
+    private boolean enabled;
 
     protected final IVersion bridge;
     protected final Logger logger;
 
-    public Module(String name, String description, Key key, boolean enabled) {
-        this.name = name;
-        this.enabled = enabled;
-        this.description = description;
-        this.showsInMenu = true;
-        this.key = key;
-
+    public Module() {
         this.bridge = ClientStartup.getInstance().getBridge();
-        this.logger = new Logger(name);
-    }
-
-    public Module(String name, String description, Key key) {
-        this(name, description, key, false);
-    }
-
-    public Module(String name, String description) {
-        this(name, description, null);
+        this.logger = new Logger(this.getClass().getSimpleName());
     }
 
     public abstract void onEnable();

@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
  * @param <C> The component type
  * @param <S> The self style type
  */
-@Accessors(fluent = true)
+
 @Getter @Setter
 public abstract class AbstractComponentStyles<C extends Component<C, S>, S extends AbstractComponentStyles<C, S>> {
 

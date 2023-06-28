@@ -2,6 +2,7 @@ package dev.lynith.core.hud;
 
 import dev.lynith.core.Logger;
 import dev.lynith.core.config.ConfigManager;
+import dev.lynith.core.hud.impl.ClockComponent;
 import dev.lynith.core.hud.impl.FPSComponent;
 import dev.lynith.core.ui.Component;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class HudManager {
 
     public void init() {
         addComponent(new FPSComponent());
+        addComponent(new ClockComponent());
 
         inGameHud = new InGameHud();
         logger.log("Loaded hud manager");

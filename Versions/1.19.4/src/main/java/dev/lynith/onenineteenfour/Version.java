@@ -1,6 +1,7 @@
 package dev.lynith.onenineteenfour;
 
 import dev.lynith.core.versions.IGame;
+import dev.lynith.core.versions.IModule;
 import dev.lynith.core.versions.IProfile;
 import dev.lynith.core.versions.IVersion;
 import dev.lynith.core.versions.renderer.IRenderer;
@@ -9,6 +10,11 @@ import lombok.Getter;
 public class Version implements IVersion {
     @Override
     public IProfile getProfile() {
+        return null;
+    }
+
+    @Override
+    public IModule getModule() {
         return null;
     }
 
