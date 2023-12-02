@@ -1,20 +1,22 @@
 package dev.lynith.core.bridge.gui;
 
+import dev.lynith.core.ui.components.Screen;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
 
-public interface IGui {
+public interface IRenderer {
+
+//    void rect(int x, int y, int width, int height, int color);
 
     GuiType getCurrentScreen();
     HashMap<Class<?>, GuiType> getScreenMap();
 
     boolean displayScreen(GuiType screen, Object... args);
-    default boolean displayScreen(GuiType screen) {
-        return displayScreen(screen, new Object[0]);
-    }
+    boolean displayScreen(Screen screen, Object... args);
 
+    @Getter
     enum GuiType {
         MAIN_MENU,
         PAUSE_MENU,
@@ -24,9 +26,8 @@ public interface IGui {
         CUSTOM,
         UNKNOWN;
 
-        @Getter @Setter
+        @Setter
         private Class<?> clazz;
-
     }
 
 }

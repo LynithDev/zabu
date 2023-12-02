@@ -1,22 +1,20 @@
 package dev.lynith.core;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dev.lynith.core.bridge.IVersion;
 import dev.lynith.core.events.EventBus;
-import dev.lynith.core.events.impl.MinecraftInit;
-import dev.lynith.core.events.impl.MouseClick;
+import dev.lynith.core.events.EventCallback;
 import dev.lynith.core.events.impl.ShutdownEvent;
 import dev.lynith.core.plugins.PluginManager;
-import dev.lynith.core.ui.components.impl.Button;
 import dev.lynith.core.ui.theme.ThemeManager;
-import dev.lynith.core.ui.theme.dark.ThemeDark;
+import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.lang.instrument.Instrumentation;
 
+@Getter
 public class ClientStartup {
 
+    @Getter(AccessLevel.NONE)
     private final static Logger logger = new Logger("main");
 
     @Getter
@@ -33,10 +31,11 @@ public class ClientStartup {
         instance.launchClient(version, inst);
     }
 
-    @Getter private PluginManager pluginManager;
-    @Getter private IVersion version;
-    @Getter private EventBus eventBus;
-    @Getter private ThemeManager themeManager;
+    private PluginManager pluginManager;
+    private IVersion version;
+    private EventBus<EventCallback> eventBus;
+    private ThemeManager themeManager;
+    private long nvgContext;
 
     public void launchClient(IVersion version, Instrumentation inst) {
         this.version = version;
@@ -56,14 +55,6 @@ public class ClientStartup {
 
         getEventBus().on(ShutdownEvent.class, () -> {
             logger.log("Preparing for shutdown");
-        });
-
-        getEventBus().on(MinecraftInit.class, () -> {
-            Button button = new Button();
-            button.init();
-
-            themeManager.setCurrentTheme(ThemeDark.class);
-            button.init();
         });
     }
 

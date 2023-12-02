@@ -1,6 +1,7 @@
 package dev.lynith.oneeightnine.gui;
 
-import dev.lynith.core.bridge.gui.IGui;
+import dev.lynith.core.bridge.gui.IRenderer;
+import dev.lynith.core.ui.MinecraftScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -12,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Gui implements IGui {
+public class Renderer implements IRenderer {
 
     @Override
     public HashMap<Class<?>, GuiType> getScreenMap() {
@@ -68,4 +69,56 @@ public class Gui implements IGui {
         return false;
     }
 
+    @Override
+    public boolean displayScreen(dev.lynith.core.ui.components.Screen screen, Object... args) {
+        return false;
+    }
+
+    private Screen toMCScreen(MinecraftScreen screen) {
+        return new Screen() {
+
+            @Override
+            public void render(int i, int j, float f) {
+                screen.render(i, j, f);
+
+                super.render(i, j, f);
+            }
+
+            @Override
+            public void init() {
+                screen.init();
+                super.init();
+            }
+
+            @Override
+            protected void keyPressed(char c, int i) {
+                screen.keyPressed(c, i);
+                super.keyPressed(c, i);
+            }
+
+            @Override
+            protected void mouseClicked(int i, int j, int k) {
+                screen.mouseClicked(i, j, k);
+                super.mouseClicked(i, j, k);
+            }
+
+            @Override
+            protected void mouseDragged(int i, int j, int k, long l) {
+                screen.mouseClickedMoved(i, j, k, l);
+                super.mouseDragged(i, j, k, l);
+            }
+
+            @Override
+            protected void mouseReleased(int i, int j, int k) {
+                screen.mouseReleased(i, j, k);
+                super.mouseReleased(i, j, k);
+            }
+
+            @Override
+            public boolean shouldPauseGame() {
+                return screen.shouldPauseGame();
+            }
+
+        };
+    }
 }
