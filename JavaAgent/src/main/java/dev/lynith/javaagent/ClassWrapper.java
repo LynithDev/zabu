@@ -20,6 +20,11 @@ public class ClassWrapper extends URLClassLoader {
     ClassWrapper(URL[] urls) {
         super(urls);
         this.upstream = getSystemClassLoader();
+
+        for (URL pkg : ((URLClassLoader) this.upstream).getURLs()) {
+            System.out.println(pkg);
+        }
+
         instance = this;
         Thread.currentThread().setContextClassLoader(this);
     }
@@ -70,6 +75,7 @@ public class ClassWrapper extends URLClassLoader {
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         byte[] data = getTransformedBytes(name);
+
         if (data == null)
             return null;
 

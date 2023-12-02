@@ -19,6 +19,11 @@ repositories {
         url = uri("https://repo.legacyfabric.net/repository/legacyfabric/")
     }
 
+    maven {
+        name = "jitpack"
+        url = uri("https://jitpack.io")
+    }
+
 }
 
 dependencies {

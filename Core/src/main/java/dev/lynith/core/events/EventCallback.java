@@ -11,8 +11,4 @@ public interface EventCallback {
 
      */
 
-    default boolean allowed(Object... args) {
-        return true;
-    }
-
 }

@@ -7,7 +7,10 @@ import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.internal.os.OperatingSystem
 import org.gradle.jvm.tasks.Jar
+import org.gradle.kotlin.dsl.add
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.project
 
@@ -39,12 +42,32 @@ class MultiBasePlugin : Plugin<Project> {
         target.repositories.apply {
             mavenCentral()
             maven("https://maven.fabricmc.net/")
+
+            maven("https://jitpack.io/")
         }
 
         target.dependencies.apply {
             if (target.project.name != "Core") {
                 add("compileOnly", project(":Core"))
             }
+
+            var platform = "linux"
+            if (OperatingSystem.current().isWindows) {
+                platform = "windows"
+            } else if (OperatingSystem.current().isMacOsX) {
+                platform = "macos"
+            }
+
+            fun lwjglNative(dep: String) {
+                add("bundle", dep) {
+                    isTransitive = false
+                }
+            }
+
+            lwjglNative( "org.lwjgl:lwjgl:3.3.1:natives-${platform}")
+            lwjglNative("org.lwjgl:lwjgl-nanovg:3.3.1:natives-${platform}")
+
+            add("compileOnly", "com.github.LynithDev:lwjgl-patched:bf1d105853")
 
             add("compileOnly", "org.projectlombok:lombok:1.18.30")
             add("annotationProcessor", "org.projectlombok:lombok:1.18.30")
@@ -57,17 +80,19 @@ class MultiBasePlugin : Plugin<Project> {
         }
 
         val jar = target.tasks.withType(Jar::class.java)
-        jar.configureEach {
-            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-            archiveFileName.set("${target.name}.jar")
+        target.afterEvaluate {
+            jar.configureEach {
+                duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+                archiveFileName.set("${target.name}.jar")
 
-            from (
-                target.configurations.getByName("bundle").map {
-                    if (it.isDirectory) it
-                    else project.zipTree(it)
+                from (
+                    target.configurations.getByName("bundle").map {
+                        if (it.isDirectory) it
+                        else project.zipTree(it)
+                    }
+                ) {
+                    exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
                 }
-            ) {
-                exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
             }
         }
 

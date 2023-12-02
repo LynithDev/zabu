@@ -1,11 +1,11 @@
 package dev.lynith.core.bridge;
 
-import dev.lynith.core.bridge.gui.IGui;
+import dev.lynith.core.bridge.gui.IRenderer;
 
 public interface IVersion {
 
     IMinecraft getMinecraft();
 
-    IGui getRenderer();
+    IRenderer getRenderer();
 
 }

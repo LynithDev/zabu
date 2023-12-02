@@ -1,6 +1,6 @@
 package dev.lynith.onetwentytwo.gui;
 
-import dev.lynith.core.bridge.gui.IGui;
+import dev.lynith.core.bridge.gui.IRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Gui implements IGui {
+public class Renderer implements IRenderer {
 
     @Override
     public HashMap<Class<?>, GuiType> getScreenMap() {

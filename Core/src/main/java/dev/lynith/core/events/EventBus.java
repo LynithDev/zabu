@@ -5,21 +5,29 @@ import dev.lynith.core.Logger;
 import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EventBus {
+public class EventBus<CB> {
 
-    private static final Logger logger = new Logger("eventbus");
+    private final Logger logger;
+
+    public EventBus() {
+        logger = new Logger("eventbus");
+    }
+
+    public EventBus(String name) {
+        logger = new Logger(name);
+    }
 
     private final CopyOnWriteArrayList<StoredEvent> events = new CopyOnWriteArrayList<>();
 
-    public <T extends EventCallback> void on(Class<T> event, T callback) {
+    public <T extends CB> void on(Class<T> event, T callback) {
         events.add(new StoredEvent(event, callback, false));
     }
 
-    public <T extends EventCallback> void once(Class<T> event, T callback) {
+    public <T extends CB> void once(Class<T> event, T callback) {
         events.add(new StoredEvent(event, callback, true));
     }
 
-    public <T extends EventCallback> void emit(Class<T> callbackClass, Object... args) {
+    public <T extends CB> void emit(Class<T> callbackClass, Object... args) {
         mainLoop:
         for (StoredEvent event : events) {
             try {
@@ -57,22 +65,22 @@ public class EventBus {
         }
     }
 
-    private static class StoredEvent {
-        private final Class<? extends EventCallback> event;
-        private final EventCallback callback;
+    private static class StoredEvent<CB> {
+        private final Class<? extends CB> event;
+        private final CB callback;
         private final boolean once;
 
-        public StoredEvent(Class<? extends EventCallback> event, EventCallback callback, boolean once) {
+        public StoredEvent(Class<? extends CB> event, CB callback, boolean once) {
             this.event = event;
             this.callback = callback;
             this.once = once;
         }
 
-        public Class<? extends EventCallback> getEvent() {
+        public Class<? extends CB> getEvent() {
             return event;
         }
 
-        public EventCallback getCallback() {
+        public CB getCallback() {
             return callback;
         }
 

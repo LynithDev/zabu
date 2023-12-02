@@ -16,6 +16,7 @@ import dev.lynith.multiversion.tasks.ExportTask
 import dev.lynith.multiversion.tasks.MergeTask
 import dev.lynith.multiversion.tasks.RemapTask
 import dev.lynith.multiversion.tasks.StartTask
+import org.gradle.kotlin.dsl.add
 
 class MultiVersionPlugin : Plugin<Project> {
 
@@ -114,6 +115,10 @@ class MultiVersionPlugin : Plugin<Project> {
             target.dependencies.apply {
                 add("compileOnly", "net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5")
 
+                if (extension.legacy) {
+                    add("implementation", "com.github.LynithDev:lwjgl-patched:bf1d105853")
+                }
+
                 add("minecraft", "com.mojang:minecraft:${extension.minecraftVersion}")
                 add("mappings",
                     if (extension.legacy) "net.legacyfabric:yarn:${extension.minecraftVersion}+build.+"
@@ -151,6 +156,9 @@ class MultiVersionPlugin : Plugin<Project> {
                             mainClass.set("net.minecraft.client.main.Main")
                             programArg("--version=${extension.minecraftVersion}")
                             programArg("--accessToken=0")
+//                            vmArg("-Dorg.lwjgl.util.Debug=true")
+                            vmArg("-Dorg.lwjgl.util.DebugLoader=true")
+                            vmArg("-Dorg.lwjgl.librarypath=/home/lynith/.local/share/PrismLauncher/instances/1.8.9(1)/.minecraft/OneConfig/temp/3.3.1-SNAPSHOT/")
                         }
 
                         ideConfigGenerated(true)

@@ -5,12 +5,19 @@ import dev.lynith.core.Logger;
 import dev.lynith.core.bridge.IVersion;
 import dev.lynith.core.bridge.IVersionMain;
 import dev.lynith.javaagent.mixin.ClientMixinTransformer;
+import org.lwjgl.system.Configuration;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.security.ProtectionDomain;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AgentMain {
 

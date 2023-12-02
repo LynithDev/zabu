@@ -3,6 +3,7 @@ package dev.lynith.start;
 import dev.lynith.core.bridge.IVersion;
 import dev.lynith.core.bridge.IVersionMain;
 import dev.lynith.oneeightnine.Version;
+import net.minecraft.client.main.Main;
 
 public class VersionMain implements IVersionMain {
 
