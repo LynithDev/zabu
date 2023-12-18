@@ -6,9 +6,7 @@ import lombok.Setter;
 
 import java.util.HashMap;
 
-public interface IRenderer {
-
-//    void rect(int x, int y, int width, int height, int color);
+public interface IRenderer extends IRendererHelper {
 
     GuiType getCurrentScreen();
     HashMap<Class<?>, GuiType> getScreenMap();

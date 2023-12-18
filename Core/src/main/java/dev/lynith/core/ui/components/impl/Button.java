@@ -13,8 +13,8 @@ public class Button extends Component<ButtonStyles> {
     }
 
     @Override
-    public void render(IRenderer renderer, int mouseX, int mouseY, float delta) {
-
+    public void render(IRenderer ctx, int mouseX, int mouseY, float delta) {
+//        ctx.rect(getX(), getY(), getWidth(), getHeight(), getStyles().getBackgroundColor().getRGB());
     }
 
     @Override

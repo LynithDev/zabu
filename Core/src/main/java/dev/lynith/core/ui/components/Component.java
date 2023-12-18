@@ -18,7 +18,7 @@ public abstract class Component<S extends ComponentStyles<?, ?>> {
     private final EventBus<ComponentCallback> eventBus = new EventBus<>();
 
     public abstract S getStyles();
-    public abstract void render(IRenderer renderer, int mouseX, int mouseY, float delta);
+    public abstract void render(IRenderer ctx, int mouseX, int mouseY, float delta);
     public abstract void init();
 
     public <T extends ComponentCallback> void on(Class<T> event, T callback) {

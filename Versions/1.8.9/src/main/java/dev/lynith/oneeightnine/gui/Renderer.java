@@ -3,6 +3,7 @@ package dev.lynith.oneeightnine.gui;
 import dev.lynith.core.bridge.gui.IRenderer;
 import dev.lynith.core.ui.MinecraftScreen;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -120,5 +121,34 @@ public class Renderer implements IRenderer {
             }
 
         };
+    }
+
+    /*
+        #### IRendererHelper ####
+    */
+
+    @Override
+    public void rect(int x, int y, int width, int height, int color) {
+        DrawableHelper.fill(x, y, x + width, y + height, color);
+    }
+
+    @Override
+    public void text(String text, int x, int y, int color) {
+        MinecraftClient.getInstance().textRenderer.draw(text, x, y, color);
+    }
+
+    @Override
+    public void text(String text, int x, int y, int color, boolean shadow) {
+        MinecraftClient.getInstance().textRenderer.draw(text, x, y, color, shadow);
+    }
+
+    @Override
+    public int textWidth(String text) {
+        return MinecraftClient.getInstance().textRenderer.getStringWidth(text);
+    }
+
+    @Override
+    public int fontHeight() {
+        return MinecraftClient.getInstance().textRenderer.fontHeight;
     }
 }
