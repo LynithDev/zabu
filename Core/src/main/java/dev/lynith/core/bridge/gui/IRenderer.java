@@ -8,13 +8,16 @@ import java.util.HashMap;
 
 public interface IRenderer {
 
-//    void rect(int x, int y, int width, int height, int color);
+    void rect(int x, int y, int width, int height, int color);
 
     GuiType getCurrentScreen();
     HashMap<Class<?>, GuiType> getScreenMap();
 
     boolean displayScreen(GuiType screen, Object... args);
     boolean displayScreen(Screen screen, Object... args);
+
+    int getWindowWidth();
+    int getWindowHeight();
 
     @Getter
     enum GuiType {

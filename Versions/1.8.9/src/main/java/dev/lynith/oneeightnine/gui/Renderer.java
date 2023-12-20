@@ -4,6 +4,7 @@ import dev.lynith.core.ClientStartup;
 import dev.lynith.core.bridge.gui.IRenderer;
 import dev.lynith.core.bridge.gui.MCScreen;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -25,6 +26,11 @@ public class Renderer implements IRenderer {
         map.put(GameMenuScreen.class, GuiType.PAUSE_MENU);
 
         return map;
+    }
+
+    @Override
+    public void rect(int x, int y, int width, int height, int color) {
+        DrawableHelper.fill(x, y, x + width, y + height, color);
     }
 
     @Override
@@ -72,7 +78,30 @@ public class Renderer implements IRenderer {
 
     @Override
     public boolean displayScreen(dev.lynith.core.ui.components.Screen screen, Object... args) {
-        return false;
+        Renderer renderer = this;
+
+        MinecraftClient.getInstance().setScreen(toMCScreen(new MCScreen() {
+            @Override
+            public void render(int mouseX, int mouseY, float delta) {
+                screen.render(renderer, mouseX, mouseY, delta);
+            }
+
+            @Override
+            public void init() {
+                screen.init();
+            }
+        }));
+        return true;
+    }
+
+    @Override
+    public int getWindowWidth() {
+        return MinecraftClient.getInstance().width;
+    }
+
+    @Override
+    public int getWindowHeight() {
+        return MinecraftClient.getInstance().height;
     }
 
     private Screen toMCScreen(MCScreen screen) {
@@ -80,9 +109,8 @@ public class Renderer implements IRenderer {
 
             @Override
             public void render(int i, int j, float f) {
-                screen.render(i, j, f);
-
                 super.render(i, j, f);
+                screen.render(i, j, f);
             }
 
             @Override

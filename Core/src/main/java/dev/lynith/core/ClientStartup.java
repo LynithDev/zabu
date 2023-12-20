@@ -1,27 +1,19 @@
 package dev.lynith.core;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dev.lynith.core.bridge.IVersion;
 import dev.lynith.core.bridge.IVersionMain;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.EventCallback;
-import dev.lynith.core.events.impl.MinecraftInit;
-import dev.lynith.core.events.impl.MouseClick;
+import dev.lynith.core.events.impl.MinecraftGuiChanged;
 import dev.lynith.core.events.impl.ShutdownEvent;
 import dev.lynith.core.plugins.PluginManager;
-import dev.lynith.core.ui.components.impl.Button;
+import dev.lynith.core.ui.screens.MainMenu;
 import dev.lynith.core.ui.theme.ThemeManager;
-import dev.lynith.core.ui.theme.dark.ThemeDark;
 import dev.lynith.core.utils.NanoVGManager;
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.lwjgl.nanovg.NVGColor;
-import org.lwjgl.nanovg.NanoVG;
-import org.lwjgl.nanovg.NanoVGGL3;
 
-import java.lang.instrument.Instrumentation;
-import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 public class ClientStartup {
@@ -91,6 +83,9 @@ public class ClientStartup {
 //        this.pluginManager = new PluginManager();
 //        logger.log("Initialized PluginManager");
 
+        nvgContext = NanoVGManager.createContext();
+        logger.log("Initialized NanoVG");
+
         this.themeManager = new ThemeManager();
         logger.log("Initialized ThemeManager");
 
@@ -102,9 +97,12 @@ public class ClientStartup {
             logger.log("Preparing for shutdown");
         });
 
-        getEventBus().once(MinecraftInit.class, () -> {
-            nvgContext = NanoVGManager.createContext();
-            logger.log("Initialized NanoVG");
+        getEventBus().on(MinecraftGuiChanged.class, (screen) -> {
+            System.out.println("Screen changed to " + screen);
+
+            if (screen.endsWith("TitleScreen")) {
+                version.getRenderer().displayScreen(new MainMenu());
+            }
         });
     }
 

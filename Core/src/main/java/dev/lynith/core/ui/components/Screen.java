@@ -11,4 +11,8 @@ public abstract class Screen extends Component<ComponentStyles<?, ?>> implements
 
     private List<Component<?>> children;
 
+    @Override
+    public ComponentStyles<?, ?> getStyles() {
+        return null;
+    }
 }

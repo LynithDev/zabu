@@ -28,8 +28,15 @@ public class EventBus<CB> {
     }
 
     public <T extends CB> void emit(Class<T> callbackClass, Object... args) {
+
         mainLoop:
-        for (StoredEvent event : events) {
+        for (int i = 0; i < events.size(); i++) {
+            StoredEvent<?> event = events.get(i);
+
+            if (event.isOnce()) {
+                events.remove(i);
+            }
+
             try {
                 Class<T> eventClass = (Class<T>) event.getEvent();
                 T callback = (T) event.getCallback();
@@ -41,6 +48,10 @@ public class EventBus<CB> {
                             if (method.getParameterCount() == args.length) {
                                 try {
                                     method.invoke(callback, args);
+
+                                    if (event.isOnce()) {
+                                        break mainLoop;
+                                    }
                                 } catch (Exception e) {
                                     logger.error("Error while invoking event {}", eventClass.getName());
                                     e.printStackTrace();
@@ -54,9 +65,6 @@ public class EventBus<CB> {
 
                     }
 
-                    if (event.isOnce()) {
-                        events.remove(event);
-                    }
                 }
             } catch (Exception e) {
                 logger.error("Error while emitting event {}", event.getEvent().getName());

@@ -1,0 +1,45 @@
+package dev.lynith.core.utils;
+
+import dev.lynith.core.ClientStartup;
+import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NanoVG;
+
+import static org.lwjgl.nanovg.NanoVG.*;
+
+public class NanoVGHelper {
+
+    public static void createFrame() {
+        nvgBeginFrame(ctx(), ClientStartup.getInstance().getVersion().getRenderer().getWindowWidth(), ClientStartup.getInstance().getVersion().getRenderer().getWindowHeight(), 1);
+        nvgSave(ctx());
+    }
+
+    public static void endFrame() {
+        nvgRestore(ctx());
+        nvgEndFrame(ctx());
+    }
+
+    public static NVGColor createColor(int r, int g, int b, int a) {
+        NVGColor nvgColor = NVGColor.create();
+        nvgRGBAf((float) r / 255, (float) g / 255, (float) b / 255, (float) a / 255, nvgColor);
+        return nvgColor;
+    }
+
+    public static void rectangle(float left, float top, float width, float height, NVGColor color) {
+        nvgBeginPath(ctx());
+        nvgFillColor(ctx(), color);
+        nvgRect(ctx(), left, top, width, height);
+        nvgFill(ctx());
+    }
+
+    public static void circle(float centerX, float centerY, float radius, NVGColor color) {
+        nvgBeginPath(ctx());
+        nvgFillColor(ctx(), color);
+        nvgCircle(ctx(), centerX, centerY, radius);
+        nvgFill(ctx());
+    }
+
+    public static long ctx() {
+        return ClientStartup.getInstance().getNvgContext();
+    }
+
+}
