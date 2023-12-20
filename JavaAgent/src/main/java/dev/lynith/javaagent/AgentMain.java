@@ -1,23 +1,11 @@
 package dev.lynith.javaagent;
 
-import dev.lynith.core.ClientStartup;
 import dev.lynith.core.Logger;
-import dev.lynith.core.bridge.IVersion;
-import dev.lynith.core.bridge.IVersionMain;
 import dev.lynith.javaagent.mixin.ClientMixinTransformer;
-import org.lwjgl.system.Configuration;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.MixinEnvironment;
-import org.spongepowered.asm.mixin.Mixins;
+import dev.lynith.javaagent.transformers.LegacyVanillaTransformer;
 
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.security.ProtectionDomain;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AgentMain {
 
@@ -36,43 +24,48 @@ public class AgentMain {
         init(args, inst, false);
     }
 
-    private static void init(String args, Instrumentation inst, boolean premain) {
+    public static void init(String args, Instrumentation inst, boolean premain) {
         logger.log("Agent starting up");
+
+        System.getProperties().list(System.out);
+
         if (!premain) {
             logger.log("## WARNING ##: Agent started dynamically");
         }
 
         try(ClassWrapper ignored = new ClassWrapper(new URL[0])) {
-            MixinBootstrap.init();
-            MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
-
-            if (inst != null) {
-                inst.addTransformer(new ClientMixinTransformer(), true);
-            }
-
-            ignored.findClass("org.spongepowered.asm.mixin.Mixins");
-            Mixins.addConfiguration("client.mixins.json");
-
-            Class<?> versionMain;
-
-            try {
-                versionMain = Class.forName("dev.lynith.start.VersionMain");
-            } catch (Exception e) {
-                logger.error("Invalid build");
-                logger.error("dev.lynith.start.VersionMain was not found!");
+            if (inst == null) {
+                logger.error("Instrumentation instance is null");
                 return;
             }
 
-            IVersionMain versionMainInstance = (IVersionMain) versionMain.getConstructor().newInstance();
-            Class<? extends IVersion> versionClass = versionMainInstance.getVersion();
+            boolean transformSuccess = transformMain(inst);
+            if (!transformSuccess) {
+                logger.error("Unable to transform main class");
+                return;
+            }
 
-            IVersion version = versionClass.getConstructor().newInstance();
-            ClientStartup.launch(version, inst);
-
-            logger.log("Hooked");
+            inst.addTransformer(new ClientMixinTransformer(), true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static boolean transformMain(Instrumentation inst) {
+        // Vanilla
+        try {
+            Class<?> main = Class.forName("net.minecraft.client.main.Main");
+            IStartTransformer transformer = new LegacyVanillaTransformer();
+
+            inst.addTransformer(transformer, true);
+            inst.retransformClasses(main);
+            inst.removeTransformer(transformer);
+
+            return true;
+        } catch (Exception ignored) {}
+
+        logger.error("Unable to find a main class. Aborting...");
+        return false;
     }
 
 }

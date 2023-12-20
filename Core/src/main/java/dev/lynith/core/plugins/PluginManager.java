@@ -25,7 +25,7 @@ public class PluginManager {
     private final Logger logger = new Logger("PluginManager");
     private final CopyOnWriteArrayList<Plugin> plugins = new CopyOnWriteArrayList<>();
 
-    public PluginManager(Instrumentation inst) {
+    public void loadPluginsPremain(Instrumentation inst) {
         String pluginPath = System.getProperty("pluginPath") != null
                 ? System.getProperty("pluginPath")
                 : System.getProperty("user.dir") + File.separator + "plugins";
@@ -89,7 +89,6 @@ public class PluginManager {
             }
         }
 
-        ClientStartup.getInstance().getEventBus().once(MinecraftInit.class, this::initPlugins);
         preInitPlugins(inst);
     }
 

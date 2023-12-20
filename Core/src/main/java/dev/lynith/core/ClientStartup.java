@@ -3,6 +3,7 @@ package dev.lynith.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.lynith.core.bridge.IVersion;
+import dev.lynith.core.bridge.IVersionMain;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.EventCallback;
 import dev.lynith.core.events.impl.MinecraftInit;
@@ -17,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.InvocationTargetException;
 
 @Getter
 public class ClientStartup {
@@ -24,10 +26,43 @@ public class ClientStartup {
     @Getter(AccessLevel.NONE)
     private final static Logger logger = new Logger("main");
 
-    @Getter
     private static ClientStartup instance;
 
-    public static void launch(IVersion version, Instrumentation inst) {
+    public static ClientStartup getInstance() {
+        if (instance == null) {
+            ClientStartup.launch();
+        }
+
+        return instance;
+    }
+
+    public static void launch() {
+        Class<?> versionMain;
+
+        try {
+            versionMain = Class.forName("dev.lynith.start.VersionMain");
+        } catch (Exception e) {
+            logger.error("Invalid build");
+            logger.error("dev.lynith.start.VersionMain was not found!");
+            return;
+        }
+
+        try {
+            IVersionMain versionMainInstance = (IVersionMain) versionMain.getConstructor().newInstance();
+            Class<? extends IVersion> versionClass = versionMainInstance.getVersion();
+
+            IVersion version = versionClass.getConstructor().newInstance();
+            logger.log("Found bridge");
+
+            ClientStartup.launch(version);
+        } catch (Exception e) {
+            logger.error("Failed to launch client");
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void launch(IVersion version) {
         if (instance != null) {
             logger.log("ClientStartup instance already exists. This shouldn't happen.");
             return;
@@ -35,7 +70,7 @@ public class ClientStartup {
 
         logger.log("Launching version " + version.getMinecraft().getGameVersion());
         instance = new ClientStartup();
-        instance.launchClient(version, inst);
+        instance.launchClient(version);
     }
 
     private PluginManager pluginManager;
@@ -44,14 +79,14 @@ public class ClientStartup {
     private ThemeManager themeManager;
     private long nvgContext;
 
-    public void launchClient(IVersion version, Instrumentation inst) {
+    public void launchClient(IVersion version) {
         this.version = version;
 
-        this.eventBus = new EventBus();
+        this.eventBus = new EventBus<>();
         logger.log("Initialized EventBus");
 
-        this.pluginManager = new PluginManager(inst);
-        logger.log("Initialized PluginManager");
+//        this.pluginManager = new PluginManager();
+//        logger.log("Initialized PluginManager");
 
         this.themeManager = new ThemeManager();
         logger.log("Initialized ThemeManager");

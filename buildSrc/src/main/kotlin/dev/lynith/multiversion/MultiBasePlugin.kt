@@ -59,12 +59,13 @@ class MultiBasePlugin : Plugin<Project> {
             }
 
             fun lwjglNative(dep: String) {
-                add("bundle", dep) {
+                add("runtimeOnly", dep) {
                     isTransitive = false
                 }
             }
 
             lwjglNative( "org.lwjgl:lwjgl:3.3.1:natives-${platform}")
+            lwjglNative("org.lwjgl:lwjgl-stb:3.3.1:natives-${platform}")
             lwjglNative("org.lwjgl:lwjgl-nanovg:3.3.1:natives-${platform}")
 
             add("compileOnly", "com.github.LynithDev:lwjgl-patched:bf1d105853")

@@ -21,10 +21,6 @@ public class ClassWrapper extends URLClassLoader {
         super(urls);
         this.upstream = getSystemClassLoader();
 
-        for (URL pkg : ((URLClassLoader) this.upstream).getURLs()) {
-            System.out.println(pkg);
-        }
-
         instance = this;
         Thread.currentThread().setContextClassLoader(this);
     }

@@ -119,6 +119,10 @@ class MultiVersionPlugin : Plugin<Project> {
                     add("implementation", "com.github.LynithDev:lwjgl-patched:bf1d105853")
                 }
 
+                if (extension.useLaunchwrapper) {
+                    add("implementation", "com.github.heni123321:LegacyLauncher:ac106bbe00")
+                }
+
                 add("minecraft", "com.mojang:minecraft:${extension.minecraftVersion}")
                 add("mappings",
                     if (extension.legacy) "net.legacyfabric:yarn:${extension.minecraftVersion}+build.+"
@@ -156,9 +160,6 @@ class MultiVersionPlugin : Plugin<Project> {
                             mainClass.set("net.minecraft.client.main.Main")
                             programArg("--version=${extension.minecraftVersion}")
                             programArg("--accessToken=0")
-//                            vmArg("-Dorg.lwjgl.util.Debug=true")
-                            vmArg("-Dorg.lwjgl.util.DebugLoader=true")
-                            vmArg("-Dorg.lwjgl.librarypath=/home/lynith/.local/share/PrismLauncher/instances/1.8.9(1)/.minecraft/OneConfig/temp/3.3.1-SNAPSHOT/")
                         }
 
                         ideConfigGenerated(true)

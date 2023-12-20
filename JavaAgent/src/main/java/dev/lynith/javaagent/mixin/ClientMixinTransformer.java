@@ -10,6 +10,6 @@ public class ClientMixinTransformer implements ClassFileTransformer {
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-        return new ClientMixinService().getTransformer().transformClass(MixinEnvironment.getDefaultEnvironment(), className.replace("/", "."), classfileBuffer);
+        return ClientMixinService.getTransformer().transformClass(MixinEnvironment.getDefaultEnvironment(), className.replace("/", "."), classfileBuffer);
     }
 }

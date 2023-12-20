@@ -68,4 +68,9 @@ public class Renderer implements IRenderer {
         return false;
     }
 
+    @Override
+    public boolean displayScreen(dev.lynith.core.ui.components.Screen screen, Object... args) {
+        return false;
+    }
+
 }

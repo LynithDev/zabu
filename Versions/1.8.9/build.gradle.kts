@@ -6,4 +6,5 @@ multiversion {
     minecraftVersion = "1.8.9"
     legacy = true
     javaVersion = JavaVersion.VERSION_1_8
+    useLaunchwrapper = true
 }

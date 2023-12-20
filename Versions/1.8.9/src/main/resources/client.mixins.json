@@ -8,5 +8,5 @@
         "MixinMinecraft",
         "lwjgl.MixinGLContext",
         "lwjgl.MixinNanoVGGLConfig"
-  ]
+    ]
 }
