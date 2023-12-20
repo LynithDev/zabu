@@ -26,7 +26,10 @@ public interface IStartTransformer extends ClassFileTransformer {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 
-            cr.accept(new ClassVisitor(Opcodes.ASM5, cw) {
+            int api = AgentMain.getLaunchedVersion() != null
+                    && AgentMain.getLaunchedVersion() >= 16 ? Opcodes.ASM7 : Opcodes.ASM5;
+
+            cr.accept(new ClassVisitor(api, cw) {
 
                 @Override
                 public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {

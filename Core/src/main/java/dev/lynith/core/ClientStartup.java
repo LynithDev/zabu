@@ -16,6 +16,9 @@ import dev.lynith.core.ui.theme.dark.ThemeDark;
 import dev.lynith.core.utils.NanoVGManager;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NanoVG;
+import org.lwjgl.nanovg.NanoVGGL3;
 
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.InvocationTargetException;
@@ -100,7 +103,6 @@ public class ClientStartup {
         });
 
         getEventBus().once(MinecraftInit.class, () -> {
-            logger.log("Initializing NanoVG");
             nvgContext = NanoVGManager.createContext();
             logger.log("Initialized NanoVG");
         });

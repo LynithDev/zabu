@@ -117,16 +117,15 @@ class MultiVersionPlugin : Plugin<Project> {
 
                 if (extension.legacy) {
                     add("implementation", "com.github.LynithDev:lwjgl-patched:bf1d105853")
-                }
-
-                if (extension.useLaunchwrapper) {
-                    add("implementation", "com.github.heni123321:LegacyLauncher:ac106bbe00")
+                } else {
+                    add("implementation", "org.lwjgl:lwjgl-nanovg:3.3.1")
+                    add("implementation", "org.lwjgl:lwjgl-stb:3.3.1")
                 }
 
                 add("minecraft", "com.mojang:minecraft:${extension.minecraftVersion}")
                 add("mappings",
                     if (extension.legacy) "net.legacyfabric:yarn:${extension.minecraftVersion}+build.+"
-                    else "net.fabricmc:yarn:${extension.minecraftVersion}+build.+"
+                    else "net.fabricmc:yarn:${extension.minecraftVersion}+build.1"
                 )
             }
 
@@ -162,7 +161,7 @@ class MultiVersionPlugin : Plugin<Project> {
                             programArg("--accessToken=0")
                         }
 
-                        ideConfigGenerated(true)
+                        ideConfigGenerated(false)
                     }
                 }
             }

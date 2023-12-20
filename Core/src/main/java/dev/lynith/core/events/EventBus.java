@@ -42,7 +42,7 @@ public class EventBus<CB> {
                                 try {
                                     method.invoke(callback, args);
                                 } catch (Exception e) {
-                                    logger.error("Error while invoking event {}: {}", eventClass.getName());
+                                    logger.error("Error while invoking event {}", eventClass.getName());
                                     e.printStackTrace();
                                 }
                                 break;

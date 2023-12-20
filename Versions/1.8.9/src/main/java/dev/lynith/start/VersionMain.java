@@ -12,4 +12,8 @@ public class VersionMain implements IVersionMain {
         return Version.class;
     }
 
+    @Override
+    public String getVersionString() {
+        return "1.8.9";
+    }
 }

@@ -4,4 +4,6 @@ public interface IVersionMain {
 
     Class<? extends IVersion> getVersion();
 
+    String getVersionString();
+
 }

@@ -13,5 +13,4 @@ open class MultiVersionExtension {
     // Start Optional //
     var fabricVersion: String? = null
     var forgeVersion: String? = null
-    var useLaunchwrapper: Boolean = false
 }

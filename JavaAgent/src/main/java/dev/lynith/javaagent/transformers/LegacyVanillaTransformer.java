@@ -1,8 +1,11 @@
 package dev.lynith.javaagent.transformers;
 
 import dev.lynith.javaagent.IStartTransformer;
+import dev.lynith.javaagent.launchwrapper.LaunchWrapper;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+
+import java.util.Arrays;
 
 public class LegacyVanillaTransformer implements IStartTransformer {
 
@@ -40,7 +43,7 @@ public class LegacyVanillaTransformer implements IStartTransformer {
             visitVarInsn(Opcodes.ALOAD, 0);
             visitMethodInsn(
                     Opcodes.INVOKESTATIC,
-                    "dev/lynith/tweaker/TweakerWrapper",
+                    "dev/lynith/javaagent/transformers/LegacyVanillaTransformer$TweakerWrapper",
                     "init",
                     "([Ljava/lang/String;)V",
                     false
@@ -50,6 +53,17 @@ public class LegacyVanillaTransformer implements IStartTransformer {
             // #START# return;
             visitInsn(Opcodes.RETURN);
             // #END#
+        }
+    }
+
+    public static class TweakerWrapper {
+        public static void init(String[] strings) {
+            boolean isModificationApplied = System.getProperty("dev.lynith.internal.isModificationApplied", "false").equals("true");
+
+            if (!isModificationApplied) {
+                System.setProperty("dev.lynith.internal.isModificationApplied", "true");
+                LaunchWrapper.main(strings);
+            }
         }
     }
 
