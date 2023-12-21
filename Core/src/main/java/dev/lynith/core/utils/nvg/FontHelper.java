@@ -15,17 +15,17 @@ public class FontHelper {
     public static final HashMap<String, Font> fontMap = new HashMap<>();
 
     public static void init() {
-        Font robotoLight = new Font("Roboto-Light", "fonts/roboto/Roboto-Light.ttf", Font.FontWeight.LIGHT);
-        Font robotoRegular = new Font("Roboto-Regular", "fonts/roboto/Roboto-Regular.ttf", Font.FontWeight.REGULAR);
-        Font robotoMedium = new Font("Roboto-Medium", "fonts/roboto/Roboto-Medium.ttf", Font.FontWeight.MEDIUM);
-        Font robotoBold = new Font("Roboto-Bold", "fonts/roboto/Roboto-Bold.ttf", Font.FontWeight.BOLD);
+        Font robotoLight = new Font("Roboto-Light", "/fonts/roboto/Roboto-Light.ttf", Font.FontWeight.LIGHT);
+        Font robotoRegular = new Font("Roboto-Regular", "/fonts/roboto/Roboto-Regular.ttf", Font.FontWeight.REGULAR);
+        Font robotoMedium = new Font("Roboto-Medium", "/fonts/roboto/Roboto-Medium.ttf", Font.FontWeight.MEDIUM);
+        Font robotoBold = new Font("Roboto-Bold", "/fonts/roboto/Roboto-Bold.ttf", Font.FontWeight.BOLD);
 
         addAll(robotoLight, robotoRegular, robotoMedium, robotoBold);
     }
 
     public static void add(Font font) {
         try {
-            ByteBuffer buffer = IOUtil.resourceToByteBuffer(font.getPath());
+            ByteBuffer buffer = IOUtil.resourceToByteBuffer(font.getPath(), ClientStartup.class);
 
             NanoVG.nvgCreateFontMem(ClientStartup.getInstance().getNvgContext(), font.getName(), buffer, 1);
             font.setBuffer(buffer);
@@ -48,6 +48,10 @@ public class FontHelper {
 
     public static Font get(String name) {
         return fontMap.get(name);
+    }
+
+    public static Font getOrDefault(String name) {
+        return fontMap.getOrDefault(name, fontMap.get("Roboto-Regular"));
     }
 
     public static Font getOrDefault(String name, Font defaultFont) {
