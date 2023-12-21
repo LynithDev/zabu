@@ -10,11 +10,10 @@ import dev.lynith.core.events.impl.ShutdownEvent;
 import dev.lynith.core.plugins.PluginManager;
 import dev.lynith.core.ui.screens.MainMenu;
 import dev.lynith.core.ui.theme.ThemeManager;
-import dev.lynith.core.utils.NanoVGManager;
+import dev.lynith.core.utils.nvg.FontHelper;
+import dev.lynith.core.utils.nvg.NanoVGManager;
 import lombok.AccessLevel;
 import lombok.Getter;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 public class ClientStartup {
@@ -85,6 +84,7 @@ public class ClientStartup {
 //        logger.log("Initialized PluginManager");
 
         nvgContext = NanoVGManager.createContext();
+        FontHelper.init();
         logger.log("Initialized NanoVG");
 
         this.themeManager = new ThemeManager();

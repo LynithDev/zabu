@@ -1,14 +1,11 @@
 package dev.lynith.core.ui.components;
 
-import dev.lynith.core.ClientStartup;
 import dev.lynith.core.bridge.gui.IRenderer;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.ui.BoundingBox;
 import dev.lynith.core.ui.styles.ComponentStyles;
-import dev.lynith.core.ui.theme.ThemeManager;
-import dev.lynith.core.utils.NanoVGHelper;
+import dev.lynith.core.utils.nvg.NanoVGHelper;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public abstract class Component<C extends Component<?,?>, S extends ComponentStyles<?, ?>> extends NanoVGHelper {

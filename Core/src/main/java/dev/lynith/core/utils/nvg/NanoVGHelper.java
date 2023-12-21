@@ -1,4 +1,4 @@
-package dev.lynith.core.utils;
+package dev.lynith.core.utils.nvg;
 
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.ui.styles.impl.Color;
@@ -31,16 +31,31 @@ public class NanoVGHelper {
 
     public static void rectangle(float left, float top, float width, float height, Color color) {
         nvgBeginPath(ctx());
-        nvgFillColor(ctx(), createColor(color));
+        NVGColor c = createColor(color);
+        nvgFillColor(ctx(), c);
         nvgRect(ctx(), left, top, width, height);
         nvgFill(ctx());
+        c.free();
     }
 
     public static void circle(float centerX, float centerY, float radius, Color color) {
         nvgBeginPath(ctx());
-        nvgFillColor(ctx(), createColor(color));
+        NVGColor c = createColor(color);
+        nvgFillColor(ctx(), c);
         nvgCircle(ctx(), centerX, centerY, radius);
         nvgFill(ctx());
+        c.free();
+    }
+
+    public static void text(String text, float left, float top, int size, Color color, Font font) {
+        nvgBeginPath(ctx());
+        nvgFontFace(ctx(), font.getName());
+        nvgFontSize(ctx(), size);
+        nvgTextAlign(ctx(), NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
+        NVGColor c = createColor(color);
+        nvgFillColor(ctx(), c);
+        nvgText(ctx(), left, top, text);
+        c.free();
     }
 
     public static long ctx() {

@@ -5,19 +5,19 @@ import dev.lynith.core.bridge.gui.IRenderer;
 import dev.lynith.core.ui.components.Component;
 import dev.lynith.core.ui.components.callbacks.ComponentMouseClicked;
 import dev.lynith.core.ui.theme.base.ButtonStyles;
+import dev.lynith.core.utils.nvg.FontHelper;
 
 public class Button extends Component<Button, ButtonStyles> {
 
     @Override
     public void render(IRenderer renderer, int mouseX, int mouseY, float delta) {
         rectangle(getX(), getY(), getWidth(), getHeight(), getStyles().getBackgroundColor());
+        text("Test", getX(), getY(), 16, getStyles().getForegroundColor(), FontHelper.get("Roboto-Regular"));
     }
 
     @Override
     public void init() {
-        on(ComponentMouseClicked.class, (mouseX, mouseY, button) -> {
 
-        });
     }
 
     @Override

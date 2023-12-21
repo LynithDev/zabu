@@ -1,4 +1,4 @@
-package dev.lynith.core.utils;
+package dev.lynith.core.utils.nvg;
 
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.nanovg.NanoVGGL3;

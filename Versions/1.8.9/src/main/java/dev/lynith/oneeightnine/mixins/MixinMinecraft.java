@@ -3,7 +3,6 @@ package dev.lynith.oneeightnine.mixins;
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.events.impl.MinecraftGuiChanged;
 import dev.lynith.core.events.impl.MinecraftInit;
-import dev.lynith.core.utils.NanoVGHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;
