@@ -6,27 +6,27 @@ import java.util.List;
 
 public interface Children {
 
-    List<Component<?>> getChildren();
+    List<Component<?, ?>> getChildren();
 
-    default void addChild(Component<?> child) {
+    default void addChild(Component<?, ?> child) {
         getChildren().add(child);
     }
 
-    default void addChildren(Component<?>... children) {
-        for (Component<?> child : children) {
+    default void addChildren(Component<?, ?>... children) {
+        for (Component<?, ?> child : children) {
             addChild(child);
         }
     }
 
-    default void addChildren(List<Component<?>> children) {
+    default void addChildren(List<Component<?, ?>> children) {
         getChildren().addAll(children);
     }
 
-    default void removeChild(Component<?> child) {
+    default void removeChild(Component<?, ?> child) {
         getChildren().remove(child);
     }
 
-    default void setChildren(List<Component<?>> children) {
+    default void setChildren(List<Component<?, ?>> children) {
         getChildren().clear();
         getChildren().addAll(children);
     }

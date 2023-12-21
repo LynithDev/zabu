@@ -16,4 +16,5 @@ class DarkButtonStyles extends ButtonStyles {
     public Padding getPadding() {
         return new Padding(10, 10, 10, 10);
     }
+
 }

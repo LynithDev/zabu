@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter @Setter @Accessors(chain = true)
-public abstract class ComponentStyles<C extends Component<CS>, CS extends ComponentStyles<C, CS>> {
+public abstract class ComponentStyles<C extends Component<C, CS>, CS extends ComponentStyles<C, CS>> {
 
     private final C component;
 

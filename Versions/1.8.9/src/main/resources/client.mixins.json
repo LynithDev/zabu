@@ -6,7 +6,6 @@
     "minVersion": "0.8.5",
     "mixins": [
         "MixinMinecraft",
-        "lwjgl.MixinGLContext",
         "lwjgl.MixinNanoVGGLConfig"
     ]
 }

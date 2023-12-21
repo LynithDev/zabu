@@ -33,4 +33,24 @@ public class BoundingBox {
         this.height = height;
     }
 
+    public BoundingBox setX(int x) {
+        this.x = x;
+        return this;
+    }
+
+    public BoundingBox setY(int y) {
+        this.y = y;
+        return this;
+    }
+
+    public BoundingBox setWidth(int width) {
+        this.width = width;
+        return this;
+    }
+
+    public BoundingBox setHeight(int height) {
+        this.height = height;
+        return this;
+    }
+
 }

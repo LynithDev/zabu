@@ -2,6 +2,7 @@ package dev.lynith.core;
 
 import dev.lynith.core.bridge.IVersion;
 import dev.lynith.core.bridge.IVersionMain;
+import dev.lynith.core.bridge.gui.IRenderer;
 import dev.lynith.core.events.EventBus;
 import dev.lynith.core.events.EventCallback;
 import dev.lynith.core.events.impl.MinecraftGuiChanged;
@@ -98,9 +99,7 @@ public class ClientStartup {
         });
 
         getEventBus().on(MinecraftGuiChanged.class, (screen) -> {
-            System.out.println("Screen changed to " + screen);
-
-            if (screen.endsWith("TitleScreen")) {
+            if (getVersion().getRenderer().getCurrentScreen() == IRenderer.GuiType.MAIN_MENU) {
                 version.getRenderer().displayScreen(new MainMenu());
             }
         });

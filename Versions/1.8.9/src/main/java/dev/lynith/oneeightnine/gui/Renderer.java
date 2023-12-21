@@ -83,12 +83,12 @@ public class Renderer implements IRenderer {
         MinecraftClient.getInstance().setScreen(toMCScreen(new MCScreen() {
             @Override
             public void render(int mouseX, int mouseY, float delta) {
-                screen.render(renderer, mouseX, mouseY, delta);
+                screen.wrappedRender(renderer, mouseX, mouseY, delta);
             }
 
             @Override
             public void init() {
-                screen.init();
+                screen.wrappedInit();
             }
         }));
         return true;

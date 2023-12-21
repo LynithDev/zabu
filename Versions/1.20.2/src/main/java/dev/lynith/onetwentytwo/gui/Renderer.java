@@ -2,6 +2,8 @@ package dev.lynith.onetwentytwo.gui;
 
 import dev.lynith.core.bridge.gui.IRenderer;
 import dev.lynith.core.bridge.gui.MCScreen;
+import dev.lynith.core.ui.components.callbacks.ComponentMouseClicked;
+import dev.lynith.core.ui.components.callbacks.ComponentMouseReleased;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -83,13 +85,22 @@ public class Renderer implements IRenderer {
         MinecraftClient.getInstance().setScreen(toMCScreen(new MCScreen() {
             @Override
             public void render(int mouseX, int mouseY, float delta) {
-                System.out.println("rendering 2");
-                screen.render(renderer, mouseX, mouseY, delta);
+                screen.wrappedRender(renderer, mouseX, mouseY, delta);
             }
 
             @Override
             public void init() {
-                screen.init();
+                screen.wrappedInit();
+            }
+
+            @Override
+            public void mouseClicked(int mouseX, int mouseY, int button) {
+                screen.emit(ComponentMouseClicked.class, mouseX, mouseY, button);
+            }
+
+            @Override
+            public void mouseReleased(int mouseX, int mouseY, int button) {
+                screen.emit(ComponentMouseReleased.class, mouseX, mouseY, button);
             }
         }));
         return true;
@@ -112,7 +123,6 @@ public class Renderer implements IRenderer {
             public void render(DrawContext drawContext, int i, int j, float f) {
                 super.render(drawContext, i, j, f);
                 screen.render(i, j, f);
-                System.out.println("rendering 1");
             }
 
             @Override
@@ -123,33 +133,26 @@ public class Renderer implements IRenderer {
 
             @Override
             public boolean keyPressed(int i, int j, int k) {
-//                screen.keyPressed(i, j, k);
+
                 return super.keyPressed(i, j, k);
             }
 
-//            @Override
-//            protected void mouseClicked(int i, int j, int k) {
-//                screen.mouseClicked(i, j, k);
-//                super.mouseClicked(i, j, k);
-//            }
-//
-//            @Override
-//            protected void mouseDragged(int i, int j, int k, long l) {
-//                screen.mouseDragged(i, j, k, l);
-//                super.mouseDragged(i, j, k, l);
-//            }
-//
-//            @Override
-//            protected void mouseReleased(int i, int j, int k) {
-//                screen.mouseReleased(i, j, k);
-//                super.mouseReleased(i, j, k);
-//            }
-//
-//            @Override
-//            public boolean shouldPauseGame() {
-//                return screen.shouldPauseGame();
-//            }
+            @Override
+            public boolean shouldPause() {
+                return screen.shouldPauseGame();
+            }
 
+            @Override
+            public boolean mouseClicked(double d, double e, int i) {
+                screen.mouseClicked((int) d, (int) e, i);
+                return super.mouseClicked(d, e, i);
+            }
+
+            @Override
+            public boolean mouseReleased(double d, double e, int i) {
+                screen.mouseReleased((int) d, (int) e, i);
+                return super.mouseReleased(d, e, i);
+            }
         };
     }
 

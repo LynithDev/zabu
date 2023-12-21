@@ -18,7 +18,7 @@ public class MinecraftMixin {
         ClientStartup.getInstance().getEventBus().emit(MinecraftInit.class);
     }
 
-    @Inject(method = "setScreen", at = @At("HEAD"))
+    @Inject(method = "setScreen", at = @At("RETURN"))
     public void setScreen(Screen screen, CallbackInfo ci) {
         String clazzName = screen.getClass().getName();
         ClientStartup.getInstance().getEventBus().emit(MinecraftGuiChanged.class, clazzName);

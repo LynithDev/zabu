@@ -1,6 +1,7 @@
 package dev.lynith.core.utils;
 
 import dev.lynith.core.ClientStartup;
+import dev.lynith.core.ui.styles.impl.Color;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
@@ -24,16 +25,20 @@ public class NanoVGHelper {
         return nvgColor;
     }
 
-    public static void rectangle(float left, float top, float width, float height, NVGColor color) {
+    public static NVGColor createColor(Color color) {
+        return createColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    }
+
+    public static void rectangle(float left, float top, float width, float height, Color color) {
         nvgBeginPath(ctx());
-        nvgFillColor(ctx(), color);
+        nvgFillColor(ctx(), createColor(color));
         nvgRect(ctx(), left, top, width, height);
         nvgFill(ctx());
     }
 
-    public static void circle(float centerX, float centerY, float radius, NVGColor color) {
+    public static void circle(float centerX, float centerY, float radius, Color color) {
         nvgBeginPath(ctx());
-        nvgFillColor(ctx(), color);
+        nvgFillColor(ctx(), createColor(color));
         nvgCircle(ctx(), centerX, centerY, radius);
         nvgFill(ctx());
     }
