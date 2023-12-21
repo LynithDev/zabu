@@ -16,10 +16,10 @@ There are 3 components required for the client to work:
 
 ### Building
 The building process is split into 3 steps:
-- Building the Core, JavaAgent and Version-specific code into separate jars
-- Extracting each jar (Core first, then version-specific code and last of all, the JavaAgent) 
+1. Building the Core, JavaAgent and Version-specific code into separate jars
+2. Extracting each jar (Core first, then version-specific code and last of all, the JavaAgent) 
 into the same directory
-- Zipping the directory into a single jar
+3. Zipping the directory into a single jar
 
 ### Running
 If the building process above is followed, the client can be run by simply adding the following JVM arguments:
