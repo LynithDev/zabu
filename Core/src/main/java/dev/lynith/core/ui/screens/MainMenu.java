@@ -12,9 +12,9 @@ public class MainMenu extends Screen {
     public void render(IRenderer renderer, int mouseX, int mouseY, float delta) {
 
         rectangle(0, 0, renderer.getWindowWidth(), renderer.getWindowHeight(), new Color(0, 255));
-        circle(150, 150, 100, new Color(255, 0, 0));
-
-        text("Test", getX(), getY() + 300, 48, new Color(255), FontHelper.get("Roboto-Regular"));
+//        circle(150, 150, 100, new Color(255, 0, 0));
+//
+//        text("Test", getX(), getY() + 300, 48, new Color(255), FontHelper.get("Roboto-Regular"));
 
     }
 
@@ -24,10 +24,9 @@ public class MainMenu extends Screen {
             new Button()
                 .setX(100)
                 .setY(100)
-                .setWidth(100)
-                .setHeight(100)
-
-
+                .setWidth(150)
+                .setHeight(50)
+                .setText("Singleplayer")
         );
     }
 

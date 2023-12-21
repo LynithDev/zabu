@@ -30,6 +30,9 @@ public class Padding extends Style<Padding, Style.FourValue<Integer, Integer, In
 
     @Override
     public void setValue(FourValue<Integer, Integer, Integer, Integer> value) {
-        super.setValue(value);
+        top = value.getFirst();
+        right = value.getSecond();
+        bottom = value.getThird();
+        left = value.getFourth();
     }
 }

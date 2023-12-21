@@ -53,4 +53,20 @@ public class BoundingBox {
         return this;
     }
 
+    public BoundingBox withX(int x) {
+        return new BoundingBox(x, y, width, height);
+    }
+
+    public BoundingBox withY(int y) {
+        return new BoundingBox(x, y, width, height);
+    }
+
+    public BoundingBox withWidth(int width) {
+        return new BoundingBox(x, y, width, height);
+    }
+
+    public BoundingBox withHeight(int height) {
+        return new BoundingBox(x, y, width, height);
+    }
+
 }

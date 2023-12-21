@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter
+@Setter
 public abstract class Style<S extends Style<S, V>, V> {
 
     private V value;
+
+    public abstract V getValue();
+    public abstract void setValue(V value);
 
     public abstract String getName();
     public abstract String getValueSerialized();

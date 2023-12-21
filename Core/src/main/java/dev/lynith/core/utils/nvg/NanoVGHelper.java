@@ -1,7 +1,11 @@
 package dev.lynith.core.utils.nvg;
 
 import dev.lynith.core.ClientStartup;
+import dev.lynith.core.ui.BoundingBox;
+import dev.lynith.core.ui.styles.impl.Border;
 import dev.lynith.core.ui.styles.impl.Color;
+import dev.lynith.core.ui.styles.impl.CornerRadius;
+import dev.lynith.core.ui.styles.impl.FontStyles;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
@@ -36,6 +40,36 @@ public class NanoVGHelper {
         nvgFill(ctx());
     }
 
+    public static void rectangle(BoundingBox bounds, Color color, Border border, CornerRadius cornerRadius) {
+        int radius = 0;
+        if (cornerRadius != null) {
+            radius = cornerRadius.getValue();
+        }
+
+        // Background
+        nvgBeginPath(ctx());
+        nvgFillColor(ctx(), createColor(color));
+        nvgRoundedRect(ctx(), bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), radius);
+        nvgFill(ctx());
+
+        // Border
+        if (border != null && border.getValue().getFirst() > 0) {
+            nvgBeginPath(ctx());
+            nvgStrokeColor(ctx(), createColor(border.getValue().getSecond()));
+            nvgStrokeWidth(ctx(), border.getValue().getFirst());
+            nvgRoundedRect(ctx(), bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), radius);
+            nvgStroke(ctx());
+        }
+    }
+
+    public static void rectangle(BoundingBox bounds, Color color, Border border) {
+        rectangle(bounds, color, border, null);
+    }
+
+    public static void rectangle(BoundingBox bounds, Color color) {
+        rectangle(bounds, color, null, null);
+    }
+
     public static void circle(float centerX, float centerY, float radius, Color color) {
         nvgBeginPath(ctx());
         nvgFillColor(ctx(), createColor(color));
@@ -50,6 +84,39 @@ public class NanoVGHelper {
         nvgTextAlign(ctx(), NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
         nvgFillColor(ctx(), createColor(color));
         nvgText(ctx(), left, top, text);
+    }
+
+    public static void text(String text, BoundingBox box, FontStyles styles, Color color) {
+        nvgBeginPath(ctx());
+        nvgFontFace(ctx(), styles.getValue().getFirst());
+        nvgFontSize(ctx(), styles.getValue().getSecond());
+        nvgTextAlign(ctx(), NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
+        nvgFillColor(ctx(), createColor(color));
+        nvgTextBox(ctx(), box.getX(), box.getY(), box.getWidth(), text);
+    }
+
+    public static float textWidth(String text, FontStyles styles) {
+        nvgBeginPath(ctx());
+        nvgFontFace(ctx(), styles.getValue().getFirst());
+        nvgFontSize(ctx(), styles.getValue().getSecond());
+        float[] bounds = new float[4];
+        System.out.println("textWidth: " + text);
+        nvgTextBounds(ctx(), 0, 0, text, bounds);
+        return bounds[2] - bounds[0];
+    }
+
+    public static int textWidthInt(String text, FontStyles styles) {
+        return (int) textWidth(text, styles);
+    }
+
+    public static float textHeight(String text, FontStyles styles) {
+        nvgBeginPath(ctx());
+        nvgFontFace(ctx(), styles.getValue().getFirst());
+        nvgFontSize(ctx(), styles.getValue().getSecond());
+        float[] bounds = new float[4];
+        System.out.println("textHeight: " + text);
+        nvgTextBounds(ctx(), 0, 0, text, bounds);
+        return bounds[3] - bounds[1];
     }
 
     public static long ctx() {

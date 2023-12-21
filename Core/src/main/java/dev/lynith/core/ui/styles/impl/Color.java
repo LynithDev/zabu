@@ -62,7 +62,7 @@ public class Color extends Style<Color, Style.FourValue<Integer, Integer, Intege
 
     @Override
     public String getValueSerialized() {
-        return red + " " + green + " " + blue + " " + alpha;
+        return "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
     }
 
     @Override
@@ -72,7 +72,10 @@ public class Color extends Style<Color, Style.FourValue<Integer, Integer, Intege
 
     @Override
     public void setValue(FourValue<Integer, Integer, Integer, Integer> value) {
-        super.setValue(value);
+        red = value.getFirst();
+        green = value.getSecond();
+        blue = value.getThird();
+        alpha = value.getFourth();
     }
 
 }

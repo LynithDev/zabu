@@ -15,10 +15,10 @@ public abstract class Screen extends Component<Screen, ComponentStyles<?, ?>> im
 
     @Override
     protected void postRender(IRenderer ctx, int mouseX, int mouseY, float delta) {
-        super.postRender(ctx, mouseX, mouseY, delta);
         for (Component<?, ?> child : children) {
             child.render(ctx, mouseX, mouseY, delta);
         }
+        super.postRender(ctx, mouseX, mouseY, delta);
     }
 
     @Override
