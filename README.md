@@ -1,29 +1,30 @@
-# multiclient
-Java + Kotlin multi Minecraft version Java Agent client
+# Zabu Client (W.I.P.)
+FOSS Minecraft client for versions starting from 1.8.9 all the way to 1.20.2
 
-## Old
-https://github.com/LynithDev/multiclient/tree/old
+## Features
+- [x] Multiversion support (currently 1.8.9 - 1.20.2)
+- [ ] Fabric support
+- [ ] Forge support
+- [x] Epic anti-aliased GUI thanks to NanoVG
 
-## How to use
+## How it works
+### Components
+There are 3 components required for the client to work:
+- The client core, which is the main client code
+- The JavaAgent, responsible for attaching the client to the game
+- Version-specific code, responsible for bridging the client core and the game
 
-### Creating a new version
-1. Create a new module in the `versions` folder
-2. Call it whatever you want
-3. Create a `build.gradle.kts` file
-4. Apply the `dev.lynith.multiclient.version` plugin
-5. Optionally configure the plugin:
-```kotlin
-multiversion {
-    minecraftVersion = "1.8.9"
-    legacy = false // If the Minecraft version is a legacy version (1.12.2 and below)
-    javaVersion = JavaVersion.VERSION_1_8
-    
-    fabricVersion = "0.11.6+build.200" // Optional
-    forgeVersion = "36.1.0" // Optional
-}
+### Building
+The building process is split into 3 steps:
+- Building the Core, JavaAgent and Version-specific code into separate jars
+- Extracting each jar (Core first, then version-specific code and last of all, the JavaAgent) 
+into the same directory
+- Zipping the directory into a single jar
+
+### Running
+If the building process above is followed, the client can be run by simply adding the following JVM arguments:
 ```
-
-### Implementing version dependent code
-1. Create a new interface in `Core` and the `bridge` folder
-2. Create a new class in each Version and implement the interface
-3. Implement your version dependent code and call it from the Core
+-javaagent:/path/to/zabu/agent.jar
+```
+Otherwise, the client Core and Version jars must be added to the classpath, and the
+`-javaagent` argument must be added with the path to the JavaAgent jar.
