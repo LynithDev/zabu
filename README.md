@@ -28,3 +28,6 @@ If the building process above is followed, the client can be run by simply addin
 ```
 Otherwise, the client Core and Version jars must be added to the classpath, and the
 `-javaagent` argument must be added with the path to the JavaAgent jar.
+
+## License
+This project is licensed under the GPLv2 license. See [LICENSE](./LICENSE)
