@@ -1,6 +1,5 @@
 package dev.lynith.oneeightnine.gui;
 
-import dev.lynith.core.ClientStartup;
 import dev.lynith.core.bridge.gui.IRenderer;
 import dev.lynith.core.bridge.gui.MCScreen;
 import net.minecraft.client.MinecraftClient;

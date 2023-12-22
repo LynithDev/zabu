@@ -8,15 +8,21 @@ import java.nio.ByteBuffer;
 @Setter @Getter
 public class Font {
 
-    private final String name;
-    private final String path;
-    private final FontWeight weight;
-    private ByteBuffer buffer;
+    public final String name;
+    public final String path;
+    public final FontWeight weight;
+    public ByteBuffer buffer;
+    public final float offset;
 
-    public Font(String name, String path, FontWeight weight) {
+    public Font(String name, String path, FontWeight weight, float offset) {
         this.name = name;
         this.path = path;
         this.weight = weight;
+        this.offset = offset;
+    }
+
+    public Font(String name, String path, FontWeight weight) {
+        this(name, path, weight, 0);
     }
 
     public int getHeightInPixels(int size) {
@@ -32,6 +38,12 @@ public class Font {
         REGULAR,
         MEDIUM,
         BOLD,
+    }
+
+    public enum FontAlign {
+        LEFT,
+        CENTER,
+        RIGHT,
     }
 
 }

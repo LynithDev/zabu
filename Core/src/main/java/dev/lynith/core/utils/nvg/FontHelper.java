@@ -15,10 +15,10 @@ public class FontHelper {
     public static final HashMap<String, Font> fontMap = new HashMap<>();
 
     public static void init() {
-        Font robotoLight = new Font("Roboto-Light", "/fonts/roboto/Roboto-Light.ttf", Font.FontWeight.LIGHT);
-        Font robotoRegular = new Font("Roboto-Regular", "/fonts/roboto/Roboto-Regular.ttf", Font.FontWeight.REGULAR);
-        Font robotoMedium = new Font("Roboto-Medium", "/fonts/roboto/Roboto-Medium.ttf", Font.FontWeight.MEDIUM);
-        Font robotoBold = new Font("Roboto-Bold", "/fonts/roboto/Roboto-Bold.ttf", Font.FontWeight.BOLD);
+        Font robotoLight = new Font("Roboto-Light", "/fonts/roboto/Roboto-Light.ttf", Font.FontWeight.LIGHT, 1.5f);
+        Font robotoRegular = new Font("Roboto-Regular", "/fonts/roboto/Roboto-Regular.ttf", Font.FontWeight.REGULAR, 1.5f);
+        Font robotoMedium = new Font("Roboto-Medium", "/fonts/roboto/Roboto-Medium.ttf", Font.FontWeight.MEDIUM, 1.5f);
+        Font robotoBold = new Font("Roboto-Bold", "/fonts/roboto/Roboto-Bold.ttf", Font.FontWeight.BOLD, 1.5f);
 
         addAll(robotoLight, robotoRegular, robotoMedium, robotoBold);
     }
