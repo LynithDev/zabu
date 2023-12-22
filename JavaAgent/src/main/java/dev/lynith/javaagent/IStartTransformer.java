@@ -48,7 +48,7 @@ public interface IStartTransformer extends ClassFileTransformer {
             return cw.toByteArray();
         }
 
-        return ClassFileTransformer.super.transform(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
+        return classfileBuffer;
     }
 
 }

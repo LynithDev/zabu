@@ -1,6 +1,7 @@
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
+    id("org.jetbrains.kotlin.jvm") version "1.9.0"
 }
 
 group = "dev.lynith.multiversion"

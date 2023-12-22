@@ -8,7 +8,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BoundingBox {
 
-    @Setter
     private int x, y, width, height;
 
     public boolean contains(int x, int y) {

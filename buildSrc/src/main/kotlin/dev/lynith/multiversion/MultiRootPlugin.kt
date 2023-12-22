@@ -7,6 +7,7 @@ import org.gradle.api.plugins.JavaPlugin
 class MultiRootPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.plugins.apply(JavaPlugin::class.java)
+        target.plugins.apply("org.jetbrains.kotlin.jvm")
 
         target.tasks.register("export-all") {
             group = "client"

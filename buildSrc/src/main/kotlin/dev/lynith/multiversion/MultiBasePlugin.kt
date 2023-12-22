@@ -9,6 +9,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.internal.os.OperatingSystem
 import org.gradle.jvm.tasks.Jar
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.add
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.maven
@@ -19,6 +20,7 @@ class MultiBasePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.plugins.apply {
             apply(JavaPlugin::class.java)
+            apply("org.jetbrains.kotlin.jvm")
         }
 
         target.tasks.apply {
@@ -80,6 +82,10 @@ class MultiBasePlugin : Plugin<Project> {
         java.apply {
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
+
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(8))
+            }
         }
 
         val jar = target.tasks.withType(Jar::class.java)

@@ -16,12 +16,14 @@ import dev.lynith.multiversion.tasks.ExportTask
 import dev.lynith.multiversion.tasks.MergeTask
 import dev.lynith.multiversion.tasks.RemapTask
 import dev.lynith.multiversion.tasks.StartTask
-import org.gradle.kotlin.dsl.add
 
 class MultiVersionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
-        target.plugins.apply(JavaPlugin::class.java)
+        target.plugins.apply {
+            apply(JavaPlugin::class.java)
+            apply("org.jetbrains.kotlin.jvm")
+        }
 
         val extension = target.project.extensions.create("multiversion", MultiVersionExtension::class.java)
 
@@ -58,6 +60,10 @@ class MultiVersionPlugin : Plugin<Project> {
                 withType(JavaExec::class.java).configureEach {
                     setExecutable(launcher.get().executablePath)
                 }
+
+                // Set the kotlin compiler target java version
+                val kotlinCompiler = toolchainService.compilerFor { languageVersion.set(JavaLanguageVersion.of(extension.javaVersion.majorVersion)) }
+
 
                 register("export-${target.name}", ExportTask::class.java) {
                     group = "client-${target.name}"
