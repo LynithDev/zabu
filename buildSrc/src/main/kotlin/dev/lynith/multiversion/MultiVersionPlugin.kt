@@ -34,6 +34,10 @@ class MultiVersionPlugin : Plugin<Project> {
             java.apply {
                 sourceCompatibility = extension.javaVersion
                 targetCompatibility = extension.javaVersion
+
+                toolchain {
+                    languageVersion.set(JavaLanguageVersion.of(extension.javaVersion.majorVersion))
+                }
             }
 
             val buildMappings = mutableMapOf("vanilla" to "official")
@@ -60,10 +64,6 @@ class MultiVersionPlugin : Plugin<Project> {
                 withType(JavaExec::class.java).configureEach {
                     setExecutable(launcher.get().executablePath)
                 }
-
-                // Set the kotlin compiler target java version
-                val kotlinCompiler = toolchainService.compilerFor { languageVersion.set(JavaLanguageVersion.of(extension.javaVersion.majorVersion)) }
-
 
                 register("export-${target.name}", ExportTask::class.java) {
                     group = "client-${target.name}"
