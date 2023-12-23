@@ -9,6 +9,7 @@ class FontStyles @JvmOverloads constructor(
     var weight: Font.FontWeight = Font.FontWeight.REGULAR,
     var lineHeight: Float = 1f,
     var align: Font.FontAlign = Font.FontAlign.LEFT,
+    var letterSpacing: Float = 0f,
 ) : Style<FontStyles>() {
 
     override val propertyName = "font"

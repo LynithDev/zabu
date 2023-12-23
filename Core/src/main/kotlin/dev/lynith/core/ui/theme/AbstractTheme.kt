@@ -13,8 +13,9 @@ abstract class AbstractTheme constructor(
     var type: ThemeType
 ) {
 
-    abstract fun getButtonStyles(button: Button): ButtonStyles
+    abstract val colorScheme: AbstractColorScheme
 
+    abstract fun getButtonStyles(button: Button): ButtonStyles
     abstract fun getLabelStyles(label: Label): LabelStyles
 
     enum class ThemeType {

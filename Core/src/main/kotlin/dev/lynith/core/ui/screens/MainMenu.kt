@@ -14,76 +14,46 @@ import dev.lynith.core.utils.nvg.Font
 
 class MainMenu : Screen() {
     override fun render(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
-        rectangle(
-            0f,
-            0f,
-            ctx.getWindowWidth().toFloat(),
-            ctx.getWindowHeight().toFloat(),
-            Color(0, 255)
-        )
+        background()
     }
 
     override fun init() {
-        val label = Label()
-
         children (
-            label.configure {
-                text = "Hello World!"
+            Label().configure {
+                text = "ZABU"
 
                 bounds = BoundingBox(
                     x = 100f,
-                    y = 150f,
-                    width = 200f,
-                    height = 40f
+                    y = 100f,
                 )
 
                 style {
                     fontStyles.change {
-                        size = 24f
+                        size = 48f
                         weight = Font.FontWeight.BOLD
-                        color = Color(255, 0, 0)
                         align = Font.FontAlign.LEFT
+                        letterSpacing = 5f
                     }
                 }
             },
 
             Button().configure {
-                text = "START"
+                text = "Singleplayer"
 
                 style {
                     fontStyles.change {
-                        size = 18f
-                        weight = Font.FontWeight.BOLD
+                        size = 16f
+                        weight = Font.FontWeight.MEDIUM
                     }
                 }
 
                 bounds = BoundingBox(
                     x = 100f,
-                    y = 100f,
+                    y = 160f,
                     width = 150f,
                     height = 40f
                 )
-
-                on<Clicked> {
-                    label.text = ""
-
-                    fun changeLabelXTimes(x: Int) {
-                        if (x == 0) {
-                            label.text = "Hello World!"
-                            return
-                        }
-
-                        label.text = "Countdown: $x"
-                        ScheduleUtils.scheduleTask({
-                            changeLabelXTimes(x - 1)
-                        }, 1000)
-                    }
-
-                    changeLabelXTimes(10)
-                }
-
-            }
-
+            },
         )
     }
 }

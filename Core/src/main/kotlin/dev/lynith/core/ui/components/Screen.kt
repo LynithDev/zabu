@@ -22,6 +22,10 @@ abstract class Screen : Component<Screen, ComponentStyles.EmptyStyles<Screen>>()
         super.postRender(ctx, mouseX, mouseY, delta)
     }
 
+    override fun render(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
+
+    }
+
     override fun postInit() {
         super.postInit()
 

@@ -1,11 +1,17 @@
 package dev.lynith.core.ui.theme
 
+import dev.lynith.core.ClientStartup
 import dev.lynith.core.ui.theme.base.ThemeBase
 import dev.lynith.core.ui.theme.dark.ThemeDark
 
 class ThemeManager {
+    companion object {
+        val instance: ThemeManager
+            get() = ClientStartup.instance.themeManager
+    }
+
     private val themes = HashSet<AbstractTheme>()
-    var currentTheme: AbstractTheme = ThemeBase()
+    var currentTheme: AbstractTheme
         get set
 
     init {

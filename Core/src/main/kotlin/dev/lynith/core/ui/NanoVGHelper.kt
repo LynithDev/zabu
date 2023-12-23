@@ -5,6 +5,7 @@ import dev.lynith.core.ui.styles.impl.Border
 import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.styles.impl.CornerRadius
 import dev.lynith.core.ui.styles.impl.FontStyles
+import dev.lynith.core.ui.theme.ThemeManager
 import dev.lynith.core.utils.nvg.Font
 import dev.lynith.core.utils.nvg.FontHelper
 import org.lwjgl.nanovg.NVGColor
@@ -28,6 +29,16 @@ open class NanoVGHelper {
             return nvgColor
         }
 
+        fun background(color: Color = ThemeManager.instance.currentTheme.colorScheme.background) {
+            rectangle(
+                0f,
+                0f,
+                ClientStartup.instance.version.getRenderer().getWindowWidth().toFloat(),
+                ClientStartup.instance.version.getRenderer().getWindowHeight().toFloat(),
+                color
+            )
+        }
+
         fun createColor(color: Color): NVGColor {
             return createColor(color.red, color.green, color.blue, color.alpha)
         }
@@ -37,6 +48,7 @@ open class NanoVGHelper {
             nvgFillColor(ctx(), createColor(color))
             nvgRect(ctx(), left, top, width, height)
             nvgFill(ctx())
+            nvgClosePath(ctx())
         }
 
         @JvmOverloads
@@ -51,6 +63,7 @@ open class NanoVGHelper {
             nvgFillColor(ctx(), createColor(color))
             nvgRoundedRect(ctx(), bounds.x.toFloat(), bounds.y.toFloat(), bounds.width.toFloat(), bounds.height.toFloat(), radius.toFloat())
             nvgFill(ctx())
+            nvgClosePath(ctx())
 
             // Border
             if (border != null && border.thickness > 0) {
@@ -59,6 +72,7 @@ open class NanoVGHelper {
                 nvgStrokeWidth(ctx(), border.thickness.toFloat())
                 nvgRoundedRect(ctx(), bounds.x.toFloat(), bounds.y.toFloat(), bounds.width.toFloat(), bounds.height.toFloat(), radius.toFloat())
                 nvgStroke(ctx())
+                nvgClosePath(ctx())
             }
         }
 
@@ -67,6 +81,7 @@ open class NanoVGHelper {
             nvgFillColor(ctx(), createColor(color))
             nvgCircle(ctx(), centerX, centerY, radius)
             nvgFill(ctx())
+            nvgClosePath(ctx())
         }
 
         fun text(text: String, left: Float, top: Float, size: Float, color: Color, font: Font) {
@@ -76,6 +91,7 @@ open class NanoVGHelper {
             nvgTextAlign(ctx(), NVG_ALIGN_LEFT or NVG_ALIGN_MIDDLE)
             nvgFillColor(ctx(), createColor(color))
             nvgText(ctx(), left, top, text)
+            nvgClosePath(ctx())
         }
 
         fun text(text: String, bounds: BoundingBox, fontStyles: FontStyles, color: Color) {
@@ -84,6 +100,7 @@ open class NanoVGHelper {
             nvgFontSize(ctx(), fontStyles.size)
             nvgTextAlign(ctx(), textAlign(fontStyles.align) or NVG_ALIGN_BOTTOM)
             nvgFillColor(ctx(), createColor(color))
+            nvgTextLetterSpacing(ctx(), fontStyles.letterSpacing)
             nvgTextBox(
                 ctx(),
                 bounds.x,
@@ -91,11 +108,13 @@ open class NanoVGHelper {
                 bounds.width,
                 text
             )
+            nvgClosePath(ctx())
         }
 
         fun textWidth(text: String, styles: FontStyles): Float {
             val bounds = FloatArray(4)
             nvgFontSize(ctx(), styles.size)
+            nvgTextLetterSpacing(ctx(), styles.letterSpacing)
             nvgFontFace(ctx(), FontHelper.get(styles.name, styles.weight).formatted())
             return nvgTextBounds(ctx(), 0f, 0f, text, bounds)
         }
@@ -104,6 +123,7 @@ open class NanoVGHelper {
             val bounds = FloatArray(4)
             nvgFontSize(ctx(), styles.size)
             nvgFontFace(ctx(), FontHelper.get(styles.name, styles.weight).formatted())
+            nvgTextLetterSpacing(ctx(), styles.letterSpacing)
             nvgTextLineHeight(ctx(), styles.lineHeight)
             nvgTextBoxBounds(ctx(), 0f, 0f, textWidth(text, styles), text, bounds)
 

@@ -4,22 +4,19 @@ import dev.lynith.core.ui.components.impl.Label
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.styles.impl.FontStyles
+import dev.lynith.core.ui.theme.AbstractTheme
 import dev.lynith.core.utils.nvg.Font
 
-open class LabelStyles(component: Label) : ComponentStyles<Label, LabelStyles>(component) {
+open class LabelStyles(
+    component: Label,
+    theme: AbstractTheme
+) : ComponentStyles<Label, LabelStyles>(
+    component,
+    theme
+) {
 
-    open var fontStyles = FontStyles(
-        name = "Roboto",
-        size = 16f,
-        weight = Font.FontWeight.REGULAR,
-        lineHeight = 1f,
-        align = Font.FontAlign.CENTER
-    )
+    open var fontStyles = FontStyles()
 
-    open var color = Color(
-        red = 255,
-        blue = 255,
-        green = 255
-    )
+    open var color = theme.colorScheme.foreground
 
 }

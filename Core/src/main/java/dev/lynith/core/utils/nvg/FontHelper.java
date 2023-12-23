@@ -22,9 +22,6 @@ public class FontHelper {
         Font robotoBold = new Font("Roboto", "/fonts/roboto/Roboto-Bold.ttf", Font.FontWeight.BOLD, 1.5f);
 
         addAll(robotoLight, robotoRegular, robotoMedium, robotoBold);
-        for (Map.Entry<String, Font> font : fontMap.entrySet()) {
-            System.out.println(font.getKey() + " -> " + font.getValue());
-        }
     }
 
     public static void add(Font font) {

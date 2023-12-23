@@ -9,8 +9,9 @@ class ThemeBase : AbstractTheme(
     type = ThemeType.LIGHT,
 ) {
 
-    override fun getButtonStyles(button: Button) = ButtonStyles(button)
+    override val colorScheme = DefaultColorScheme()
 
-    override fun getLabelStyles(label: Label) = LabelStyles(label)
+    override fun getButtonStyles(button: Button) = ButtonStyles(button, this)
+    override fun getLabelStyles(label: Label) = LabelStyles(label, this)
 
 }

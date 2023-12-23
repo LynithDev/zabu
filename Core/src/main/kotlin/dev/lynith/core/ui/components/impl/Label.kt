@@ -20,7 +20,10 @@ class Label : Component<Label, LabelStyles>() {
     }
 
     override fun init() {
-
+        if (text.isNotEmpty() && bounds.width <= 0f) {
+            bounds.width = textWidth(text, styles.fontStyles)
+            bounds.height = textHeight(text, styles.fontStyles)
+        }
     }
 
     override var styles = ClientStartup.instance.themeManager.currentTheme.getLabelStyles(this)
