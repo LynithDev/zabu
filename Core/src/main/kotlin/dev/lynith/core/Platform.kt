@@ -2,11 +2,10 @@ package dev.lynith.core
 
 import dev.lynith.core.bridge.IMinecraft
 import dev.lynith.core.bridge.IVersion
-import dev.lynith.core.bridge.IVersionMain
 import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.events.Event
 import dev.lynith.core.events.EventBus
-import dev.lynith.core.ui.NanoVGHelper
+import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.theme.ThemeManager
 import dev.lynith.core.ui.nvg.FontHelper
 import dev.lynith.core.ui.nvg.NanoVGManager

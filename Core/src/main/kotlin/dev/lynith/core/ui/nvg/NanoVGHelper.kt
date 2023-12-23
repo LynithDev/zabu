@@ -11,7 +11,7 @@ import org.lwjgl.nanovg.NanoVG.*
 
 open class NanoVGHelper {
 
-    var ctx: Long = Platform.nvgContext
+    val ctx: Long = Platform.nvgContext
 
     fun createFrame() {
         nvgBeginFrame(ctx, Platform.renderer.windowWidth.toFloat(), Platform.renderer.windowHeight.toFloat(), 1f)

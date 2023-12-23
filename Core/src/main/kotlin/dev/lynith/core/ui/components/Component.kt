@@ -4,7 +4,7 @@ import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.styles.ComponentStyles
-import dev.lynith.core.ui.NanoVGHelper
+import dev.lynith.core.ui.nvg.NanoVGHelper
 
 abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoVGHelper() {
     open var parent: Component<*, *>? = null

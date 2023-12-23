@@ -7,7 +7,7 @@ import dev.lynith.core.events.Event
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.events.impl.MinecraftScreenChangedEvent
 import dev.lynith.core.events.impl.ShutdownEvent
-import dev.lynith.core.ui.NanoVGHelper
+import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.screens.MainMenu
 import dev.lynith.core.ui.theme.ThemeManager
 import dev.lynith.core.ui.nvg.FontHelper
