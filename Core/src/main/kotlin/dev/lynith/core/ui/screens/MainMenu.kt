@@ -5,7 +5,7 @@ import dev.lynith.core.ui.components.Screen
 import dev.lynith.core.ui.components.impl.Button
 import dev.lynith.core.ui.components.impl.Label
 import dev.lynith.core.ui.styles.impl.Color
-import dev.lynith.core.utils.nvg.Font
+import dev.lynith.core.ui.nvg.Font
 
 class MainMenu : Screen() {
 

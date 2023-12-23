@@ -1,7 +1,7 @@
 package dev.lynith.core.ui.styles.impl
 
 import dev.lynith.core.ui.styles.Style
-import dev.lynith.core.utils.nvg.Font
+import dev.lynith.core.ui.nvg.Font
 
 class FontStyles @JvmOverloads constructor(
     var name: String = "Roboto",

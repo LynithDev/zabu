@@ -1,15 +1,11 @@
-package dev.lynith.core.ui
+package dev.lynith.core.ui.nvg
 
 import dev.lynith.core.Platform
-import dev.lynith.core.ClientStartup
+import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.styles.impl.Border
 import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.styles.impl.CornerRadius
 import dev.lynith.core.ui.styles.impl.FontStyles
-import dev.lynith.core.ui.theme.ThemeManager
-import dev.lynith.core.utils.nvg.Font
-import dev.lynith.core.utils.nvg.FontHelper
-import dev.lynith.core.utils.nvg.NanoVGManager
 import org.lwjgl.nanovg.NVGColor
 import org.lwjgl.nanovg.NanoVG.*
 

@@ -53,11 +53,13 @@ class MultiBasePlugin : Plugin<Project> {
                 add("compileOnly", project(":Core"))
             }
 
-            var platform = "linux"
-            if (OperatingSystem.current().isWindows) {
-                platform = "windows"
-            } else if (OperatingSystem.current().isMacOsX) {
-                platform = "macos"
+            add("compileOnly", "commons-io:commons-io:2.11.0")
+
+            val platform = when (OperatingSystem.current()) {
+                OperatingSystem.WINDOWS -> "windows"
+                OperatingSystem.LINUX -> "linux"
+                OperatingSystem.MAC_OS -> "macos"
+                else -> throw IllegalStateException("Unsupported OS: ${OperatingSystem.current()}")
             }
 
             fun lwjglNative(dep: String) {
@@ -66,13 +68,14 @@ class MultiBasePlugin : Plugin<Project> {
                 }
             }
 
-            lwjglNative( "org.lwjgl:lwjgl:3.3.1:natives-${platform}")
+            lwjglNative("org.lwjgl:lwjgl:3.3.1:natives-${platform}")
             lwjglNative("org.lwjgl:lwjgl-stb:3.3.1:natives-${platform}")
             lwjglNative("org.lwjgl:lwjgl-nanovg:3.3.1:natives-${platform}")
 
-            add("compileOnly", "commons-io:commons-io:2.11.0")
-
-            add("compileOnly", "com.github.LynithDev:lwjgl-patched:bf1d105853")
+            add("compileOnly", "org.lwjgl:lwjgl:3.3.1")
+            add("compileOnly", "org.lwjgl:lwjgl-stb:3.3.1")
+            add("compileOnly", "org.lwjgl:lwjgl-nanovg:3.3.1")
+            add("compileOnly", "org.lwjgl:lwjgl-opengl:3.3.1")
 
             add("compileOnly", "org.projectlombok:lombok:1.18.30")
             add("annotationProcessor", "org.projectlombok:lombok:1.18.30")

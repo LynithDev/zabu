@@ -8,8 +8,8 @@ import dev.lynith.core.events.Event
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.ui.NanoVGHelper
 import dev.lynith.core.ui.theme.ThemeManager
-import dev.lynith.core.utils.nvg.FontHelper
-import dev.lynith.core.utils.nvg.NanoVGManager
+import dev.lynith.core.ui.nvg.FontHelper
+import dev.lynith.core.ui.nvg.NanoVGManager
 
 object Platform {
 

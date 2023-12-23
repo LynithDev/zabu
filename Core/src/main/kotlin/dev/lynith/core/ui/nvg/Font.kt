@@ -1,4 +1,4 @@
-package dev.lynith.core.utils.nvg
+package dev.lynith.core.ui.nvg
 
 import java.nio.ByteBuffer
 

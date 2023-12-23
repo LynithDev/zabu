@@ -10,9 +10,7 @@ import dev.lynith.core.events.impl.ShutdownEvent
 import dev.lynith.core.ui.NanoVGHelper
 import dev.lynith.core.ui.screens.MainMenu
 import dev.lynith.core.ui.theme.ThemeManager
-import dev.lynith.core.utils.nvg.FontHelper
-import dev.lynith.core.utils.nvg.NanoVGManager
-import org.lwjgl.nanovg.NanoVGGL2
+import dev.lynith.core.ui.nvg.FontHelper
 import kotlin.system.exitProcess
 
 class ClientStartup {
