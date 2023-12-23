@@ -7,41 +7,48 @@ import dev.lynith.core.events.Event
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.events.impl.MinecraftScreenChangedEvent
 import dev.lynith.core.events.impl.ShutdownEvent
+import dev.lynith.core.ui.NanoVGHelper
 import dev.lynith.core.ui.screens.MainMenu
 import dev.lynith.core.ui.theme.ThemeManager
 import dev.lynith.core.utils.nvg.FontHelper
 import dev.lynith.core.utils.nvg.NanoVGManager
+import org.lwjgl.nanovg.NanoVGGL2
 import kotlin.system.exitProcess
 
 class ClientStartup {
 
-    lateinit var version: IVersion
-    lateinit var eventBus: EventBus<Event>
-    lateinit var themeManager: ThemeManager
-
-    var nvgContext: Long = 0
-
     fun launchClient(ver: IVersion) {
-        version = ver
+        Platform.apply {
+            renderer = ver.renderer
+            minecraft = ver.minecraft
+            bridge = ver
 
-        eventBus = EventBus()
-        logger.log("Initialized EventBus")
+            eventBus = EventBus()
+            logger.log("Initialized EventBus")
 
-        nvgContext = NanoVGManager.createContext()
-        FontHelper.init()
-        logger.log("Initialized NanoVG")
+            clientStartup = this@ClientStartup
+            logger.log("Initialized ClientStartup")
 
-        themeManager = ThemeManager()
-        logger.log("Initialized ThemeManager")
+            nvg = NanoVGHelper()
+            logger.log("Initialized NanoVG")
+
+            fontHelper = FontHelper()
+            logger.log("Initialized Fonts")
+
+            themeManager = ThemeManager()
+            logger.log("Initialized ThemeManager")
+
+            logger.log("Initialized Platform")
+        }
 
         Runtime.getRuntime().addShutdownHook(Thread {
             logger.log("Preparing for shut down...")
-            eventBus.emit(ShutdownEvent())
+            Platform.eventBus.emit(ShutdownEvent())
         })
 
-        eventBus.on<MinecraftScreenChangedEvent> {
-            if (version.getRenderer().getCurrentScreen() == IRenderer.GuiType.MAIN_MENU) {
-                version.getRenderer().displayScreen(MainMenu())
+        Platform.eventBus.on<MinecraftScreenChangedEvent> {
+            if (Platform.renderer.currentScreen == IRenderer.GuiType.MAIN_MENU) {
+                Platform.renderer.displayScreen(MainMenu())
             }
         }
     }
@@ -79,7 +86,7 @@ class ClientStartup {
 
             try {
                 val versionMainInstance = versionMain.getConstructor().newInstance() as IVersionMain
-                val versionClass = versionMainInstance.getVersion()
+                val versionClass = versionMainInstance.version
                 val version = versionClass.getConstructor().newInstance()
                 logger.log("Found bridge")
                 launch(version)
@@ -96,7 +103,7 @@ class ClientStartup {
                 return
             }
 
-            logger.log("Launching version " + version.getMinecraft().getGameVersion())
+            logger.log("Launching version " + version.minecraft.gameVersion)
             instance_ = ClientStartup()
             instance.launchClient(version)
         }

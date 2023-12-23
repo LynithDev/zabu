@@ -1,14 +1,15 @@
 package dev.lynith.core.ui.screens
 
-import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Screen
 import dev.lynith.core.ui.components.impl.Button
 import dev.lynith.core.ui.components.impl.Label
+import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.utils.nvg.Font
 
 class MainMenu : Screen() {
-    override fun render(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
+
+    override fun render(mouseX: Int, mouseY: Int, delta: Float) {
         background()
     }
 

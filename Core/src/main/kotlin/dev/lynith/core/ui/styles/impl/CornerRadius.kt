@@ -7,5 +7,6 @@ class CornerRadius @JvmOverloads constructor(
 ) : Style<CornerRadius>() {
 
     override val propertyName = "corner-radius"
-    override val valueSerialized = value.toString()
+    override val valueSerialized: String
+        get() = value.toString()
 }

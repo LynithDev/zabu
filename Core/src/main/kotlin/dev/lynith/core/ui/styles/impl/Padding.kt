@@ -10,6 +10,7 @@ class Padding @JvmOverloads constructor(
 ) : Style<Padding>() {
 
     override val propertyName = "padding"
-    override val valueSerialized = "$top $right $bottom $left"
+    override val valueSerialized: String
+        get() = "$top $right $bottom $left"
 
 }

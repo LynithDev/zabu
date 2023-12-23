@@ -9,6 +9,7 @@ class Border @JvmOverloads constructor(
 
     override val propertyName = "border"
 
-    override val valueSerialized = thickness.toString() + " " + color.valueSerialized
+    override val valueSerialized: String
+        get() = "$thickness ${color.valueSerialized}"
 
 }

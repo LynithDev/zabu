@@ -1,9 +1,9 @@
 package dev.lynith.core.ui.components
 
 import dev.lynith.core.ClientStartup
+import dev.lynith.core.Platform
 import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.bridge.gui.MCScreen
-import dev.lynith.core.ui.components.callbacks.Clicked
 import dev.lynith.core.ui.components.callbacks.Destroyed
 import dev.lynith.core.ui.components.callbacks.Pressed
 import dev.lynith.core.ui.components.callbacks.Released
@@ -14,15 +14,15 @@ abstract class Screen : Component<Screen, ComponentStyles.EmptyStyles<Screen>>()
     override val children: MutableList<Component<*, *>> = ArrayList()
     var shouldPauseGame: Boolean = false
 
-    override fun postRender(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun postRender(mouseX: Int, mouseY: Int, delta: Float) {
         for (child in children) {
-            child.render(ctx, mouseX, mouseY, delta)
+            child.render(mouseX, mouseY, delta)
         }
 
-        super.postRender(ctx, mouseX, mouseY, delta)
+        super.postRender(mouseX, mouseY, delta)
     }
 
-    override fun render(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(mouseX: Int, mouseY: Int, delta: Float) {
 
     }
 
@@ -58,12 +58,11 @@ abstract class Screen : Component<Screen, ComponentStyles.EmptyStyles<Screen>>()
 
         override fun render(mouseX: Int, mouseY: Int, delta: Float) {
             super.render(mouseX, mouseY, delta)
-            screen.wrappedRender(ClientStartup.instance.version.renderer, mouseX, mouseY, delta)
+            screen.wrappedRender(mouseX, mouseY, delta)
         }
 
         override fun init() {
             super.init()
-            println("Init screen")
             screen.wrappedInit()
         }
 

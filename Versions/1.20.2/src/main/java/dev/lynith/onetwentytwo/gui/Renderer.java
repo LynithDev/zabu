@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
-import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,11 +26,6 @@ public class Renderer implements IRenderer {
         map.put(GameMenuScreen.class, GuiType.PAUSE_MENU);
 
         return map;
-    }
-
-    @Override
-    public void rect(int x, int y, int width, int height, int color) {
-
     }
 
     @Override

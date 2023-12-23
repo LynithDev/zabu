@@ -21,19 +21,19 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     abstract var styles: S
 
     // ---- RENDER ----
-    protected open fun preRender(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
+    protected open fun preRender(mouseX: Int, mouseY: Int, delta: Float) {
         createFrame()
     }
 
-    abstract fun render(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float)
-    protected open fun postRender(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
+    abstract fun render(mouseX: Int, mouseY: Int, delta: Float)
+    protected open fun postRender(mouseX: Int, mouseY: Int, delta: Float) {
         endFrame()
     }
 
-    fun wrappedRender(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
-        preRender(ctx, mouseX, mouseY, delta)
-        render(ctx, mouseX, mouseY, delta)
-        postRender(ctx, mouseX, mouseY, delta)
+    fun wrappedRender(mouseX: Int, mouseY: Int, delta: Float) {
+        preRender(mouseX, mouseY, delta)
+        render(mouseX, mouseY, delta)
+        postRender(mouseX, mouseY, delta)
     }
     // ---- RENDER ----
 

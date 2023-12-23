@@ -1,15 +1,16 @@
 package dev.lynith.core.ui.components.impl
 
-import dev.lynith.core.ClientStartup
-import dev.lynith.core.bridge.gui.IRenderer
+import dev.lynith.core.Platform
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Component
+import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.theme.base.ButtonStyles
+import org.lwjgl.nanovg.NanoVG
 
 class Button : Component<Button, ButtonStyles>() {
     var text: String = ""
 
-    override fun render(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(mouseX: Int, mouseY: Int, delta: Float) {
         rectangle(
             bounds = bounds,
             color = styles.backgroundColor,
@@ -31,5 +32,5 @@ class Button : Component<Button, ButtonStyles>() {
 
     }
 
-    override var styles = ClientStartup.instance.themeManager.currentTheme.getButtonStyles(this)
+    override var styles = Platform.themeManager.currentTheme.getButtonStyles(this)
 }

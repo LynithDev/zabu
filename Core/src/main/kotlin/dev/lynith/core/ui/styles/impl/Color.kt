@@ -41,6 +41,9 @@ class Color : Style<Color> {
 
     override val propertyName = "color"
 
-    override val valueSerialized = "rgba($red, $green, $blue, $alpha)"
+    override val valueSerialized: String
+        get() {
+            return "rgba($red, $green, $blue, $alpha)"
+        }
 
 }

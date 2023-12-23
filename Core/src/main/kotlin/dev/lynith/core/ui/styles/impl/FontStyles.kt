@@ -13,6 +13,7 @@ class FontStyles @JvmOverloads constructor(
 ) : Style<FontStyles>() {
 
     override val propertyName = "font"
-    override val valueSerialized = "$size, $weight, $name"
+    override val valueSerialized: String
+        get() = "'$name', $size, $weight, $lineHeight, ${align.name}, $letterSpacing"
 
 }

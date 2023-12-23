@@ -1,6 +1,5 @@
 package dev.lynith.core.plugins;
 
-import dev.lynith.core.ClientStartup;
 import dev.lynith.core.Logger;
 import dev.lynith.core.bridge.IVersion;
 import lombok.Getter;

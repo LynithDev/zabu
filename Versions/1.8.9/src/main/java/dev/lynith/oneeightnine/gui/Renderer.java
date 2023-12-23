@@ -29,11 +29,6 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public void rect(int x, int y, int width, int height, int color) {
-        DrawableHelper.fill(x, y, x + width, y + height, color);
-    }
-
-    @Override
     public GuiType getCurrentScreen() {
         GuiType type = GuiType.UNKNOWN;
 
