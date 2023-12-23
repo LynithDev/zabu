@@ -16,9 +16,7 @@ import kotlin.system.exitProcess
 class ClientStartup {
 
     lateinit var version: IVersion
-
     lateinit var eventBus: EventBus<Event>
-
     lateinit var themeManager: ThemeManager
 
     var nvgContext: Long = 0
@@ -28,9 +26,6 @@ class ClientStartup {
 
         eventBus = EventBus()
         logger.log("Initialized EventBus")
-
-//        this.pluginManager = new PluginManager();
-//        logger.log("Initialized PluginManager");
 
         nvgContext = NanoVGManager.createContext()
         FontHelper.init()
@@ -54,18 +49,25 @@ class ClientStartup {
     companion object {
         private val logger = Logger("main")
 
-        lateinit var instance: ClientStartup
-            @JvmName("getInstanceKotlin") get
+        private lateinit var instance_: ClientStartup
 
         @JvmStatic
-        fun getInstance(): ClientStartup {
-            if (!::instance.isInitialized) {
-                launch()
+        var instance: ClientStartup
+            get() {
+                if (!::instance_.isInitialized) {
+                    launch()
+                }
+
+                return instance_
+            }
+            set(value) = if (!::instance_.isInitialized) {
+                instance_ = value
+            } else {
+                logger.log("ClientStartup instance already initialized. This shouldn't happen.")
             }
 
-            return instance
-        }
 
+        @JvmStatic
         fun launch() {
             val versionMain: Class<*> = try {
                 Class.forName("dev.lynith.start.VersionMain")
@@ -89,13 +91,13 @@ class ClientStartup {
         }
 
         private fun launch(version: IVersion) {
-            if (::instance.isInitialized) {
+            if (::instance_.isInitialized) {
                 logger.log("ClientStartup instance already exists. This shouldn't happen.")
                 return
             }
 
             logger.log("Launching version " + version.getMinecraft().getGameVersion())
-            instance = ClientStartup()
+            instance_ = ClientStartup()
             instance.launchClient(version)
         }
 

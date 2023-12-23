@@ -3,13 +3,8 @@ package dev.lynith.core.ui.screens
 import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Screen
-import dev.lynith.core.ui.components.callbacks.Clicked
-import dev.lynith.core.ui.components.callbacks.Pressed
-import dev.lynith.core.ui.components.callbacks.Released
 import dev.lynith.core.ui.components.impl.Button
 import dev.lynith.core.ui.components.impl.Label
-import dev.lynith.core.ui.styles.impl.Color
-import dev.lynith.core.utils.ScheduleUtils
 import dev.lynith.core.utils.nvg.Font
 
 class MainMenu : Screen() {

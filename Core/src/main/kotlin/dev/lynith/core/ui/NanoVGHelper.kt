@@ -96,7 +96,7 @@ open class NanoVGHelper {
 
         fun text(text: String, bounds: BoundingBox, fontStyles: FontStyles, color: Color) {
             nvgBeginPath(ctx())
-            nvgFontFace(ctx(), FontHelper.get(fontStyles.name, fontStyles.weight).formatted())
+            nvgFontFace(ctx(), FontHelper.getOrDefault(fontStyles.name, fontStyles.weight).formatted())
             nvgFontSize(ctx(), fontStyles.size)
             nvgTextAlign(ctx(), textAlign(fontStyles.align) or NVG_ALIGN_BOTTOM)
             nvgFillColor(ctx(), createColor(color))
@@ -115,20 +115,21 @@ open class NanoVGHelper {
             val bounds = FloatArray(4)
             nvgFontSize(ctx(), styles.size)
             nvgTextLetterSpacing(ctx(), styles.letterSpacing)
-            nvgFontFace(ctx(), FontHelper.get(styles.name, styles.weight).formatted())
+            nvgFontFace(ctx(), FontHelper.getOrDefault(styles.name, styles.weight).formatted())
             return nvgTextBounds(ctx(), 0f, 0f, text, bounds)
         }
 
         fun textHeight(text: String, styles: FontStyles): Float {
             val bounds = FloatArray(4)
+            val font = FontHelper.getOrDefault(styles.name, styles.weight)
+
             nvgFontSize(ctx(), styles.size)
-            nvgFontFace(ctx(), FontHelper.get(styles.name, styles.weight).formatted())
+            nvgFontFace(ctx(), font.formatted())
             nvgTextLetterSpacing(ctx(), styles.letterSpacing)
             nvgTextLineHeight(ctx(), styles.lineHeight)
             nvgTextBoxBounds(ctx(), 0f, 0f, textWidth(text, styles), text, bounds)
 
-            val offset = FontHelper.get(styles.name).offset
-            return (bounds[3] - bounds[1]) + offset
+            return (bounds[3] - bounds[1]) + font.offset
         }
 
         fun textAlign(align: Font.FontAlign): Int {

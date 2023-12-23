@@ -16,86 +16,86 @@ import java.util.jar.JarFile;
 
 public class PluginManager {
 
-    private final Logger logger = new Logger("PluginManager");
-    private final CopyOnWriteArrayList<Plugin> plugins = new CopyOnWriteArrayList<>();
-
-    public void loadPluginsPremain(Instrumentation inst) {
-        String pluginPath = System.getProperty("pluginPath") != null
-                ? System.getProperty("pluginPath")
-                : System.getProperty("user.dir") + File.separator + "plugins";
-
-        logger.log("Loading plugins from '{}'", pluginPath);
-
-        File pluginDir = new File(pluginPath);
-        if (!pluginDir.exists()) pluginDir.mkdirs();
-
-        File[] files = pluginDir.listFiles();
-        if (files == null) return;
-
-        List<PluginManifest> pluginManifests = new ArrayList<>();
-
-        for (File file : files) {
-            if (!file.getName().endsWith(".jar")) continue;
-
-            try {
-                JarFile jar = new JarFile(file);
-
-                Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(PluginManifest.class, new AnnotatedDeserializer<PluginManifest>())
-                        .create();
-
-                PluginManifest manifest = gson.fromJson(
-                        new InputStreamReader(jar.getInputStream(jar.getEntry("plugin.json"))),
-                        PluginManifest.class
-                );
-
-                if (manifest == null) {
-                    logger.error("Failed to load plugin from file '{}': plugin.json is missing or invalid", file.getName());
-                    continue;
-                }
-
-                pluginManifests.add(manifest);
-
-                inst.appendToSystemClassLoaderSearch(jar);
-            } catch (Exception e) {
-                logger.error("Failed to load plugin from file '{}': {}", file.getName(), e.getMessage());
-            }
-        }
-
-        for (PluginManifest manifest : pluginManifests) {
-            try {
-                Class<?> clazz = Class.forName(manifest.getMain());
-
-                Plugin plugin = (Plugin) clazz.getConstructor().newInstance();
-
-                Field manifestField = plugin.getClass().getSuperclass().getDeclaredField("manifest");
-                manifestField.setAccessible(true);
-                manifestField.set(plugin, manifest);
-
-                Field loggerField = plugin.getClass().getSuperclass().getDeclaredField("logger");
-                loggerField.setAccessible(true);
-                loggerField.set(plugin, new Logger("Plugin/" + manifest.getName()));
-
-                plugins.add(plugin);
-            } catch (Exception e) {
-                logger.error("Failed to load plugin '{}': {}", manifest.getName());
-                e.printStackTrace();
-            }
-        }
-
-        preInitPlugins(inst);
-    }
-
-    private void preInitPlugins(Instrumentation inst) {
-        for (Plugin plugin : plugins) {
-            plugin.onPreInit(inst);
-        }
-    }
-
-    private void initPlugins() {
-        for (Plugin plugin : plugins) {
-            plugin.onInit(ClientStartup.getInstance().getVersion());
-        }
-    }
+//    private final Logger logger = new Logger("PluginManager");
+//    private final CopyOnWriteArrayList<Plugin> plugins = new CopyOnWriteArrayList<>();
+//
+//    public void loadPluginsPremain(Instrumentation inst) {
+//        String pluginPath = System.getProperty("pluginPath") != null
+//                ? System.getProperty("pluginPath")
+//                : System.getProperty("user.dir") + File.separator + "plugins";
+//
+//        logger.log("Loading plugins from '{}'", pluginPath);
+//
+//        File pluginDir = new File(pluginPath);
+//        if (!pluginDir.exists()) pluginDir.mkdirs();
+//
+//        File[] files = pluginDir.listFiles();
+//        if (files == null) return;
+//
+//        List<PluginManifest> pluginManifests = new ArrayList<>();
+//
+//        for (File file : files) {
+//            if (!file.getName().endsWith(".jar")) continue;
+//
+//            try {
+//                JarFile jar = new JarFile(file);
+//
+//                Gson gson = new GsonBuilder()
+//                        .registerTypeAdapter(PluginManifest.class, new AnnotatedDeserializer<PluginManifest>())
+//                        .create();
+//
+//                PluginManifest manifest = gson.fromJson(
+//                        new InputStreamReader(jar.getInputStream(jar.getEntry("plugin.json"))),
+//                        PluginManifest.class
+//                );
+//
+//                if (manifest == null) {
+//                    logger.error("Failed to load plugin from file '{}': plugin.json is missing or invalid", file.getName());
+//                    continue;
+//                }
+//
+//                pluginManifests.add(manifest);
+//
+//                inst.appendToSystemClassLoaderSearch(jar);
+//            } catch (Exception e) {
+//                logger.error("Failed to load plugin from file '{}': {}", file.getName(), e.getMessage());
+//            }
+//        }
+//
+//        for (PluginManifest manifest : pluginManifests) {
+//            try {
+//                Class<?> clazz = Class.forName(manifest.getMain());
+//
+//                Plugin plugin = (Plugin) clazz.getConstructor().newInstance();
+//
+//                Field manifestField = plugin.getClass().getSuperclass().getDeclaredField("manifest");
+//                manifestField.setAccessible(true);
+//                manifestField.set(plugin, manifest);
+//
+//                Field loggerField = plugin.getClass().getSuperclass().getDeclaredField("logger");
+//                loggerField.setAccessible(true);
+//                loggerField.set(plugin, new Logger("Plugin/" + manifest.getName()));
+//
+//                plugins.add(plugin);
+//            } catch (Exception e) {
+//                logger.error("Failed to load plugin '{}': {}", manifest.getName());
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        preInitPlugins(inst);
+//    }
+//
+//    private void preInitPlugins(Instrumentation inst) {
+//        for (Plugin plugin : plugins) {
+//            plugin.onPreInit(inst);
+//        }
+//    }
+//
+//    private void initPlugins() {
+//        for (Plugin plugin : plugins) {
+//            plugin.onInit(ClientStartup.getInstance().getVersion());
+//        }
+//    }
 
 }
