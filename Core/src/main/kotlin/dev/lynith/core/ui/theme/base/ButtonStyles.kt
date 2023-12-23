@@ -42,7 +42,7 @@ open class ButtonStyles(component: Button) : ComponentStyles<Button, ButtonStyle
     )
 
     open var fontStyles = FontStyles(
-        name = "Roboto-Regular",
+        name = "Roboto",
         size = 16f,
         weight = Font.FontWeight.REGULAR,
         lineHeight = 1f,

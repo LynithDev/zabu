@@ -9,7 +9,7 @@ import dev.lynith.core.utils.nvg.Font
 open class LabelStyles(component: Label) : ComponentStyles<Label, LabelStyles>(component) {
 
     open var fontStyles = FontStyles(
-        name = "Roboto-Regular",
+        name = "Roboto",
         size = 16f,
         weight = Font.FontWeight.REGULAR,
         lineHeight = 1f,

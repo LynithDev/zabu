@@ -18,6 +18,7 @@ public interface IRenderer {
 
     int getWindowWidth();
     int getWindowHeight();
+    int getScaleFactor();
 
     @Getter
     enum GuiType {

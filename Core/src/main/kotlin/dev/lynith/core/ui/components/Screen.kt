@@ -25,6 +25,10 @@ abstract class Screen : Component<Screen, ComponentStyles.EmptyStyles<Screen>>()
     override fun postInit() {
         super.postInit()
 
+        on<Destroyed> {
+            clearChildren()
+        }
+
         for (child in children) {
             child.init()
         }
@@ -55,6 +59,7 @@ abstract class Screen : Component<Screen, ComponentStyles.EmptyStyles<Screen>>()
 
         override fun init() {
             super.init()
+            println("Init screen")
             screen.wrappedInit()
         }
 

@@ -20,7 +20,7 @@ class Button : Component<Button, ButtonStyles>() {
         text(
             text = text,
             bounds = bounds.with(
-                y = bounds.y + textHeight(text, styles.fontStyles)
+                y = bounds.y + (bounds.height / 2) - (styles.fontStyles.size / 2)
             ),
             fontStyles = styles.fontStyles,
             color = styles.foregroundColor

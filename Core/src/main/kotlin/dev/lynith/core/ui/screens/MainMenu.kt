@@ -26,14 +26,14 @@ class MainMenu : Screen() {
     override fun init() {
         val label = Label()
 
-        children(
+        children (
             label.configure {
                 text = "Hello World!"
 
                 bounds = BoundingBox(
                     x = 100f,
                     y = 150f,
-                    width = 150f,
+                    width = 200f,
                     height = 40f
                 )
 
@@ -42,12 +42,20 @@ class MainMenu : Screen() {
                         size = 24f
                         weight = Font.FontWeight.BOLD
                         color = Color(255, 0, 0)
+                        align = Font.FontAlign.LEFT
                     }
                 }
             },
 
             Button().configure {
-                text = "Click Me!"
+                text = "START"
+
+                style {
+                    fontStyles.change {
+                        size = 18f
+                        weight = Font.FontWeight.BOLD
+                    }
+                }
 
                 bounds = BoundingBox(
                     x = 100f,

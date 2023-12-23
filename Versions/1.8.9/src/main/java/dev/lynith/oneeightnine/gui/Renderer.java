@@ -84,16 +84,23 @@ public class Renderer implements IRenderer {
 
     @Override
     public int getWindowWidth() {
-        return MinecraftClient.getInstance().width;
+        return new Window(MinecraftClient.getInstance()).getWidth() * getScaleFactor();
     }
 
     @Override
     public int getWindowHeight() {
-        return MinecraftClient.getInstance().height;
+        return new Window(MinecraftClient.getInstance()).getHeight() * getScaleFactor();
+    }
+
+    @Override
+    public int getScaleFactor() {
+        return new Window(MinecraftClient.getInstance()).getScaleFactor();
     }
 
     private Screen toMCScreen(MCScreen screen) {
         return new Screen() {
+
+            boolean initiated = false;
 
             @Override
             public void render(int i, int j, float f) {
@@ -103,38 +110,42 @@ public class Renderer implements IRenderer {
 
             @Override
             public void init() {
-                screen.init();
                 super.init();
+
+                if (!initiated) {
+                    initiated = true;
+                    screen.init();
+                }
             }
 
             @Override
             protected void keyPressed(char c, int i) {
-                screen.keyPressed(c, i);
                 super.keyPressed(c, i);
+                screen.keyPressed(c, i);
             }
 
             @Override
             protected void mouseClicked(int i, int j, int k) {
-                i = (i * new Window(MinecraftClient.getInstance()).getScaleFactor());
-                j = (j * new Window(MinecraftClient.getInstance()).getScaleFactor());
+                i *= getScaleFactor();
+                j *= getScaleFactor();
 
-                screen.mouseClicked(i, j, k);
                 super.mouseClicked(i, j, k);
+                screen.mouseClicked(i, j, k);
             }
 
             @Override
             protected void mouseDragged(int i, int j, int k, long l) {
-                screen.mouseDragged(i, j, k, l);
                 super.mouseDragged(i, j, k, l);
+                screen.mouseDragged(i, j, k, l);
             }
 
             @Override
             protected void mouseReleased(int i, int j, int k) {
-                i *= new Window(MinecraftClient.getInstance()).getScaleFactor();
-                j *= new Window(MinecraftClient.getInstance()).getScaleFactor();
+                i *= getScaleFactor();
+                j *= getScaleFactor();
 
-                screen.mouseReleased(i, j, k);
                 super.mouseReleased(i, j, k);
+                screen.mouseReleased(i, j, k);
             }
 
             @Override
@@ -142,6 +153,17 @@ public class Renderer implements IRenderer {
                 return screen.shouldPauseGame();
             }
 
+            @Override
+            public void removed() {
+                super.removed();
+                screen.closed();
+            }
+
+            @Override
+            public void resize(MinecraftClient minecraftClient, int i, int j) {
+                super.resize(minecraftClient, i, j);
+                screen.resized();
+            }
         };
     }
 }

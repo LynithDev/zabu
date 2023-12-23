@@ -71,7 +71,7 @@ open class NanoVGHelper {
 
         fun text(text: String, left: Float, top: Float, size: Float, color: Color, font: Font) {
             nvgBeginPath(ctx())
-            nvgFontFace(ctx(), font.name)
+            nvgFontFace(ctx(), font.formatted())
             nvgFontSize(ctx(), size)
             nvgTextAlign(ctx(), NVG_ALIGN_LEFT or NVG_ALIGN_MIDDLE)
             nvgFillColor(ctx(), createColor(color))
@@ -80,14 +80,14 @@ open class NanoVGHelper {
 
         fun text(text: String, bounds: BoundingBox, fontStyles: FontStyles, color: Color) {
             nvgBeginPath(ctx())
-            nvgFontFace(ctx(), fontStyles.name)
+            nvgFontFace(ctx(), FontHelper.get(fontStyles.name, fontStyles.weight).formatted())
             nvgFontSize(ctx(), fontStyles.size)
-            nvgTextAlign(ctx(), textAlign(fontStyles.align) or NVG_ALIGN_BASELINE)
+            nvgTextAlign(ctx(), textAlign(fontStyles.align) or NVG_ALIGN_BOTTOM)
             nvgFillColor(ctx(), createColor(color))
             nvgTextBox(
                 ctx(),
                 bounds.x,
-                bounds.y + textHeight(text, fontStyles) / 2,
+                bounds.y + textHeight(text, fontStyles),
                 bounds.width,
                 text
             )
@@ -96,14 +96,14 @@ open class NanoVGHelper {
         fun textWidth(text: String, styles: FontStyles): Float {
             val bounds = FloatArray(4)
             nvgFontSize(ctx(), styles.size)
-            nvgFontFace(ctx(), styles.name)
+            nvgFontFace(ctx(), FontHelper.get(styles.name, styles.weight).formatted())
             return nvgTextBounds(ctx(), 0f, 0f, text, bounds)
         }
 
         fun textHeight(text: String, styles: FontStyles): Float {
             val bounds = FloatArray(4)
             nvgFontSize(ctx(), styles.size)
-            nvgFontFace(ctx(), styles.name)
+            nvgFontFace(ctx(), FontHelper.get(styles.name, styles.weight).formatted())
             nvgTextLineHeight(ctx(), styles.lineHeight)
             nvgTextBoxBounds(ctx(), 0f, 0f, textWidth(text, styles), text, bounds)
 

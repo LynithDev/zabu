@@ -93,8 +93,15 @@ public class Renderer implements IRenderer {
         return MinecraftClient.getInstance().getWindow().getHeight();
     }
 
+    @Override
+    public int getScaleFactor() {
+        return (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
+    }
+
     private Screen toMCScreen(MCScreen screen) {
         return new Screen(Text.empty()) {
+
+            boolean initiated = false;
 
             @Override
             public void render(DrawContext drawContext, int i, int j, float f) {
@@ -104,8 +111,12 @@ public class Renderer implements IRenderer {
 
             @Override
             public void init() {
-                screen.init();
                 super.init();
+
+                if (!initiated) {
+                    screen.init();
+                    initiated = true;
+                }
             }
 
             @Override
@@ -120,8 +131,8 @@ public class Renderer implements IRenderer {
 
             @Override
             public boolean mouseClicked(double d, double e, int i) {
-                d *= MinecraftClient.getInstance().getWindow().getScaleFactor();
-                e *= MinecraftClient.getInstance().getWindow().getScaleFactor();
+                d *= getScaleFactor();
+                e *= getScaleFactor();
 
                 screen.mouseClicked((int) d, (int) e, i);
                 return super.mouseClicked(d, e, i);
@@ -129,11 +140,23 @@ public class Renderer implements IRenderer {
 
             @Override
             public boolean mouseReleased(double d, double e, int i) {
-                d *= MinecraftClient.getInstance().getWindow().getScaleFactor();
-                e *= MinecraftClient.getInstance().getWindow().getScaleFactor();
+                d *= getScaleFactor();
+                e *= getScaleFactor();
 
                 screen.mouseReleased((int) d, (int) e, i);
                 return super.mouseReleased(d, e, i);
+            }
+
+            @Override
+            public void resize(MinecraftClient minecraftClient, int i, int j) {
+                super.resize(minecraftClient, i, j);
+                screen.resized();
+            }
+
+            @Override
+            public void close() {
+                super.close();
+                screen.closed();
             }
         };
     }

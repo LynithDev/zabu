@@ -25,19 +25,35 @@ public class Font {
         this(name, path, weight, 0);
     }
 
-    public int getHeightInPixels(int size) {
-        return size;
+    public String formatted() {
+        return name + "-" + weight.formatted();
     }
 
-    public int getWidthInPixels(int size, String text) {
-        return text.length() * size;
+    @Override
+    public String toString() {
+        return "Font{" +
+            "name='" + name + '\'' +
+            ", path='" + path + '\'' +
+            ", weight=" + weight +
+            ", offset=" + offset +
+            '}';
     }
 
     public enum FontWeight {
-        LIGHT,
-        REGULAR,
-        MEDIUM,
-        BOLD,
+        LIGHT("Light"),
+        REGULAR("Regular"),
+        MEDIUM("Medium"),
+        BOLD("Bold");
+
+        private final String name;
+
+        public String formatted() {
+            return name;
+        }
+
+        FontWeight(String name) {
+            this.name = name;
+        }
     }
 
     public enum FontAlign {

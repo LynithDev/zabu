@@ -13,5 +13,5 @@ public class MCScreen {
 
     public boolean shouldPauseGame() { return false; }
 
-
+    public void resized() {}
 }
