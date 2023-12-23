@@ -43,7 +43,7 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public boolean displayScreen(GuiType screen, Object... args) {
+    public boolean setScreen(GuiType screen, Object... args) {
         try {
             Class<?> clazz = null;
 
@@ -56,7 +56,12 @@ public class Renderer implements IRenderer {
 
             Class<?>[] paramTypes = new Class[args.length];
             for (int i = 0; i < args.length; i++) {
-                paramTypes[i] = args[i].getClass();
+                if (args[i] instanceof MCScreen) {
+                    args[i] = toMCScreen((MCScreen) args[i]);
+                }
+
+                // TODO: Auto detect param types, check all existing constructors and find the one that matches the args
+                paramTypes[i] = args[i].getClass().getSuperclass();
             }
 
             if (clazz != null) {
@@ -72,7 +77,7 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public boolean displayScreen(dev.lynith.core.ui.components.Screen screen, Object... args) {
+    public boolean setScreen(dev.lynith.core.ui.components.Screen screen, Object... args) {
         MinecraftClient.getInstance().setScreen(toMCScreen(screen.toMCScreen()));
         return true;
     }

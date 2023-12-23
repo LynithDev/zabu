@@ -8,6 +8,7 @@ import dev.lynith.core.ui.styles.impl.CornerRadius
 import dev.lynith.core.ui.styles.impl.FontStyles
 import org.lwjgl.nanovg.NVGColor
 import org.lwjgl.nanovg.NanoVG.*
+import org.lwjgl.opengl.GL11
 
 open class NanoVGHelper {
 
@@ -29,6 +30,10 @@ open class NanoVGHelper {
         return nvgColor
     }
 
+    fun createColor(color: Color): NVGColor {
+        return createColor(color.red, color.green, color.blue, color.alpha)
+    }
+
     fun background(color: Color = Platform.themeManager.currentTheme.colorScheme.background) {
         rectangle(
             0f,
@@ -37,10 +42,6 @@ open class NanoVGHelper {
             Platform.renderer.windowHeight.toFloat(),
             color
         )
-    }
-
-    fun createColor(color: Color): NVGColor {
-        return createColor(color.red, color.green, color.blue, color.alpha)
     }
 
     fun rectangle(left: Float, top: Float, width: Float, height: Float, color: Color) {
@@ -86,6 +87,7 @@ open class NanoVGHelper {
 
     fun text(text: String, left: Float, top: Float, size: Float, color: Color, font: Font) {
         nvgBeginPath(ctx)
+        nvgFontBlur(ctx, 0.1f)
         nvgFontFace(ctx, font.formatted())
         nvgFontSize(ctx, size)
         nvgTextAlign(ctx, NVG_ALIGN_LEFT or NVG_ALIGN_MIDDLE)
@@ -96,6 +98,7 @@ open class NanoVGHelper {
 
     fun text(text: String, bounds: BoundingBox, fontStyles: FontStyles, color: Color) {
         nvgBeginPath(ctx)
+        nvgFontBlur(ctx, 0.1f)
         nvgFontFace(ctx, Platform.fontHelper.getOrDefault(fontStyles.name, fontStyles.weight).formatted())
         nvgFontSize(ctx, fontStyles.size)
         nvgTextAlign(ctx, textAlign(fontStyles.align) or NVG_ALIGN_BOTTOM)

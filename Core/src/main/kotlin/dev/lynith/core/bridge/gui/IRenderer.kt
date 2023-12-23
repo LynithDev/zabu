@@ -7,8 +7,8 @@ interface IRenderer {
     val currentScreen: GuiType?
     val screenMap: HashMap<Class<*>, GuiType>
 
-    fun displayScreen(screen: GuiType?, vararg args: Any?): Boolean
-    fun displayScreen(screen: Screen?, vararg args: Any?): Boolean
+    fun setScreen(screen: GuiType?, vararg args: Any?): Boolean
+    fun setScreen(screen: Screen?, vararg args: Any?): Boolean
 
     val windowWidth: Int
     val windowHeight: Int

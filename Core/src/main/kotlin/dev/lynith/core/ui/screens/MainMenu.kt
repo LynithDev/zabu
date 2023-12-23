@@ -1,11 +1,16 @@
 package dev.lynith.core.ui.screens
 
+import dev.lynith.core.Platform
+import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Screen
+import dev.lynith.core.ui.components.callbacks.Clicked
 import dev.lynith.core.ui.components.impl.Button
 import dev.lynith.core.ui.components.impl.Label
 import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.nvg.Font
+import org.lwjgl.nanovg.NVGColor
+import org.lwjgl.nanovg.NanoVG
 
 class MainMenu : Screen() {
 
@@ -49,6 +54,10 @@ class MainMenu : Screen() {
                     width = 150f,
                     height = 40f
                 )
+
+                on<Clicked> {
+                    Platform.renderer.setScreen(IRenderer.GuiType.SINGLEPLAYER_SELECTOR, toMCScreen())
+                }
             },
         )
     }

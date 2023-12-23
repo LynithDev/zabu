@@ -9,9 +9,10 @@ import dev.lynith.core.ui.components.callbacks.Pressed
 import dev.lynith.core.ui.components.callbacks.Released
 import dev.lynith.core.ui.components.features.Children
 import dev.lynith.core.ui.styles.ComponentStyles
+import java.util.concurrent.CopyOnWriteArrayList
 
 abstract class Screen : Component<Screen, ComponentStyles.EmptyStyles<Screen>>(), Children {
-    override val children: MutableList<Component<*, *>> = ArrayList()
+    override val children: MutableList<Component<*, *>> = CopyOnWriteArrayList()
     var shouldPauseGame: Boolean = false
 
     override fun postRender(mouseX: Int, mouseY: Int, delta: Float) {

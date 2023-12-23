@@ -3,7 +3,6 @@ package dev.lynith.core
 import dev.lynith.core.bridge.IVersion
 import dev.lynith.core.bridge.IVersionMain
 import dev.lynith.core.bridge.gui.IRenderer
-import dev.lynith.core.events.Event
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.events.impl.MinecraftScreenChangedEvent
 import dev.lynith.core.events.impl.ShutdownEvent
@@ -46,7 +45,7 @@ class ClientStartup {
 
         Platform.eventBus.on<MinecraftScreenChangedEvent> {
             if (Platform.renderer.currentScreen == IRenderer.GuiType.MAIN_MENU) {
-                Platform.renderer.displayScreen(MainMenu())
+                Platform.renderer.setScreen(MainMenu())
             }
         }
     }
