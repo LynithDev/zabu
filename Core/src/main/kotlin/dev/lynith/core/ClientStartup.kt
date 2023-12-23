@@ -3,11 +3,10 @@ package dev.lynith.core
 import dev.lynith.core.bridge.IVersion
 import dev.lynith.core.bridge.IVersionMain
 import dev.lynith.core.bridge.gui.IRenderer
+import dev.lynith.core.events.Event
 import dev.lynith.core.events.EventBus
-import dev.lynith.core.events.EventCallback
-import dev.lynith.core.events.impl.MinecraftGuiChanged
+import dev.lynith.core.events.impl.MinecraftScreenChangedEvent
 import dev.lynith.core.events.impl.ShutdownEvent
-import dev.lynith.core.plugins.PluginManager
 import dev.lynith.core.ui.screens.MainMenu
 import dev.lynith.core.ui.theme.ThemeManager
 import dev.lynith.core.utils.nvg.FontHelper
@@ -16,10 +15,18 @@ import kotlin.system.exitProcess
 
 class ClientStartup {
 
+    lateinit var version: IVersion
+
+    lateinit var eventBus: EventBus<Event>
+
+    lateinit var themeManager: ThemeManager
+
+    var nvgContext: Long = 0
+
     fun launchClient(ver: IVersion) {
         version = ver
-        eventBus = EventBus()
 
+        eventBus = EventBus()
         logger.log("Initialized EventBus")
 
 //        this.pluginManager = new PluginManager();
@@ -33,34 +40,22 @@ class ClientStartup {
         logger.log("Initialized ThemeManager")
 
         Runtime.getRuntime().addShutdownHook(Thread {
-            eventBus.emit<ShutdownEvent>(ShutdownEvent::class.java)
+            logger.log("Preparing for shut down...")
+            eventBus.emit(ShutdownEvent())
         })
 
-        eventBus.on<ShutdownEvent>(ShutdownEvent::class.java, ShutdownEvent { logger.log("Preparing for shutdown") })
-        eventBus.on<MinecraftGuiChanged>(MinecraftGuiChanged::class.java, MinecraftGuiChanged { screen: String? ->
+        eventBus.on<MinecraftScreenChangedEvent> {
             if (version.getRenderer().getCurrentScreen() == IRenderer.GuiType.MAIN_MENU) {
                 version.getRenderer().displayScreen(MainMenu())
             }
-        })
+        }
     }
 
     companion object {
         private val logger = Logger("main")
 
-        lateinit var version: IVersion
-            @JvmName("getVersionKotlin") get
-
-        lateinit var eventBus: EventBus<EventCallback>
-            @JvmName("getEventBusKotlin") get
-
-        lateinit var themeManager: ThemeManager
-            @JvmName("getThemeManagerKotlin") get
-
         lateinit var instance: ClientStartup
             @JvmName("getInstanceKotlin") get
-
-        var nvgContext: Long = 0
-            @JvmName("getNvgContextKotlin") get
 
         @JvmStatic
         fun getInstance(): ClientStartup {
@@ -70,18 +65,6 @@ class ClientStartup {
 
             return instance
         }
-
-        @JvmStatic
-        fun getThemeManager() = themeManager
-
-        @JvmStatic
-        fun getEventBus() = eventBus
-
-        @JvmStatic
-        fun getVersion() = version
-
-        @JvmStatic
-        fun getNvgContext() = nvgContext
 
         fun launch() {
             val versionMain: Class<*> = try {

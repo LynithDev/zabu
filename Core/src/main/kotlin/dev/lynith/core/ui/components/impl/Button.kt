@@ -6,12 +6,8 @@ import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Component
 import dev.lynith.core.ui.theme.base.ButtonStyles
 
-class Button(
-    var text: String = "",
-
-    override var parent: Component<*, *>? = null,
-    override var bounds: BoundingBox = BoundingBox(),
-) : Component<Button, ButtonStyles>() {
+class Button : Component<Button, ButtonStyles>() {
+    var text: String = ""
 
     override fun render(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
         rectangle(
@@ -24,7 +20,7 @@ class Button(
         text(
             text = text,
             bounds = bounds.with(
-                y = y + textHeight(text, styles.fontStyles)
+                y = bounds.y + textHeight(text, styles.fontStyles)
             ),
             fontStyles = styles.fontStyles,
             color = styles.foregroundColor
@@ -35,5 +31,5 @@ class Button(
 
     }
 
-    override var styles = ClientStartup.themeManager.currentTheme.getButtonStyles(this)
+    override var styles = ClientStartup.instance.themeManager.currentTheme.getButtonStyles(this)
 }

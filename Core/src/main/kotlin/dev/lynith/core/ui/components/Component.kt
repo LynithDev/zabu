@@ -6,17 +6,19 @@ import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.NanoVGHelper
 
-abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> (
-    open var parent: Component<*, *>? = null,
-    open var bounds: BoundingBox = BoundingBox(),
-) : NanoVGHelper() {
-    private val eventBus = EventBus<ComponentCallback>()
-    abstract var styles: S
+abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoVGHelper() {
+    open var parent: Component<*, *>? = null
+    open var bounds: BoundingBox = BoundingBox()
 
-    fun style(block: S.() -> Unit): C {
-        styles.apply(block)
-        return this as C
-    }
+    /**
+     * Custom properties for a component. These are not used by the engine at all, and are only really useful for
+     * storing data that you want to persist with the component such as a boolean state whether a component was pressed
+     * or not.
+     */
+    val customProperties = mutableMapOf<String, Any>()
+
+    private val eventBus = EventBus<ComponentEvent>()
+    abstract var styles: S
 
     // ---- RENDER ----
     protected open fun preRender(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
@@ -46,69 +48,34 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> (
     }
     // ---- INIT ----
 
-    /**
-     * Adds a callback to the components event bus
-     * @param event The event to listen for, must be a subclass of ComponentCallback
-     * @param callback The callback to run when the event is emitted
-     */
-    open fun <T : ComponentCallback> on(event: Class<T>, callback: T) {
-        on(event, callback, false)
+    open fun <T : ComponentEvent> on(once: Boolean, clazz: Class<T>, callback: (T) -> Unit) {
+        eventBus.on(clazz, callback, once)
     }
 
-    /**
-     * Adds a callback to the components event bus
-     * @param event The event to listen for, must be a subclass of ComponentCallback
-     * @param callback The callback to run when the event is emitted
-     */
-    open fun <T : ComponentCallback> on(event: Class<T>, callback: T, once: Boolean) {
-        if (once) {
-            eventBus.once(event, callback)
-        } else {
-            eventBus.on(event, callback)
+    inline fun <reified T : ComponentEvent> on(noinline callback: (T) -> Unit) {
+        on(false, T::class.java, callback)
+    }
+
+    inline fun <reified T : ComponentEvent> once(noinline callback: (T) -> Unit) {
+        on(true, T::class.java, callback)
+    }
+
+    open fun emit(event: ComponentEvent) {
+        if (event.shouldPass(this)) {
+            eventBus.emit(event)
+            event.postPass(this)
         }
     }
 
-    /**
-     * Adds a callback to the components event bus that **will only be called once**
-     * @param event The event to listen for, must be a subclass of ComponentCallback
-     * @param callback The callback to run when the event is emitted
-     */
-    open fun <T : ComponentCallback> once(event: Class<T>, callback: T) {
-        on(event, callback, true)
+    // Blocks
+    fun style(block: S.() -> Unit): C {
+        styles.apply(block)
+        return this as C
     }
 
-    /**
-     * Emit Call all types of a callback registered on the component's event bus
-     * @param callbackClass The class of the callback to emit
-     * @param args The arguments to pass to the callback, must match the callback's `invoke` method
-     */
-    open fun <T : ComponentCallback> emit(callbackClass: Class<T>, vararg args: Any?) {
-        eventBus.emit(callbackClass, *args)
+    fun configure(block: C.() -> Unit): C {
+        block(this as C)
+        return this as C
     }
-
-    // Helper Utils
-    var x: Float
-        get() = bounds.x
-        set(value) {
-            bounds.x = value
-        }
-
-    var y: Float
-        get() = bounds.y
-        set(value) {
-            bounds.y = value
-        }
-
-    var width: Float
-        get() = bounds.width
-        set(value) {
-            bounds.width = value
-        }
-
-    var height: Float
-        get() = bounds.height
-        set(value) {
-            bounds.height = value
-        }
 
 }

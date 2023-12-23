@@ -6,12 +6,9 @@ import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Component
 import dev.lynith.core.ui.theme.base.LabelStyles
 
-class Label @JvmOverloads constructor(
-    var text: String = "",
+class Label : Component<Label, LabelStyles>() {
 
-    override var parent: Component<*, *>? = null,
-    override var bounds: BoundingBox = BoundingBox(),
-) : Component<Label, LabelStyles>() {
+    var text: String = ""
 
     override fun render(ctx: IRenderer, mouseX: Int, mouseY: Int, delta: Float) {
         text(
@@ -26,6 +23,6 @@ class Label @JvmOverloads constructor(
 
     }
 
-    override var styles = ClientStartup.themeManager.currentTheme.getLabelStyles(this)
+    override var styles = ClientStartup.instance.themeManager.currentTheme.getLabelStyles(this)
 
 }

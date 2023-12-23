@@ -4,21 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.Logger;
-import dev.lynith.core.events.impl.MinecraftInit;
 import dev.lynith.core.utils.gson.AnnotatedDeserializer;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.instrument.Instrumentation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
 public class PluginManager {
 

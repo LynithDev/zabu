@@ -6,7 +6,6 @@ class BoundingBox(
     var width: Float = 0f,
     var height: Float = 0f
 ) {
-
     fun contains(x: Float, y: Float): Boolean {
         return x >= this.x // left
             && x <= this.x + width // right
@@ -14,12 +13,7 @@ class BoundingBox(
             && y <= this.y + height // bottom
     }
 
-    fun Floatersects(other: BoundingBox): Boolean {
-        return x < other.x + other.width // left
-            && x + width > other.x // right
-            && y < other.y + other.height  // top
-            && y + height > other.y // bottom
-    }
+    fun contains(x: Int, y: Int): Boolean = contains(x.toFloat(), y.toFloat())
 
     fun set(other: BoundingBox) {
         x = other.x
@@ -42,6 +36,10 @@ class BoundingBox(
         height: Float = this.height
     ): BoundingBox {
         return BoundingBox(x, y, width, height)
+    }
+
+    override fun toString(): String {
+        return "BoundingBox@${hashCode()}(x=$x, y=$y, width=$width, height=$height)"
     }
 
 }

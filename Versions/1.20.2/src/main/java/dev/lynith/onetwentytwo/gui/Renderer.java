@@ -2,8 +2,6 @@ package dev.lynith.onetwentytwo.gui;
 
 import dev.lynith.core.bridge.gui.IRenderer;
 import dev.lynith.core.bridge.gui.MCScreen;
-import dev.lynith.core.ui.components.callbacks.ComponentMouseClicked;
-import dev.lynith.core.ui.components.callbacks.ComponentMouseReleased;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -11,6 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
+import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
@@ -80,29 +79,7 @@ public class Renderer implements IRenderer {
 
     @Override
     public boolean displayScreen(dev.lynith.core.ui.components.Screen screen, Object... args) {
-        Renderer renderer = this;
-
-        MinecraftClient.getInstance().setScreen(toMCScreen(new MCScreen() {
-            @Override
-            public void render(int mouseX, int mouseY, float delta) {
-                screen.wrappedRender(renderer, mouseX, mouseY, delta);
-            }
-
-            @Override
-            public void init() {
-                screen.wrappedInit();
-            }
-
-            @Override
-            public void mouseClicked(int mouseX, int mouseY, int button) {
-                screen.emit(ComponentMouseClicked.class, mouseX, mouseY, button);
-            }
-
-            @Override
-            public void mouseReleased(int mouseX, int mouseY, int button) {
-                screen.emit(ComponentMouseReleased.class, mouseX, mouseY, button);
-            }
-        }));
+        MinecraftClient.getInstance().setScreen(toMCScreen(screen.toMCScreen()));
         return true;
     }
 
@@ -133,7 +110,6 @@ public class Renderer implements IRenderer {
 
             @Override
             public boolean keyPressed(int i, int j, int k) {
-
                 return super.keyPressed(i, j, k);
             }
 
@@ -144,12 +120,18 @@ public class Renderer implements IRenderer {
 
             @Override
             public boolean mouseClicked(double d, double e, int i) {
+                d *= MinecraftClient.getInstance().getWindow().getScaleFactor();
+                e *= MinecraftClient.getInstance().getWindow().getScaleFactor();
+
                 screen.mouseClicked((int) d, (int) e, i);
                 return super.mouseClicked(d, e, i);
             }
 
             @Override
             public boolean mouseReleased(double d, double e, int i) {
+                d *= MinecraftClient.getInstance().getWindow().getScaleFactor();
+                e *= MinecraftClient.getInstance().getWindow().getScaleFactor();
+
                 screen.mouseReleased((int) d, (int) e, i);
                 return super.mouseReleased(d, e, i);
             }

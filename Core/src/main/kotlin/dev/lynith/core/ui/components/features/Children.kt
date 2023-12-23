@@ -4,7 +4,7 @@ import dev.lynith.core.ui.components.Component
 
 interface Children {
 
-    var children: MutableList<Component<*, *>>
+    val children: MutableList<Component<*, *>>
 
     fun child(child: Component<*, *>) {
         children.add(child)

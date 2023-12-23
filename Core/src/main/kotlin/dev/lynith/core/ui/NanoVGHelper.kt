@@ -1,7 +1,6 @@
 package dev.lynith.core.ui
 
-import dev.lynith.core.ClientStartup.Companion.getNvgContext
-import dev.lynith.core.ClientStartup.Companion.getVersion
+import dev.lynith.core.ClientStartup
 import dev.lynith.core.ui.styles.impl.Border
 import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.styles.impl.CornerRadius
@@ -14,7 +13,7 @@ import org.lwjgl.nanovg.NanoVG.*
 open class NanoVGHelper {
     companion object {
         fun createFrame() {
-            nvgBeginFrame(ctx(), getVersion().getRenderer().getWindowWidth().toFloat(), getVersion().getRenderer().getWindowHeight().toFloat(), 1f)
+            nvgBeginFrame(ctx(), ClientStartup.instance.version.getRenderer().getWindowWidth().toFloat(), ClientStartup.instance.version.getRenderer().getWindowHeight().toFloat(), 1f)
             nvgSave(ctx())
         }
 
@@ -120,6 +119,6 @@ open class NanoVGHelper {
             }
         }
 
-        fun ctx() = getNvgContext()
+        fun ctx() = ClientStartup.instance.nvgContext
     }
 }

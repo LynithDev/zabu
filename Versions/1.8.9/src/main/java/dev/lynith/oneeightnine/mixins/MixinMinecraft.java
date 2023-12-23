@@ -1,8 +1,8 @@
 package dev.lynith.oneeightnine.mixins;
 
 import dev.lynith.core.ClientStartup;
-import dev.lynith.core.events.impl.MinecraftGuiChanged;
-import dev.lynith.core.events.impl.MinecraftInit;
+import dev.lynith.core.events.impl.MinecraftInitEvent;
+import dev.lynith.core.events.impl.MinecraftScreenChangedEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,13 +15,13 @@ public class MixinMinecraft {
 
     @Inject(method = "initializeGame", at = @At("RETURN"))
     public void startGame(CallbackInfo ci) {
-        ClientStartup.getInstance().getEventBus().emit(MinecraftInit.class);
+        ClientStartup.getInstance().getEventBus().emit(new MinecraftInitEvent());
     }
 
     @Inject(method = "setScreen", at = @At("RETURN"))
     public void setScreen(Screen screen, CallbackInfo ci) {
         String clazz = screen.getClass().getName();
-        ClientStartup.getInstance().getEventBus().emit(MinecraftGuiChanged.class, clazz);
+        ClientStartup.getInstance().getEventBus().emit(new MinecraftScreenChangedEvent(clazz));
     }
 
 }

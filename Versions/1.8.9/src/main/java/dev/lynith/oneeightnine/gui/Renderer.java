@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
+import net.minecraft.client.util.Window;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -77,19 +78,7 @@ public class Renderer implements IRenderer {
 
     @Override
     public boolean displayScreen(dev.lynith.core.ui.components.Screen screen, Object... args) {
-        Renderer renderer = this;
-
-        MinecraftClient.getInstance().setScreen(toMCScreen(new MCScreen() {
-            @Override
-            public void render(int mouseX, int mouseY, float delta) {
-                screen.wrappedRender(renderer, mouseX, mouseY, delta);
-            }
-
-            @Override
-            public void init() {
-                screen.wrappedInit();
-            }
-        }));
+        MinecraftClient.getInstance().setScreen(toMCScreen(screen.toMCScreen()));
         return true;
     }
 
@@ -126,6 +115,9 @@ public class Renderer implements IRenderer {
 
             @Override
             protected void mouseClicked(int i, int j, int k) {
+                i = (i * new Window(MinecraftClient.getInstance()).getScaleFactor());
+                j = (j * new Window(MinecraftClient.getInstance()).getScaleFactor());
+
                 screen.mouseClicked(i, j, k);
                 super.mouseClicked(i, j, k);
             }
@@ -138,6 +130,9 @@ public class Renderer implements IRenderer {
 
             @Override
             protected void mouseReleased(int i, int j, int k) {
+                i *= new Window(MinecraftClient.getInstance()).getScaleFactor();
+                j *= new Window(MinecraftClient.getInstance()).getScaleFactor();
+
                 screen.mouseReleased(i, j, k);
                 super.mouseReleased(i, j, k);
             }
