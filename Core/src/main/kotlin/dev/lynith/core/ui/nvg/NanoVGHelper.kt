@@ -8,7 +8,6 @@ import dev.lynith.core.ui.styles.impl.CornerRadius
 import dev.lynith.core.ui.styles.impl.FontStyles
 import org.lwjgl.nanovg.NVGColor
 import org.lwjgl.nanovg.NanoVG.*
-import org.lwjgl.opengl.GL11
 
 open class NanoVGHelper {
 
@@ -99,7 +98,7 @@ open class NanoVGHelper {
     fun text(text: String, bounds: BoundingBox, fontStyles: FontStyles, color: Color) {
         nvgBeginPath(ctx)
         nvgFontBlur(ctx, 0.1f)
-        nvgFontFace(ctx, Platform.fontHelper.getOrDefault(fontStyles.name, fontStyles.weight).formatted())
+        nvgFontFace(ctx, Platform.fontHelper.getOrDefault(fontStyles.family, fontStyles.weight).formatted())
         nvgFontSize(ctx, fontStyles.size)
         nvgTextAlign(ctx, textAlign(fontStyles.align) or NVG_ALIGN_BOTTOM)
         nvgFillColor(ctx, createColor(color))
@@ -118,13 +117,13 @@ open class NanoVGHelper {
         val bounds = FloatArray(4)
         nvgFontSize(ctx, styles.size)
         nvgTextLetterSpacing(ctx, styles.letterSpacing)
-        nvgFontFace(ctx, Platform.fontHelper.getOrDefault(styles.name, styles.weight).formatted())
+        nvgFontFace(ctx, Platform.fontHelper.getOrDefault(styles.family, styles.weight).formatted())
         return nvgTextBounds(ctx, 0f, 0f, text, bounds)
     }
 
     fun textHeight(text: String, styles: FontStyles): Float {
         val bounds = FloatArray(4)
-        val font = Platform.fontHelper.getOrDefault(styles.name, styles.weight)
+        val font = Platform.fontHelper.getOrDefault(styles.family, styles.weight)
 
         nvgFontSize(ctx, styles.size)
         nvgFontFace(ctx, font.formatted())

@@ -7,10 +7,7 @@ import dev.lynith.core.ui.components.Screen
 import dev.lynith.core.ui.components.callbacks.Clicked
 import dev.lynith.core.ui.components.impl.Button
 import dev.lynith.core.ui.components.impl.Label
-import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.nvg.Font
-import org.lwjgl.nanovg.NVGColor
-import org.lwjgl.nanovg.NanoVG
 
 class MainMenu : Screen() {
 
@@ -25,7 +22,7 @@ class MainMenu : Screen() {
 
                 bounds = BoundingBox(
                     x = 100f,
-                    y = 100f,
+                    y = 110f,
                 )
 
                 style {
@@ -41,13 +38,6 @@ class MainMenu : Screen() {
             Button().configure {
                 text = "Singleplayer"
 
-                style {
-                    fontStyles.change {
-                        size = 16f
-                        weight = Font.FontWeight.MEDIUM
-                    }
-                }
-
                 bounds = BoundingBox(
                     x = 100f,
                     y = 160f,
@@ -57,6 +47,21 @@ class MainMenu : Screen() {
 
                 on<Clicked> {
                     Platform.renderer.setScreen(IRenderer.GuiType.SINGLEPLAYER_SELECTOR, toMCScreen())
+                }
+            },
+
+            Button().configure {
+                text = "Multiplayer"
+
+                bounds = BoundingBox(
+                    x = 100f,
+                    y = 210f,
+                    width = 150f,
+                    height = 40f
+                )
+
+                on<Clicked> {
+                    Platform.renderer.setScreen(IRenderer.GuiType.MULTIPLAYER_SELECTOR, toMCScreen())
                 }
             },
         )

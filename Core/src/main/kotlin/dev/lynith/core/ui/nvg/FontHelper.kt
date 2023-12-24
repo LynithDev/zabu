@@ -10,10 +10,11 @@ class FontHelper {
 
     init {
         addAll(
-            Font("Roboto", "/fonts/roboto/Roboto-Light.ttf", Font.FontWeight.LIGHT, 1.5f), 
-            Font("Roboto", "/fonts/roboto/Roboto-Regular.ttf", Font.FontWeight.REGULAR, 1.5f),
-            Font("Roboto", "/fonts/roboto/Roboto-Medium.ttf", Font.FontWeight.MEDIUM, 1.5f),
-            Font("Roboto", "/fonts/roboto/Roboto-Bold.ttf", Font.FontWeight.BOLD, 1.5f)
+            Font("Inter", "/fonts/inter/Inter-Light.ttf", Font.FontWeight.LIGHT, 1f),
+            Font("Inter", "/fonts/inter/Inter-Regular.ttf", Font.FontWeight.REGULAR, 1f),
+            Font("Inter", "/fonts/inter/Inter-Medium.ttf", Font.FontWeight.MEDIUM, 1f),
+            Font("Inter", "/fonts/inter/Inter-SemiBold.ttf", Font.FontWeight.SEMIBOLD, 1f),
+            Font("Inter", "/fonts/inter/Inter-Bold.ttf", Font.FontWeight.BOLD, 1f),
         )
     }
 
@@ -52,7 +53,7 @@ class FontHelper {
     }
 
     fun getOrDefault(name: String, weight: Font.FontWeight = Font.FontWeight.REGULAR): Font {
-        return getOrDefault(name, weight, fontMap["Roboto-Regular"]!!)
+        return getOrDefault(name, weight, fontMap["Inter-Regular"]!!)
     }
 
     fun getOrDefault(name: String, weight: Font.FontWeight, defaultFont: Font): Font {

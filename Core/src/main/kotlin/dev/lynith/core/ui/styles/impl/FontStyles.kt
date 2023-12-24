@@ -4,7 +4,7 @@ import dev.lynith.core.ui.styles.Style
 import dev.lynith.core.ui.nvg.Font
 
 class FontStyles @JvmOverloads constructor(
-    var name: String = "Roboto",
+    var family: String = "Inter",
     var size: Float = 16f,
     var weight: Font.FontWeight = Font.FontWeight.REGULAR,
     var lineHeight: Float = 1f,
@@ -14,6 +14,6 @@ class FontStyles @JvmOverloads constructor(
 
     override val propertyName = "font"
     override val valueSerialized: String
-        get() = "'$name', $size, $weight, $lineHeight, ${align.name}, $letterSpacing"
+        get() = "'$family', $size, $weight, $lineHeight, ${align.name}, $letterSpacing"
 
 }

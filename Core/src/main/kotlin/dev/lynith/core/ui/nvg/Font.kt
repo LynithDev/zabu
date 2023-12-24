@@ -27,7 +27,9 @@ class Font @JvmOverloads constructor(
         LIGHT("Light"),
         REGULAR("Regular"),
         MEDIUM("Medium"),
-        BOLD("Bold");
+        SEMIBOLD("SemiBold"),
+        BOLD("Bold"),
+        BLACK("Black");
 
         override fun toString(): String {
             return weight

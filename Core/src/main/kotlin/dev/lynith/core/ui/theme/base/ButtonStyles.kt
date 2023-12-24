@@ -23,13 +23,13 @@ open class ButtonStyles(
     )
 
     open var cornerRadius = CornerRadius(
-        value = 5
+        value = 7
     )
 
     open var fontStyles = FontStyles(
-        name = "Roboto",
+        family = "Inter",
         size = 16f,
-        weight = Font.FontWeight.REGULAR,
+        weight = Font.FontWeight.MEDIUM,
         lineHeight = 1f,
         align = Font.FontAlign.CENTER
     )
