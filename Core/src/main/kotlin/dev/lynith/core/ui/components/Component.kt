@@ -1,10 +1,12 @@
 package dev.lynith.core.ui.components
 
-import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.nvg.NanoVGHelper
+import dev.lynith.core.ui.styles.impl.Border
+import dev.lynith.core.ui.styles.impl.Color
+import dev.lynith.core.ui.units.px
 
 abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoVGHelper() {
     open var parent: Component<*, *>? = null
@@ -65,6 +67,20 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
             eventBus.emit(event)
             event.postPass(this)
         }
+    }
+
+    // Utils
+    fun debugBox() {
+        val color = Color(
+            (hashCode() shr 16) and 0xFF,
+            (hashCode() shr 8) and 0xFF,
+            hashCode() and 0xFF
+        )
+
+        rectangle(bounds, Color.TRANSPARENT, Border(
+            thickness = 2.px,
+            color = color
+        ))
     }
 
     // Blocks

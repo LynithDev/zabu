@@ -13,7 +13,13 @@ class DefaultLayout : Layout() {
 
         if (children.isEmpty()) return
 
-        children = direction(children)
+        if (properties.direction.isReverse()) {
+            children = children.reversed()
+        }
+
+        childWidth(component, children)
+        childHeight(component, children)
+
         justify(component, children)
         align(component, children)
 
@@ -24,22 +30,42 @@ class DefaultLayout : Layout() {
         }
     }
 
-    private fun direction(children: List<Component<*, *>>): List<Component<*, *>> {
-        when (properties.direction) {
-            LayoutProperties.Direction.Horizontal -> {
-                return children
-            }
+    private fun childWidth(component: ComponentWithChildren<*, *>, children: List<Component<*, *>>) {
+        when (properties.childWidth) {
+            LayoutProperties.ChildSize.Fixed -> {}
+            LayoutProperties.ChildSize.Fill -> {
+                if (properties.direction.isHorizontal()) {
+                    val containerWidth = component.bounds.width - component.styles.padding.left - component.styles.padding.right - (component.layout.properties.gap.x * (children.size - 1))
+                    val singularChildWidth = containerWidth / children.size
 
-            LayoutProperties.Direction.Vertical -> {
-                return children
+                    for (child in children) {
+                        child.bounds.width = singularChildWidth
+                    }
+                } else {
+                    for (child in children) {
+                        child.bounds.width = component.bounds.width - component.styles.padding.left - component.styles.padding.right
+                    }
+                }
             }
+        }
+    }
 
-            LayoutProperties.Direction.HorizontalReverse -> {
-                return children.reversed()
-            }
+    private fun childHeight(component: ComponentWithChildren<*, *>, children: List<Component<*, *>>) {
+        when (properties.childHeight) {
+            LayoutProperties.ChildSize.Fixed -> {}
+            LayoutProperties.ChildSize.Fill -> {
+                if (properties.direction.isVertical()) {
+                    val containerHeight = component.bounds.height - component.styles.padding.top - component.styles.padding.bottom - ((component.layout.properties.gap.y / 2) * (children.size - 1))
+                    val singularChildHeight = containerHeight / children.size
 
-            LayoutProperties.Direction.VerticalReverse -> {
-                return children.reversed()
+                    for (child in children) {
+                        child.bounds.height = singularChildHeight
+                    }
+                } else {
+                    for (child in children) {
+                        child.bounds.height = component.bounds.height - component.styles.padding.top - component.styles.padding.bottom
+                    }
+                }
             }
         }
     }
@@ -66,7 +92,7 @@ class DefaultLayout : Layout() {
                     totalHeight += child.bounds.height
                 }
 
-                var startY = ((component.bounds.height - totalHeight) / 2) + component.bounds.y - component.layout.properties.gap.y
+                var startY = ((component.bounds.height - totalHeight) / 2) + component.bounds.y - (component.layout.properties.gap.y / 2)
                 for (child in children) {
                     if (properties.direction.isHorizontal()) {
                         startY = (component.bounds.height - child.bounds.height) / 2f + component.bounds.y
@@ -117,7 +143,7 @@ class DefaultLayout : Layout() {
                     totalWidth += child.bounds.width
                 }
 
-                var startX = ((component.bounds.width - totalWidth) / 2f) + component.bounds.x - component.layout.properties.gap.x
+                var startX = ((component.bounds.width - totalWidth) / 2f) + component.bounds.x - (component.layout.properties.gap.x / 2)
                 for (child in children) {
                     if (properties.direction.isVertical()) {
                         startX = (component.bounds.width - child.bounds.width) / 2f + component.bounds.x

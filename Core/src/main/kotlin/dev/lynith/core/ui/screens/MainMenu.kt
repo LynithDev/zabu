@@ -31,10 +31,15 @@ class MainMenu : Screen() {
                     direction = LayoutProperties.Direction.Vertical
                     align = LayoutProperties.Align.Center
                     justify = LayoutProperties.Justify.Center
+                    childWidth = LayoutProperties.ChildSize.Fill
                     gap = LayoutProperties.Gap(
                         y = 10.px
                     )
                 }
+
+                bounds = BoundingBox(
+                    width = 500.px
+                )
 
                 children(
                     Label().configure {
@@ -71,6 +76,7 @@ class MainMenu : Screen() {
                             direction = LayoutProperties.Direction.Horizontal
                             align = LayoutProperties.Align.Center
                             justify = LayoutProperties.Justify.Center
+                            childWidth = LayoutProperties.ChildSize.Fixed
                             gap = LayoutProperties.Gap(
                                 x = 10.px
                             )
