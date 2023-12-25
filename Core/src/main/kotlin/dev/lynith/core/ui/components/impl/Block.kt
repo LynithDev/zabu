@@ -4,6 +4,7 @@ import dev.lynith.core.ui.components.ComponentWithChildren
 import dev.lynith.core.ui.styles.ComponentWithChildrenStyles
 import dev.lynith.core.ui.styles.impl.Border
 import dev.lynith.core.ui.styles.impl.Color
+import dev.lynith.core.ui.units.px
 
 class Block : ComponentWithChildren<Block, ComponentWithChildrenStyles.EmptyStyles<Block>>() {
 

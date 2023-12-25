@@ -1,17 +1,16 @@
 package dev.lynith.core.ui.screens
 
 import dev.lynith.core.Platform
-import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Screen
 import dev.lynith.core.ui.components.callbacks.Clicked
-import dev.lynith.core.ui.components.callbacks.WindowResized
 import dev.lynith.core.ui.components.impl.Block
 import dev.lynith.core.ui.components.impl.Button
 import dev.lynith.core.ui.components.impl.Label
 import dev.lynith.core.ui.layouts.LayoutProperties
 import dev.lynith.core.ui.nvg.Font
 import dev.lynith.core.ui.styles.impl.Position
+import dev.lynith.core.ui.units.px
 
 class MainMenu : Screen() {
 
@@ -28,38 +27,12 @@ class MainMenu : Screen() {
 
         children (
             Block().configure {
-                styles.position = Position(Position.PositionType.ABSOLUTE)
-
-                bounds = BoundingBox(
-                    width = Platform.renderer.windowWidth.toFloat(),
-                    height = Platform.renderer.windowHeight.toFloat()
-                )
-
-                on<WindowResized> {
-                    bounds = BoundingBox(
-                        width = Platform.renderer.windowWidth.toFloat(),
-                        height = Platform.renderer.windowHeight.toFloat()
-                    )
-                }
-
-                children(
-                    Button().configure {
-                        text = "Settings"
-
-                        on<Clicked> {
-                            Platform.renderer.displayOptionsScreen()
-                        }
-                    }
-                )
-            },
-
-            Block().configure {
                 layout.properties.apply {
                     direction = LayoutProperties.Direction.Vertical
                     align = LayoutProperties.Align.Center
                     justify = LayoutProperties.Justify.Center
                     gap = LayoutProperties.Gap(
-                        y = 5f
+                        y = 10.px
                     )
                 }
 
@@ -69,10 +42,10 @@ class MainMenu : Screen() {
 
                         style {
                             fontStyles.change {
-                                size = 56f
+                                size = 56.px
                                 weight = Font.FontWeight.BOLD
                                 align = Font.FontAlign.LEFT
-                                letterSpacing = 5f
+                                letterSpacing = 5.px
                             }
                         }
                     },
@@ -92,6 +65,35 @@ class MainMenu : Screen() {
                             Platform.renderer.displayMultiplayerSelectorScreen()
                         }
                     },
+
+                    Block().configure {
+                        layout.properties.apply {
+                            direction = LayoutProperties.Direction.Horizontal
+                            align = LayoutProperties.Align.Center
+                            justify = LayoutProperties.Justify.Center
+                            gap = LayoutProperties.Gap(
+                                x = 10.px
+                            )
+                        }
+
+                        children(
+                            Button().configure {
+                                text = "Options"
+
+                                on<Clicked> {
+                                    Platform.renderer.displayOptionsScreen()
+                                }
+                            },
+
+                            Button().configure {
+                                text = "Quit"
+
+                                on<Clicked> {
+                                    Platform.minecraft.scheduleStop()
+                                }
+                            }
+                        )
+                    }
                 )
             }
         )

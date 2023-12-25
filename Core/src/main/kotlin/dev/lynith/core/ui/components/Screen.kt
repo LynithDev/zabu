@@ -3,10 +3,7 @@ package dev.lynith.core.ui.components
 import dev.lynith.core.Platform
 import dev.lynith.core.bridge.gui.MCScreen
 import dev.lynith.core.ui.BoundingBox
-import dev.lynith.core.ui.components.callbacks.Destroyed
-import dev.lynith.core.ui.components.callbacks.Pressed
-import dev.lynith.core.ui.components.callbacks.Released
-import dev.lynith.core.ui.components.callbacks.WindowResized
+import dev.lynith.core.ui.components.callbacks.*
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.styles.ComponentWithChildrenStyles
 import java.util.concurrent.CopyOnWriteArrayList
@@ -32,9 +29,18 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyle
     private class WrappedScreen(
         private val screen: Screen
     ) : MCScreen() {
+        var prevX: Int? = null
+        var prevY: Int? = null
 
         override fun render(mouseX: Int, mouseY: Int, delta: Float) {
             super.render(mouseX, mouseY, delta)
+
+            if (prevX != mouseX || prevY != mouseY) {
+                prevX = mouseX
+                prevY = mouseY
+                screen.emit(CursorMoved(mouseX, mouseY))
+            }
+
             screen.wrappedRender(mouseX, mouseY, delta)
         }
 
