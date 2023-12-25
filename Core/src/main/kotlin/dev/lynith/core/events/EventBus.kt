@@ -3,16 +3,18 @@ package dev.lynith.core.events
 import dev.lynith.core.Logger
 import java.util.concurrent.CopyOnWriteArrayList
 
-class EventBus<E : Event> @JvmOverloads constructor(
+open class EventBus<E : Event> @JvmOverloads constructor(
     name: String = "eventbus"
 ) {
 
     private val logger: Logger = Logger(name)
-    private val events: CopyOnWriteArrayList<StoredEvent<in E>> = CopyOnWriteArrayList()
+    private val events: MutableMap<Class<out E>, MutableList<StoredEvent<in E>>> = mutableMapOf()
 
     fun <T : E> on(eventClazz: Class<T>, callback: (T) -> Unit, once: Boolean = false) {
-        val storedEvent = StoredEvent(eventClazz, callback, once)
-        events.add(storedEvent as StoredEvent<in E>)
+        val storedEvent = StoredEvent(callback, once) as StoredEvent<in E>
+        events[eventClazz] = (events[eventClazz] ?: CopyOnWriteArrayList()).apply {
+            add(storedEvent)
+        }
     }
 
     fun <T : E> once(eventClazz: Class<T>, callback: (T) -> Unit) {
@@ -27,25 +29,27 @@ class EventBus<E : Event> @JvmOverloads constructor(
         on(T::class.java, callback, true)
     }
 
-    fun emit(event: E) {
-        events.forEach { storedEvent ->
-            if (storedEvent.eventClazz.isAssignableFrom(event.javaClass)) {
-                storedEvent.call(event)
+    open fun emit(event: E) {
+        val callbacks = events[event.javaClass] ?: return
 
-                if (storedEvent.once) {
-                    events.remove(storedEvent)
-                }
+        for (callback in callbacks) {
+            callback.call(event)
+            if (callback.once) {
+                events[event.javaClass]?.remove(callback)
             }
         }
     }
 
     private class StoredEvent<E : Event> (
-        val eventClazz: Class<E>,
         val callback: (E) -> Unit,
         var once: Boolean = false
     ) {
         fun call(event: E) {
             callback.invoke(event)
+        }
+
+        override fun toString(): String {
+            return "StoredEvent(callback=${callback.javaClass.simpleName}, once=$once)"
         }
     }
 

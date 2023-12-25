@@ -2,6 +2,8 @@ package dev.lynith.core.ui.components
 
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.ui.BoundingBox
+import dev.lynith.core.ui.callbacks.ComponentEvent
+import dev.lynith.core.ui.callbacks.ComponentEventBus
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.styles.impl.Border
@@ -10,6 +12,8 @@ import dev.lynith.core.ui.units.px
 
 abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoVGHelper() {
     open var parent: ComponentWithChildren<*, *>? = null
+    open var screen: Screen? = null
+
     open var bounds: BoundingBox = BoundingBox()
 
     /**
@@ -19,7 +23,14 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
      */
     val customProperties = mutableMapOf<String, Any>()
 
-    private val eventBus = EventBus<ComponentEvent>()
+    /**
+     * The event bus for this component. An event bus for a specific component should reduce slight overhead
+     */
+    private val eventBus = ComponentEventBus.instance
+
+    /**
+     * The styles for this component. This is a mutable property so that you can change the styles of a component
+     */
     abstract var styles: S
 
     // ---- RENDER ----
@@ -28,6 +39,7 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     }
 
     abstract fun render(mouseX: Int, mouseY: Int, delta: Float)
+
     protected open fun postRender(mouseX: Int, mouseY: Int, delta: Float) {
         endFrame()
     }
@@ -43,6 +55,7 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     protected open fun preInit() {}
     abstract fun init()
     protected open fun postInit() {}
+
     open fun wrappedInit() {
         preInit()
         init()
@@ -50,8 +63,9 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     }
     // ---- INIT ----
 
+    // ---- EVENTS -----
     open fun <T : ComponentEvent> on(once: Boolean, clazz: Class<T>, callback: (T) -> Unit) {
-        eventBus.on(clazz, callback, once)
+        eventBus.on(this, clazz, callback, once)
     }
 
     inline fun <reified T : ComponentEvent> on(noinline callback: (T) -> Unit) {
@@ -62,12 +76,10 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
         on(true, T::class.java, callback)
     }
 
-    open fun emit(event: ComponentEvent) {
-        if (event.shouldPass(this)) {
-            eventBus.emit(event)
-            event.postPass(this)
-        }
+    fun emit(event: ComponentEvent) {
+        eventBus.emit(event)
     }
+    // ---- EVENTS -----
 
     // Utils
     fun debugBox() {

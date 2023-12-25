@@ -1,15 +1,12 @@
 package dev.lynith.core.ui.components
 
-import dev.lynith.core.Platform
-import dev.lynith.core.ui.components.callbacks.Destroyed
-import dev.lynith.core.ui.components.callbacks.WindowResized
+import dev.lynith.core.ui.callbacks.ComponentEvent
+import dev.lynith.core.ui.callbacks.impl.Destroyed
+import dev.lynith.core.ui.callbacks.impl.WindowResized
 import dev.lynith.core.ui.layouts.DefaultLayout
 import dev.lynith.core.ui.layouts.Layout
 import dev.lynith.core.ui.layouts.LayoutProperties
-import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.styles.ComponentWithChildrenStyles
-import dev.lynith.core.ui.styles.impl.Border
-import dev.lynith.core.ui.styles.impl.Color
 import java.util.concurrent.CopyOnWriteArrayList
 
 abstract class ComponentWithChildren<C : Component<C, S>, S : ComponentWithChildrenStyles<C, S>> : Component<C, S>() {
@@ -51,15 +48,9 @@ abstract class ComponentWithChildren<C : Component<C, S>, S : ComponentWithChild
         }
     }
 
-    override fun emit(event: ComponentEvent) {
-        super.emit(event)
+    // Children
 
-        for (child in children) {
-            child.emit(event)
-        }
-    }
-
-    fun child(child: Component<*, *>) {
+    open fun child(child: Component<*, *>) {
         children.add(child)
     }
 
@@ -72,7 +63,11 @@ abstract class ComponentWithChildren<C : Component<C, S>, S : ComponentWithChild
     }
 
     fun children(children: List<Component<*, *>>) {
-        this.children.addAll(children)
+        for (c in children) {
+            child(c.apply {
+                parent = this@ComponentWithChildren
+            })
+        }
     }
 
     fun removeChild(child: Component<*, *>) {

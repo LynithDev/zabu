@@ -2,14 +2,20 @@ package dev.lynith.core.ui.screens
 
 import dev.lynith.core.Platform
 import dev.lynith.core.ui.BoundingBox
+import dev.lynith.core.ui.animation.Animation
+import dev.lynith.core.ui.animation.Easing
 import dev.lynith.core.ui.components.Screen
-import dev.lynith.core.ui.components.callbacks.Clicked
+import dev.lynith.core.ui.callbacks.impl.Clicked
 import dev.lynith.core.ui.components.impl.Block
 import dev.lynith.core.ui.components.impl.Button
+import dev.lynith.core.ui.components.impl.CustomWidget
 import dev.lynith.core.ui.components.impl.Label
 import dev.lynith.core.ui.layouts.LayoutProperties
 import dev.lynith.core.ui.nvg.Font
+import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.styles.impl.Position
+import dev.lynith.core.ui.styles.impl.PositionType
+import dev.lynith.core.ui.units.ms
 import dev.lynith.core.ui.units.px
 
 class MainMenu : Screen() {
@@ -25,9 +31,23 @@ class MainMenu : Screen() {
             justify = LayoutProperties.Justify.Center
         }
 
-        val block = Block()
+        val rectangle = CustomWidget().configure {
+            bounds = BoundingBox(
+                width = 0.px,
+                height = 300.px
+            )
+
+            styles.position = Position(Position.PositionType.ABSOLUTE)
+
+            onRender {
+                Platform.nvg.rectangle(bounds, Color(255, 0, 0))
+            }
+        }
+
         children (
-            block.configure {
+            rectangle,
+
+            Block().configure {
                 layout {
                     direction = LayoutProperties.Direction.Vertical
                     align = LayoutProperties.Align.Center
@@ -65,11 +85,43 @@ class MainMenu : Screen() {
                     },
 
                     Button().configure {
-                        text = "Test Button"
+                        text = "Play"
+
+                        val becomeSkinny = Animation(1000.ms, Easing.SineInOut()).configure {
+                            onUpdate { progress ->
+                                rectangle.bounds.configure {
+                                    width = 300.px * (1 - progress)
+                                }
+                            }
+                        }
+
+                        val becomeFatter = Animation(1000.ms, Easing.SineInOut()).configure {
+                            onUpdate { progress ->
+                                rectangle.bounds.configure {
+                                    width = 300.px * progress
+                                }
+                            }
+                        }
+
+                        becomeSkinny.onFinish { becomeFatter.animate() }
+                        becomeFatter.onFinish { becomeSkinny.animate() }
 
                         on<Clicked> {
-                            bounds.height = if (bounds.height == 70.px) 30.px else 70.px
-                            parent?.reposition()
+                            if (becomeFatter.isRunning()) {
+                                if (becomeFatter.isPaused()) {
+                                    becomeFatter.resume()
+                                } else {
+                                    becomeFatter.pause()
+                                } // terrible but its a proof of concept
+                            } else if (becomeSkinny.isRunning()) {
+                                if (becomeSkinny.isPaused()) {
+                                    becomeSkinny.resume()
+                                } else {
+                                    becomeSkinny.pause()
+                                }
+                            } else {
+                                becomeFatter.animate()
+                            }
                         }
                     },
 

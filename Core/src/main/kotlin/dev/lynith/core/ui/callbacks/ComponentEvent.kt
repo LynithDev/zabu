@@ -1,6 +1,7 @@
-package dev.lynith.core.ui.components
+package dev.lynith.core.ui.callbacks
 
 import dev.lynith.core.events.Event
+import dev.lynith.core.ui.components.Component
 
 open class ComponentEvent : Event {
 
@@ -9,7 +10,7 @@ open class ComponentEvent : Event {
     }
 
     open fun postPass(component: Component<*, *>) {
-        // no-op
+
     }
 
 }

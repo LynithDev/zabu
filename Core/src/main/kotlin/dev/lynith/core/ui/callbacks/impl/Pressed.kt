@@ -1,7 +1,7 @@
-package dev.lynith.core.ui.components.callbacks
+package dev.lynith.core.ui.callbacks.impl
 
+import dev.lynith.core.ui.callbacks.ComponentEvent
 import dev.lynith.core.ui.components.Component
-import dev.lynith.core.ui.components.ComponentEvent
 
 class Pressed(
     val mouseX: Int,

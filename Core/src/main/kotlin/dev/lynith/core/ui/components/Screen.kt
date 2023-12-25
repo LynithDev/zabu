@@ -3,10 +3,9 @@ package dev.lynith.core.ui.components
 import dev.lynith.core.Platform
 import dev.lynith.core.bridge.gui.MCScreen
 import dev.lynith.core.ui.BoundingBox
-import dev.lynith.core.ui.components.callbacks.*
-import dev.lynith.core.ui.styles.ComponentStyles
+import dev.lynith.core.ui.callbacks.*
+import dev.lynith.core.ui.callbacks.impl.*
 import dev.lynith.core.ui.styles.ComponentWithChildrenStyles
-import java.util.concurrent.CopyOnWriteArrayList
 
 abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyles.EmptyStyles<Screen>>() {
     var shouldPauseGame: Boolean = false
@@ -16,11 +15,22 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyle
         height = Platform.renderer.windowHeight.toFloat()
     )
 
+    init {
+        this.screen = this
+    }
+
     override fun render(mouseX: Int, mouseY: Int, delta: Float) {
         // Empty
     }
 
     override var styles = ComponentWithChildrenStyles.EmptyStyles(this)
+
+    override fun child(child: Component<*, *>) {
+        super.child(child)
+        child.screen = this
+    }
+
+    // Utils
 
     fun toMCScreen(): MCScreen {
         return WrappedScreen(this)
@@ -57,6 +67,7 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyle
         override fun mouseReleased(mouseX: Int, mouseY: Int, button: Int) {
             super.mouseReleased(mouseX, mouseY, button)
             screen.emit(Released(mouseX, mouseY, button))
+            screen.emit(Clicked(mouseX, mouseY, button))
         }
 
         override fun shouldPauseGame(): Boolean {

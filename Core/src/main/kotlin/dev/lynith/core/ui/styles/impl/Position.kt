@@ -16,3 +16,5 @@ class Position @JvmOverloads constructor(
     }
 
 }
+
+typealias PositionType = Position.PositionType

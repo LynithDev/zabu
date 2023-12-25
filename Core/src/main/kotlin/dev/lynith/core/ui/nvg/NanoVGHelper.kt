@@ -53,13 +53,17 @@ open class NanoVGHelper {
     }
 
     @JvmOverloads
-    fun rectangle(bounds: BoundingBox, color: Color, border: Border? = null, cornerRadius: CornerRadius? = null) {
+    fun rectangle(bounds: BoundingBox, color: Color, border: Border? = null, cornerRadius: CornerRadius? = null, round: Boolean = true) {
         var radius = 0
         if (cornerRadius != null) {
             radius = cornerRadius.value
         }
 
-        val (x, y, w, h) = arrayOf(round(bounds.x), round(bounds.y), round(bounds.width), round(bounds.height))
+        val (x, y, w, h) = if (round) {
+            arrayOf(round(bounds.x), round(bounds.y), round(bounds.width), round(bounds.height))
+        } else {
+            arrayOf(bounds.x, bounds.y, bounds.width, bounds.height)
+        }
 
         // Background
         nvgBeginPath(ctx)
