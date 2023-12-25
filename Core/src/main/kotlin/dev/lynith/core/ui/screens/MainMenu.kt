@@ -19,15 +19,16 @@ class MainMenu : Screen() {
     }
 
     override fun init() {
-        layout.properties.apply {
+        layout {
             direction = LayoutProperties.Direction.Vertical
             align = LayoutProperties.Align.Center
             justify = LayoutProperties.Justify.Center
         }
 
+        val block = Block()
         children (
-            Block().configure {
-                layout.properties.apply {
+            block.configure {
+                layout {
                     direction = LayoutProperties.Direction.Vertical
                     align = LayoutProperties.Align.Center
                     justify = LayoutProperties.Justify.Center
@@ -38,7 +39,7 @@ class MainMenu : Screen() {
                 }
 
                 bounds = BoundingBox(
-                    width = 500.px
+                    width = 300.px
                 )
 
                 children(
@@ -49,7 +50,7 @@ class MainMenu : Screen() {
                             fontStyles.change {
                                 size = 56.px
                                 weight = Font.FontWeight.BOLD
-                                align = Font.FontAlign.LEFT
+                                align = Font.FontAlign.CENTER
                                 letterSpacing = 5.px
                             }
                         }
@@ -64,6 +65,15 @@ class MainMenu : Screen() {
                     },
 
                     Button().configure {
+                        text = "Test Button"
+
+                        on<Clicked> {
+                            bounds.height = if (bounds.height == 70.px) 30.px else 70.px
+                            parent?.reposition()
+                        }
+                    },
+
+                    Button().configure {
                         text = "Multiplayer"
 
                         on<Clicked> {
@@ -72,11 +82,11 @@ class MainMenu : Screen() {
                     },
 
                     Block().configure {
-                        layout.properties.apply {
+                        layout {
                             direction = LayoutProperties.Direction.Horizontal
                             align = LayoutProperties.Align.Center
                             justify = LayoutProperties.Justify.Center
-                            childWidth = LayoutProperties.ChildSize.Fixed
+                            childWidth = LayoutProperties.ChildSize.Fill
                             gap = LayoutProperties.Gap(
                                 x = 10.px
                             )

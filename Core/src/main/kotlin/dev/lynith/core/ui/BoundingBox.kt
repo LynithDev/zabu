@@ -38,6 +38,11 @@ class BoundingBox(
         return BoundingBox(x, y, width, height)
     }
 
+    fun configure(func: BoundingBox.() -> Unit): BoundingBox {
+        func()
+        return this
+    }
+
     override fun toString(): String {
         return "BoundingBox@${hashCode()}(x=$x, y=$y, width=$width, height=$height)"
     }

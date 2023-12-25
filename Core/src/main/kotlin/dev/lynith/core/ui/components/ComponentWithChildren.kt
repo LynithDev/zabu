@@ -5,6 +5,7 @@ import dev.lynith.core.ui.components.callbacks.Destroyed
 import dev.lynith.core.ui.components.callbacks.WindowResized
 import dev.lynith.core.ui.layouts.DefaultLayout
 import dev.lynith.core.ui.layouts.Layout
+import dev.lynith.core.ui.layouts.LayoutProperties
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.styles.ComponentWithChildrenStyles
 import dev.lynith.core.ui.styles.impl.Border
@@ -14,7 +15,16 @@ import java.util.concurrent.CopyOnWriteArrayList
 abstract class ComponentWithChildren<C : Component<C, S>, S : ComponentWithChildrenStyles<C, S>> : Component<C, S>() {
 
     val children: MutableList<Component<*, *>> = CopyOnWriteArrayList()
-    val layout: Layout = DefaultLayout()
+    var layout: Layout = DefaultLayout()
+
+    fun reposition() {
+        layout.position(this)
+    }
+
+    fun layout(func: LayoutProperties.() -> Unit): C {
+        func(layout.properties)
+        return this as C
+    }
 
     override fun postRender(mouseX: Int, mouseY: Int, delta: Float) {
         for (child in children) {
@@ -56,7 +66,7 @@ abstract class ComponentWithChildren<C : Component<C, S>, S : ComponentWithChild
     fun children(vararg children: Component<*, *>) {
         for (c in children) {
             child(c.apply {
-                parent = this
+                parent = this@ComponentWithChildren
             })
         }
     }

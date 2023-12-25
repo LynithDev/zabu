@@ -9,7 +9,7 @@ import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.units.px
 
 abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoVGHelper() {
-    open var parent: Component<*, *>? = null
+    open var parent: ComponentWithChildren<*, *>? = null
     open var bounds: BoundingBox = BoundingBox()
 
     /**
