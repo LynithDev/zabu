@@ -5,9 +5,13 @@ import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Screen
 import dev.lynith.core.ui.components.callbacks.Clicked
+import dev.lynith.core.ui.components.callbacks.WindowResized
+import dev.lynith.core.ui.components.impl.Block
 import dev.lynith.core.ui.components.impl.Button
 import dev.lynith.core.ui.components.impl.Label
+import dev.lynith.core.ui.layouts.LayoutProperties
 import dev.lynith.core.ui.nvg.Font
+import dev.lynith.core.ui.styles.impl.Position
 
 class MainMenu : Screen() {
 
@@ -16,54 +20,80 @@ class MainMenu : Screen() {
     }
 
     override fun init() {
+        layout.properties.apply {
+            direction = LayoutProperties.Direction.Vertical
+            align = LayoutProperties.Align.Center
+            justify = LayoutProperties.Justify.Center
+        }
+
         children (
-            Label().configure {
-                text = "ZABU"
+            Block().configure {
+                styles.position = Position(Position.PositionType.ABSOLUTE)
 
                 bounds = BoundingBox(
-                    x = 100f,
-                    y = 110f,
+                    width = Platform.renderer.windowWidth.toFloat(),
+                    height = Platform.renderer.windowHeight.toFloat()
                 )
 
-                style {
-                    fontStyles.change {
-                        size = 48f
-                        weight = Font.FontWeight.BOLD
-                        align = Font.FontAlign.LEFT
-                        letterSpacing = 5f
+                on<WindowResized> {
+                    bounds = BoundingBox(
+                        width = Platform.renderer.windowWidth.toFloat(),
+                        height = Platform.renderer.windowHeight.toFloat()
+                    )
+                }
+
+                children(
+                    Button().configure {
+                        text = "Settings"
+
+                        on<Clicked> {
+                            Platform.renderer.displayOptionsScreen()
+                        }
                     }
-                }
-            },
-
-            Button().configure {
-                text = "Singleplayer"
-
-                bounds = BoundingBox(
-                    x = 100f,
-                    y = 160f,
-                    width = 150f,
-                    height = 40f
                 )
-
-                on<Clicked> {
-                    Platform.renderer.setScreen(IRenderer.GuiType.SINGLEPLAYER_SELECTOR, toMCScreen())
-                }
             },
 
-            Button().configure {
-                text = "Multiplayer"
+            Block().configure {
+                layout.properties.apply {
+                    direction = LayoutProperties.Direction.Vertical
+                    align = LayoutProperties.Align.Center
+                    justify = LayoutProperties.Justify.Center
+                    gap = LayoutProperties.Gap(
+                        y = 5f
+                    )
+                }
 
-                bounds = BoundingBox(
-                    x = 100f,
-                    y = 210f,
-                    width = 150f,
-                    height = 40f
+                children(
+                    Label().configure {
+                        text = "ZABU"
+
+                        style {
+                            fontStyles.change {
+                                size = 56f
+                                weight = Font.FontWeight.BOLD
+                                align = Font.FontAlign.LEFT
+                                letterSpacing = 5f
+                            }
+                        }
+                    },
+
+                    Button().configure {
+                        text = "Singleplayer"
+
+                        on<Clicked> {
+                            Platform.renderer.displaySingleplayerSelectorScreen()
+                        }
+                    },
+
+                    Button().configure {
+                        text = "Multiplayer"
+
+                        on<Clicked> {
+                            Platform.renderer.displayMultiplayerSelectorScreen()
+                        }
+                    },
                 )
-
-                on<Clicked> {
-                    Platform.renderer.setScreen(IRenderer.GuiType.MULTIPLAYER_SELECTOR, toMCScreen())
-                }
-            },
+            }
         )
     }
 }

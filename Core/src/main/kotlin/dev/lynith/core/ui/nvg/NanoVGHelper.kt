@@ -2,12 +2,12 @@ package dev.lynith.core.ui.nvg
 
 import dev.lynith.core.Platform
 import dev.lynith.core.ui.BoundingBox
-import dev.lynith.core.ui.styles.impl.Border
-import dev.lynith.core.ui.styles.impl.Color
-import dev.lynith.core.ui.styles.impl.CornerRadius
-import dev.lynith.core.ui.styles.impl.FontStyles
+import dev.lynith.core.ui.styles.impl.*
 import org.lwjgl.nanovg.NVGColor
+import org.lwjgl.nanovg.NVGPaint
 import org.lwjgl.nanovg.NanoVG.*
+import org.lwjgl.opengl.GL11
+import kotlin.math.round
 
 open class NanoVGHelper {
 
@@ -58,10 +58,14 @@ open class NanoVGHelper {
             radius = cornerRadius.value
         }
 
+        val (x, y, w, h) = arrayOf(round(bounds.x), round(bounds.y), round(bounds.width), round(bounds.height))
+
         // Background
         nvgBeginPath(ctx)
         nvgFillColor(ctx, createColor(color))
-        nvgRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius.toFloat())
+        nvgPathWinding(ctx, NVG_CCW)
+        nvgRoundedRect(ctx, x, y, w, h, radius.toFloat())
+        nvgPathWinding(ctx, NVG_CW)
         nvgFill(ctx)
         nvgClosePath(ctx)
 
@@ -69,44 +73,27 @@ open class NanoVGHelper {
         if (border != null && border.thickness > 0) {
             nvgBeginPath(ctx)
             nvgStrokeColor(ctx, createColor(border.color))
-            nvgStrokeWidth(ctx, border.thickness.toFloat())
-            nvgRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius.toFloat())
+            nvgStrokeWidth(ctx, border.thickness)
+            nvgPathWinding(ctx, NVG_CCW)
+            nvgRoundedRect(ctx, x, y, w, h, radius.toFloat())
+            nvgPathWinding(ctx, NVG_CW)
             nvgStroke(ctx)
             nvgClosePath(ctx)
         }
     }
 
-    fun circle(centerX: Float, centerY: Float, radius: Float, color: Color) {
-        nvgBeginPath(ctx)
-        nvgFillColor(ctx, createColor(color))
-        nvgCircle(ctx, centerX, centerY, radius)
-        nvgFill(ctx)
-        nvgClosePath(ctx)
-    }
-
-    fun text(text: String, left: Float, top: Float, size: Float, color: Color, font: Font) {
-        nvgBeginPath(ctx)
-        nvgFontBlur(ctx, 0.1f)
-        nvgFontFace(ctx, font.formatted())
-        nvgFontSize(ctx, size)
-        nvgTextAlign(ctx, NVG_ALIGN_LEFT or NVG_ALIGN_MIDDLE)
-        nvgFillColor(ctx, createColor(color))
-        nvgText(ctx, left, top, text)
-        nvgClosePath(ctx)
-    }
-
     fun text(text: String, bounds: BoundingBox, fontStyles: FontStyles, color: Color) {
         nvgBeginPath(ctx)
-        nvgFontBlur(ctx, 0.1f)
+//        nvgFontBlur(ctx, 0.5f / fontStyles.size)
         nvgFontFace(ctx, Platform.fontHelper.getOrDefault(fontStyles.family, fontStyles.weight).formatted())
         nvgFontSize(ctx, fontStyles.size)
-        nvgTextAlign(ctx, textAlign(fontStyles.align) or NVG_ALIGN_BOTTOM)
+        nvgTextAlign(ctx, textAlign(fontStyles.align) or NVG_ALIGN_BASELINE)
         nvgFillColor(ctx, createColor(color))
         nvgTextLetterSpacing(ctx, fontStyles.letterSpacing)
         nvgTextBox(
             ctx,
-            bounds.x,
-            bounds.y + textHeight(text, fontStyles),
+            round(bounds.x),
+            round(bounds.y + textHeight(text, fontStyles)),
             bounds.width,
             text
         )
@@ -131,7 +118,7 @@ open class NanoVGHelper {
         nvgTextLineHeight(ctx, styles.lineHeight)
         nvgTextBoxBounds(ctx, 0f, 0f, textWidth(text, styles), text, bounds)
 
-        return (bounds[3] - bounds[1]) + font.offset
+        return (bounds[3] - bounds[1]) - styles.size / font.offset
     }
 
     fun textAlign(align: Font.FontAlign): Int {
@@ -141,4 +128,36 @@ open class NanoVGHelper {
             Font.FontAlign.RIGHT -> NVG_ALIGN_RIGHT
         }
     }
+
+    fun boxShadow(bounds: BoundingBox, shadow: Shadow) {
+        val paint = NVGPaint.create()
+
+        nvgBoxGradient(ctx,
+            bounds.x + shadow.offsetX - shadow.spread,
+            bounds.y + shadow.offsetY - shadow.spread,
+            bounds.width + (2 * shadow.spread),
+            bounds.height + (2 * shadow.spread),
+            shadow.radius.value + shadow.spread,
+            shadow.blur,
+            createColor(shadow.innerColor),
+            createColor(shadow.outerColor),
+            paint
+        )
+
+        nvgBeginPath(ctx)
+        nvgPathWinding(ctx, NVG_SOLID)
+        nvgRoundedRect(ctx,
+            bounds.x + shadow.offsetX - shadow.spread - shadow.blur,
+            bounds.y + shadow.offsetY - shadow.spread - shadow.blur,
+            bounds.width + (2 * shadow.spread) + (2 * shadow.blur),
+            bounds.height + (2 * shadow.spread) + (2 * shadow.blur),
+            shadow.radius.value + shadow.spread
+        )
+        nvgPathWinding(ctx, NVG_HOLE)
+        nvgRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, shadow.radius.value.toFloat())
+        nvgFillPaint(ctx, paint)
+        nvgFill(ctx)
+        nvgClosePath(ctx)
+    }
+
 }

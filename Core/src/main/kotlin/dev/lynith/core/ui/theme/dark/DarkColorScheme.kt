@@ -17,6 +17,9 @@ class DarkColorScheme : AbstractColorScheme() {
     override val backgroundDisabled: Color = Color(170, 170, 170)
     override val backgroundHover: Color = Color(240, 240, 240)
 
+    override val border: Color = Color(0, 0, 0)
+    override val borderSecondary: Color = Color(10, 10, 10)
+
     override val foreground: Color = Color(0, 0, 0)
     override val foregroundSecondary: Color = Color(10, 10, 10)
     override val foregroundTertiary: Color = Color(20, 20, 20)

@@ -35,6 +35,14 @@ class Color : Style<Color> {
             alpha = (alpha * 255).toInt()
         )
 
+    constructor(red: Int, green: Int, blue: Int, alpha: Float)
+        : this(
+            red = red,
+            green = green,
+            blue = blue,
+            alpha = (alpha * 255).toInt()
+        )
+
     @JvmOverloads
     constructor(rgb: Float, alpha: Float = 1f)
         : this(rgb, rgb, rgb, alpha)
@@ -45,5 +53,10 @@ class Color : Style<Color> {
         get() {
             return "rgba($red, $green, $blue, $alpha)"
         }
+
+    companion object {
+        @JvmStatic
+        val TRANSPARENT = Color(0, 0, 0, 0)
+    }
 
 }

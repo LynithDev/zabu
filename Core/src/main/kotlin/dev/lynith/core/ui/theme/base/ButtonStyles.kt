@@ -14,16 +14,43 @@ open class ButtonStyles(
     theme
 ) {
 
-    open var backgroundColor = theme.colorScheme.background
+    open var backgroundColor = Color(250, 251, 252)
     open var foregroundColor = theme.colorScheme.foreground
 
+    open var boxShadow = Shadow(
+        offsetY = 2f,
+        radius = CornerRadius(
+            value = 4
+        ),
+        blur = 0f,
+        innerColor = Color(27, 31, 35, 0.04f),
+        outerColor = Color(27, 31, 35, 0f)
+    )
+
+    open var innerBoxShadow = Shadow(
+        offsetY = 2f,
+        radius = CornerRadius(
+            value = 4
+        ),
+        blur = 0f,
+        innerColor = Color(255, 255, 255, 0.25f),
+        outerColor = Color(255, 255, 255, 0.04f)
+    )
+
+    open var padding: Padding = Padding(
+        top = 6,
+        right = 16,
+        bottom = 6,
+        left = 16
+    )
+
     open var border = Border(
-        thickness = 2,
-        color = theme.colorScheme.backgroundTertiary
+        thickness = 2f,
+        color = theme.colorScheme.border
     )
 
     open var cornerRadius = CornerRadius(
-        value = 7
+        value = 4
     )
 
     open var fontStyles = FontStyles(

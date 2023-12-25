@@ -1,6 +1,7 @@
 package dev.lynith.core.bridge.gui
 
 import dev.lynith.core.ui.components.Screen
+import dev.lynith.core.ui.screens.MainMenu
 
 interface IRenderer {
 
@@ -9,6 +10,10 @@ interface IRenderer {
 
     fun setScreen(screen: GuiType?, vararg args: Any?): Boolean
     fun setScreen(screen: Screen?, vararg args: Any?): Boolean
+
+    fun displayOptionsScreen(parent: Screen = MainMenu())
+    fun displaySingleplayerSelectorScreen(parent: Screen = MainMenu())
+    fun displayMultiplayerSelectorScreen(parent: Screen = MainMenu())
 
     val windowWidth: Int
     val windowHeight: Int
@@ -21,6 +26,7 @@ interface IRenderer {
         SINGLEPLAYER_SELECTOR,
         INGAME,
         CUSTOM,
+        OPTIONS,
         UNKNOWN;
 
         var clazz: Class<*>? = null

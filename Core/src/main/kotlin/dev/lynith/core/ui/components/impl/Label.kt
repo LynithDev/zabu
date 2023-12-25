@@ -22,6 +22,9 @@ class Label : Component<Label, LabelStyles>() {
     override fun init() {
         if (text.isNotEmpty() && bounds.width <= 0f) {
             bounds.width = textWidth(text, styles.fontStyles)
+        }
+
+        if (text.isNotEmpty() && bounds.height <= 0f) {
             bounds.height = textHeight(text, styles.fontStyles)
         }
     }

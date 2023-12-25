@@ -10,11 +10,11 @@ class FontHelper {
 
     init {
         addAll(
-            Font("Inter", "/fonts/inter/Inter-Light.ttf", Font.FontWeight.LIGHT, 1f),
-            Font("Inter", "/fonts/inter/Inter-Regular.ttf", Font.FontWeight.REGULAR, 1f),
-            Font("Inter", "/fonts/inter/Inter-Medium.ttf", Font.FontWeight.MEDIUM, 1f),
-            Font("Inter", "/fonts/inter/Inter-SemiBold.ttf", Font.FontWeight.SEMIBOLD, 1f),
-            Font("Inter", "/fonts/inter/Inter-Bold.ttf", Font.FontWeight.BOLD, 1f),
+            Font("Inter", "/fonts/inter/Inter-Light.ttf", Font.FontWeight.LIGHT, 4f),
+            Font("Inter", "/fonts/inter/Inter-Regular.ttf", Font.FontWeight.REGULAR, 4f),
+            Font("Inter", "/fonts/inter/Inter-Medium.ttf", Font.FontWeight.MEDIUM, 4f),
+            Font("Inter", "/fonts/inter/Inter-SemiBold.ttf", Font.FontWeight.SEMIBOLD, 4f),
+            Font("Inter", "/fonts/inter/Inter-Bold.ttf", Font.FontWeight.BOLD, 4f),
         )
     }
 

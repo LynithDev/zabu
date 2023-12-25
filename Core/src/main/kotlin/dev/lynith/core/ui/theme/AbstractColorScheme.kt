@@ -16,6 +16,9 @@ abstract class AbstractColorScheme {
     abstract val backgroundDisabled: Color
     abstract val backgroundHover: Color
 
+    abstract val border: Color
+    abstract val borderSecondary: Color
+
     abstract val foreground: Color
     abstract val foregroundSecondary: Color
     abstract val foregroundTertiary: Color

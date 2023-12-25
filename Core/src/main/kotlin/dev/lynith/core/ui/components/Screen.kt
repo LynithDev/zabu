@@ -1,53 +1,29 @@
 package dev.lynith.core.ui.components
 
-import dev.lynith.core.ClientStartup
 import dev.lynith.core.Platform
-import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.bridge.gui.MCScreen
+import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.callbacks.Destroyed
 import dev.lynith.core.ui.components.callbacks.Pressed
 import dev.lynith.core.ui.components.callbacks.Released
-import dev.lynith.core.ui.components.features.Children
+import dev.lynith.core.ui.components.callbacks.WindowResized
 import dev.lynith.core.ui.styles.ComponentStyles
+import dev.lynith.core.ui.styles.ComponentWithChildrenStyles
 import java.util.concurrent.CopyOnWriteArrayList
 
-abstract class Screen : Component<Screen, ComponentStyles.EmptyStyles<Screen>>(), Children {
-    override val children: MutableList<Component<*, *>> = CopyOnWriteArrayList()
+abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyles.EmptyStyles<Screen>>() {
     var shouldPauseGame: Boolean = false
 
-    override fun postRender(mouseX: Int, mouseY: Int, delta: Float) {
-        for (child in children) {
-            child.render(mouseX, mouseY, delta)
-        }
-
-        super.postRender(mouseX, mouseY, delta)
-    }
+    override var bounds: BoundingBox = BoundingBox(
+        width = Platform.renderer.windowWidth.toFloat(),
+        height = Platform.renderer.windowHeight.toFloat()
+    )
 
     override fun render(mouseX: Int, mouseY: Int, delta: Float) {
-
+        // Empty
     }
 
-    override fun postInit() {
-        super.postInit()
-
-        on<Destroyed> {
-            clearChildren()
-        }
-
-        for (child in children) {
-            child.init()
-        }
-    }
-
-    override fun emit(event: ComponentEvent) {
-        super.emit(event)
-
-        for (child in children) {
-            child.emit(event)
-        }
-    }
-
-    override var styles = ComponentStyles.EmptyStyles(this)
+    override var styles = ComponentWithChildrenStyles.EmptyStyles(this)
 
     fun toMCScreen(): MCScreen {
         return WrappedScreen(this)
@@ -79,6 +55,17 @@ abstract class Screen : Component<Screen, ComponentStyles.EmptyStyles<Screen>>()
 
         override fun shouldPauseGame(): Boolean {
             return screen.shouldPauseGame
+        }
+
+        override fun resized() {
+            super.resized()
+
+            screen.bounds = BoundingBox(
+                width = Platform.renderer.windowWidth.toFloat(),
+                height = Platform.renderer.windowHeight.toFloat()
+            )
+
+            screen.emit(WindowResized(screen.bounds.width, screen.bounds.height))
         }
 
         override fun closed() {
