@@ -99,12 +99,6 @@ public class AgentMain {
             return;
         }
 
-        // I don't know when this was fixed, but it was fixed at some point.
-        // I think it's safe to assume 1.12.2 and below don't require this fix.
-        if (getLaunchedVersion() <= 12) {
-            return;
-        }
-
         try {
             inst.addTransformer(new ClassFileTransformer() {
 
