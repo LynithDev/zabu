@@ -3,6 +3,7 @@ package dev.lynith.core.ui.callbacks
 import dev.lynith.core.Logger
 import dev.lynith.core.events.Event
 import dev.lynith.core.events.EventBus
+import dev.lynith.core.ui.callbacks.impl.CursorMoved
 import dev.lynith.core.ui.components.Component
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -25,9 +26,13 @@ class ComponentEventBus {
         val callbacks = events[event.javaClass] ?: return
 
         for (callback in callbacks) {
-            callback.call(event)
-            if (callback.once) {
-                events[event.javaClass]?.remove(callback)
+            if (event.shouldPass(callback.component)) {
+                callback.callback.invoke(event)
+                event.postPass(callback.component)
+
+                if (callback.once) {
+                    events[event.javaClass]?.remove(callback)
+                }
             }
         }
     }
@@ -37,14 +42,6 @@ class ComponentEventBus {
         val callback: (E) -> Unit,
         var once: Boolean = false
     ) {
-        fun call(event: E) {
-            if (event.shouldPass(component)) {
-                callback.invoke(event)
-                event.postPass(component)
-            }
-
-        }
-
         override fun toString(): String {
             return "StoredEvent(callback=${callback.javaClass.simpleName}, once=$once)"
         }

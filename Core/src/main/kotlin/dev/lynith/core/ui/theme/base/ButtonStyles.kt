@@ -16,6 +16,8 @@ open class ButtonStyles(
 
     open var backgroundColor = Color(250, 251, 252)
     open var foregroundColor = theme.colorScheme.foreground
+    open var hoveredForegroundColor = theme.colorScheme.foregroundHover
+    open var hoveredBackgroundColor = theme.colorScheme.backgroundHover
 
     open var boxShadow = Shadow(
         offsetY = 2f,

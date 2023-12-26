@@ -10,13 +10,7 @@ class Pressed(
 ) : ComponentEvent() {
 
     override fun shouldPass(component: Component<*, *>): Boolean {
-        val contains = component.bounds.contains(mouseX, mouseY)
-
-        if (contains) {
-            component.customProperties["pressed"] = true
-        }
-
-        return contains
+        return component.bounds.contains(mouseX, mouseY)
     }
 
 }

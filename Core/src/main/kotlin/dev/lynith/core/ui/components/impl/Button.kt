@@ -1,7 +1,9 @@
 package dev.lynith.core.ui.components.impl
 
 import dev.lynith.core.Platform
+import dev.lynith.core.ui.callbacks.impl.CursorMoved
 import dev.lynith.core.ui.components.Component
+import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.theme.base.ButtonStyles
 
 class Button : Component<Button, ButtonStyles>() {
@@ -12,7 +14,7 @@ class Button : Component<Button, ButtonStyles>() {
 
         rectangle(
             bounds = bounds,
-            color = styles.backgroundColor,
+            color = if (mouseOver) styles.hoveredBackgroundColor else styles.backgroundColor,
             border = styles.border,
             cornerRadius = styles.cornerRadius
         )
@@ -25,7 +27,7 @@ class Button : Component<Button, ButtonStyles>() {
                 y = bounds.y + (bounds.height / 2) - (textHeight(text, styles.fontStyles) / 2)
             ),
             fontStyles = styles.fontStyles,
-            color = styles.foregroundColor
+            color = if (mouseOver) styles.hoveredForegroundColor else styles.foregroundColor
         )
     }
 

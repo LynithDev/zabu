@@ -45,10 +45,13 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyle
         override fun render(mouseX: Int, mouseY: Int, delta: Float) {
             super.render(mouseX, mouseY, delta)
 
-            if (prevX != mouseX || prevY != mouseY) {
-                prevX = mouseX
-                prevY = mouseY
-                screen.emit(CursorMoved(mouseX, mouseY))
+            val mouseXScaled = mouseX * Platform.renderer.scaleFactor
+            val mouseYScaled = mouseY * Platform.renderer.scaleFactor
+
+            if (prevX != mouseXScaled || prevY != mouseYScaled) {
+                prevX = mouseXScaled
+                prevY = mouseYScaled
+                screen.emit(CursorMoved(prevX!!, prevY!!))
             }
 
             screen.wrappedRender(mouseX, mouseY, delta)
@@ -67,7 +70,6 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyle
         override fun mouseReleased(mouseX: Int, mouseY: Int, button: Int) {
             super.mouseReleased(mouseX, mouseY, button)
             screen.emit(Released(mouseX, mouseY, button))
-            screen.emit(Clicked(mouseX, mouseY, button))
         }
 
         override fun shouldPauseGame(): Boolean {

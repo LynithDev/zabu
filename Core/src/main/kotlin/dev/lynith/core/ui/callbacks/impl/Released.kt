@@ -13,11 +13,4 @@ class Released(
         return component.bounds.contains(mouseX, mouseY)
     }
 
-    override fun postPass(component: Component<*, *>) {
-        if (component.customProperties.contains("pressed") && component.customProperties["pressed"] == true) {
-            component.customProperties.remove("pressed")
-            component.emit(Clicked(mouseX, mouseY, button))
-        }
-    }
-
 }

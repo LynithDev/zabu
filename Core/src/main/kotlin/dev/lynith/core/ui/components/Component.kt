@@ -4,6 +4,10 @@ import dev.lynith.core.events.EventBus
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.callbacks.ComponentEvent
 import dev.lynith.core.ui.callbacks.ComponentEventBus
+import dev.lynith.core.ui.callbacks.impl.Clicked
+import dev.lynith.core.ui.callbacks.impl.CursorMoved
+import dev.lynith.core.ui.callbacks.impl.Pressed
+import dev.lynith.core.ui.callbacks.impl.Released
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.styles.impl.Border
@@ -13,6 +17,7 @@ import dev.lynith.core.ui.units.px
 abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoVGHelper() {
     open var parent: ComponentWithChildren<*, *>? = null
     open var screen: Screen? = null
+    open var mouseOver: Boolean = false
 
     open var bounds: BoundingBox = BoundingBox()
 
@@ -52,7 +57,22 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     // ---- RENDER ----
 
     // ---- INIT ----
-    protected open fun preInit() {}
+    protected open fun preInit() {
+        on<Pressed> {
+            customProperties["pressed"] = true
+        }
+
+        on<Released> {
+            if (customProperties.contains("pressed") && customProperties["pressed"] == true) {
+                customProperties.remove("pressed")
+                emit(Clicked(it.mouseX, it.mouseY, it.button))
+            }
+        }
+
+        on<CursorMoved> {
+            mouseOver = bounds.contains(it.mouseX, it.mouseY)
+        }
+    }
     abstract fun init()
     protected open fun postInit() {}
 

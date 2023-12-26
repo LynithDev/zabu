@@ -31,22 +31,7 @@ class MainMenu : Screen() {
             justify = LayoutProperties.Justify.Center
         }
 
-        val rectangle = CustomWidget().configure {
-            bounds = BoundingBox(
-                width = 0.px,
-                height = 300.px
-            )
-
-            styles.position = Position(Position.PositionType.ABSOLUTE)
-
-            onRender {
-                Platform.nvg.rectangle(bounds, Color(255, 0, 0))
-            }
-        }
-
         children (
-            rectangle,
-
             Block().configure {
                 layout {
                     direction = LayoutProperties.Direction.Vertical
@@ -81,47 +66,6 @@ class MainMenu : Screen() {
 
                         on<Clicked> {
                             Platform.renderer.displaySingleplayerSelectorScreen()
-                        }
-                    },
-
-                    Button().configure {
-                        text = "Play"
-
-                        val becomeSkinny = Animation(1000.ms, Easing.SineInOut()).configure {
-                            onUpdate { progress ->
-                                rectangle.bounds.configure {
-                                    width = 300.px * (1 - progress)
-                                }
-                            }
-                        }
-
-                        val becomeFatter = Animation(1000.ms, Easing.SineInOut()).configure {
-                            onUpdate { progress ->
-                                rectangle.bounds.configure {
-                                    width = 300.px * progress
-                                }
-                            }
-                        }
-
-                        becomeSkinny.onFinish { becomeFatter.animate() }
-                        becomeFatter.onFinish { becomeSkinny.animate() }
-
-                        on<Clicked> {
-                            if (becomeFatter.isRunning()) {
-                                if (becomeFatter.isPaused()) {
-                                    becomeFatter.resume()
-                                } else {
-                                    becomeFatter.pause()
-                                } // terrible but its a proof of concept
-                            } else if (becomeSkinny.isRunning()) {
-                                if (becomeSkinny.isPaused()) {
-                                    becomeSkinny.resume()
-                                } else {
-                                    becomeSkinny.pause()
-                                }
-                            } else {
-                                becomeFatter.animate()
-                            }
                         }
                     },
 
