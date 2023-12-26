@@ -27,7 +27,14 @@ public class MixinMinecraft {
 
     @Inject(method = "setScreen", at = @At("RETURN"))
     public void setScreen(Screen screen, CallbackInfo ci) {
-        String clazz = screen.getClass().getName();
+        String clazz;
+
+        try {
+            clazz = screen.getClass().getName();
+        } catch (NullPointerException ignored) {
+            clazz = null;
+        }
+
         Platform.getEventBus().emit(new MinecraftScreenChangedEvent(clazz));
     }
 

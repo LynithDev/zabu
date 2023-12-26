@@ -37,9 +37,14 @@ public class Renderer implements IRenderer {
     @Override
     public GuiType getCurrentScreen() {
         GuiType type = GuiType.UNKNOWN;
+        Screen screen = MinecraftClient.getInstance().currentScreen;
+
+        if (screen == null) {
+            return GuiType.INGAME;
+        }
 
         for (Map.Entry<Class<?>, GuiType> entry : getScreenMap().entrySet()) {
-            if (MinecraftClient.getInstance().currentScreen.getClass().equals(entry.getKey())) {
+            if (screen.getClass().equals(entry.getKey())) {
                 type = entry.getValue();
                 break;
             }
