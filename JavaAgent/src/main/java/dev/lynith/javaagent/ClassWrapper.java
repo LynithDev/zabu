@@ -17,7 +17,7 @@ public class ClassWrapper extends URLClassLoader {
 
     private final ClassLoader upstream;
 
-    ClassWrapper(URL[] urls) {
+    public ClassWrapper(URL[] urls) {
         super(urls);
         this.upstream = getSystemClassLoader();
 

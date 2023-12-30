@@ -1,6 +1,8 @@
 package dev.lynith.javaagent;
 
 import dev.lynith.core.Logger;
+import dev.lynith.javaagent.injectors.FabricInjector;
+import dev.lynith.javaagent.injectors.VanillaInjector;
 import dev.lynith.javaagent.mixin.ClientMixinTransformer;
 import dev.lynith.javaagent.patches.PackageAccessVisitor;
 import dev.lynith.javaagent.transformers.LegacyVanillaTransformer;
@@ -35,46 +37,37 @@ public class AgentMain {
         logger.log("Agent starting up");
         if (!premain) logger.log("## WARNING ##: Agent started dynamically. This is not recommended and *WILL* cause issues.");
 
-        try(ClassWrapper ignored = new ClassWrapper(new URL[0])) {
-            if (inst == null) {
-                logger.error("Instrumentation instance is null");
-                return;
-            }
-
-            boolean transformSuccess = transformMain(inst);
-            if (!transformSuccess) return;
-
-            fixPackageAccessors(inst); // 1.13+
-            inst.addTransformer(new ClientMixinTransformer(), true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (inst == null) {
+            logger.error("Instrumentation instance is null");
+            return;
         }
-    }
 
-    private static boolean transformMain(Instrumentation inst) {
-        // Vanilla
-        try {
-            Class<?> main = Class.forName("net.minecraft.client.main.Main");
-            IStartTransformer transformer;
+        IInject[] injectors = new IInject[] {
+            new FabricInjector(),
+            new VanillaInjector(),
+        };
 
-            if (getLaunchedVersion() != null && getLaunchedVersion() <= 12) {
-                transformer = new LegacyVanillaTransformer();
-            } else if (getLaunchedVersion() != null && getLaunchedVersion() >= 13) {
-                transformer = new ModernVanillaTransformer();
-            } else {
-                logger.error("Unable to determine Minecraft version. Aborting...");
-                return false;
+        boolean success = false;
+        for (IInject injector : injectors) {
+            try {
+                Class.forName(injector.getClassName());
+                success = injector.inject(inst);
+                if (success) {
+                    logger.log("Injected into the " + injector.getEnvironmentName() + " environment successfully");
+                    break;
+                }
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+                // Class not found, continue to the next injector
             }
+        }
 
-            inst.addTransformer(transformer, true);
-            inst.retransformClasses(main);
-            inst.removeTransformer(transformer);
-            return true;
+        if (!success) {
+            logger.error("Unable to find a main class to inject to. Aborting...");
+            return;
+        }
 
-        } catch (Exception ignored) {}
-
-        logger.error("Unable to find a main class. Aborting...");
-        return false;
+        logger.log("Agent injected successfully");
     }
 
     // I am starting to hate Java and my life
@@ -94,7 +87,7 @@ public class AgentMain {
         return null;
     }
 
-    private static void fixPackageAccessors(Instrumentation inst) {
+    public static void fixPackageAccessors(Instrumentation inst) {
         if (inst == null || System.getProperty("fabric.dli.env") == null || getLaunchedVersion() == null) {
             return;
         }

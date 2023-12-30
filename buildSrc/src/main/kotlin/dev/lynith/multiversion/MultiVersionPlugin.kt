@@ -16,6 +16,8 @@ import dev.lynith.multiversion.tasks.ExportTask
 import dev.lynith.multiversion.tasks.MergeTask
 import dev.lynith.multiversion.tasks.RemapTask
 import dev.lynith.multiversion.tasks.StartTask
+import org.gradle.api.execution.TaskExecutionGraph
+import org.gradle.kotlin.dsl.accessors.runtime.addDependencyTo
 
 class MultiVersionPlugin : Plugin<Project> {
 
@@ -28,6 +30,13 @@ class MultiVersionPlugin : Plugin<Project> {
         val extension = target.project.extensions.create("multiversion", MultiVersionExtension::class.java)
 
         target.afterEvaluate {
+//            gradle.taskGraph.whenReady {
+//                if (hasTask(":Versions:${extension.minecraftVersion}:start-fabric-${extension.minecraftVersion}")) {
+//                    val fabric = configurations.getByName("fabric")
+//                    fabric.dependencies.add(target.dependencies.create("net.fabricmc:fabric-loader:${extension.fabricVersion}"))
+//                }
+//            }
+
             val toolchainService = target.extensions.getByType(JavaToolchainService::class.java)
             val java = target.extensions.getByType(JavaPluginExtension::class.java)
 
@@ -85,7 +94,7 @@ class MultiVersionPlugin : Plugin<Project> {
                 }
 
                 buildTargets.forEach { entry ->
-                    register("remap-${entry.key}-${entry.value}", RemapTask::class.java) {
+                    register("remap-${entry.key}-${extension.minecraftVersion}", RemapTask::class.java) {
                         group = "client-${target.name}"
                         description = "Remap the ${entry.key} ${entry.value} client"
 
@@ -94,14 +103,14 @@ class MultiVersionPlugin : Plugin<Project> {
                         dependsOn("merge-${target.name}")
                     }
 
-                    register("start-${entry.key}-${entry.value}", StartTask::class.java) {
+                    register("start-${entry.key}-${extension.minecraftVersion}", StartTask::class.java) {
                         group = "client-${target.name}"
                         description = "Start the ${entry.key} ${entry.value} client"
 
                         mapping = entry.key
-                        version = entry.value
+                        version = extension.minecraftVersion
 
-                        dependsOn("remap-${entry.key}-${entry.value}")
+                        dependsOn("remap-${entry.key}-${extension.minecraftVersion}")
                     }
                 }
 
@@ -128,6 +137,10 @@ class MultiVersionPlugin : Plugin<Project> {
                     add("implementation", "org.lwjgl:lwjgl-stb:3.3.1")
                 }
 
+                if (extension.fabricVersion != null) {
+                    add("modImplementation", "net.fabricmc:fabric-loader:${extension.fabricVersion}")
+                }
+
                 add("minecraft", "com.mojang:minecraft:${extension.minecraftVersion}")
                 add("mappings",
                     if (extension.legacy) "net.legacyfabric:yarn:${extension.minecraftVersion}+build.+"
@@ -147,10 +160,6 @@ class MultiVersionPlugin : Plugin<Project> {
                 mixin.useLegacyMixinAp.set(false)
 
                 buildMappings.forEach { target ->
-                    if (target.key == "fabric" && extension.fabricVersion == null) {
-                        return@forEach
-                    }
-
                     runConfigs.register("-${target.key}-${extension.minecraftVersion}") {
                         runDir("run")
 

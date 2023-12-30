@@ -24,7 +24,7 @@ class Logger @JvmOverloads constructor(private val name: String = "unknown") {
     private fun format(message: String, vararg args: Any): String {
         var message = message
         for (arg in args) {
-            val argString = arg.toString() ?: "null"
+            val argString = arg.toString()
             message = message.replaceFirst("\\{\\}".toRegex(), argString)
         }
         return message
