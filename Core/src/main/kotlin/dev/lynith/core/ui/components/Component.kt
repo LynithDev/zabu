@@ -1,13 +1,11 @@
 package dev.lynith.core.ui.components
 
+import dev.lynith.core.Platform
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.callbacks.ComponentEvent
 import dev.lynith.core.ui.callbacks.ComponentEventBus
-import dev.lynith.core.ui.callbacks.impl.Clicked
-import dev.lynith.core.ui.callbacks.impl.CursorMoved
-import dev.lynith.core.ui.callbacks.impl.Pressed
-import dev.lynith.core.ui.callbacks.impl.Released
+import dev.lynith.core.ui.callbacks.impl.*
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.styles.impl.Border
@@ -31,7 +29,7 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     /**
      * The event bus for this component. An event bus for a specific component should reduce slight overhead
      */
-    private val eventBus = ComponentEventBus.instance
+    private val eventBus = Platform.componentEventBus
 
     /**
      * The styles for this component. This is a mutable property so that you can change the styles of a component
@@ -40,6 +38,8 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
 
     // ---- RENDER ----
     protected open fun preRender(mouseX: Int, mouseY: Int, delta: Float) {
+        mouseOver = bounds.contains(mouseX, mouseY)
+
         createFrame()
     }
 
@@ -69,8 +69,8 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
             }
         }
 
-        on<CursorMoved> {
-            mouseOver = bounds.contains(it.mouseX, it.mouseY)
+        once<Destroyed> {
+            eventBus.unregister(this)
         }
     }
     abstract fun init()
@@ -94,6 +94,10 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
 
     inline fun <reified T : ComponentEvent> once(noinline callback: (T) -> Unit) {
         on(true, T::class.java, callback)
+    }
+
+    open fun unregister() {
+        eventBus.unregister(this)
     }
 
     fun emit(event: ComponentEvent) {

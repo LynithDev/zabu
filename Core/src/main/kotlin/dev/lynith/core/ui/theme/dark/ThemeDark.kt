@@ -12,7 +12,7 @@ class ThemeDark : AbstractTheme(
     type = ThemeType.DARK
 ) {
 
-    override val colorScheme = DefaultColorScheme()
+    override val colorScheme = DarkColorScheme()
 
     override fun getButtonStyles(button: Button) = ButtonStyles(button, this)
     override fun getLabelStyles(label: Label) = LabelStyles(label, this)

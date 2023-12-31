@@ -17,7 +17,7 @@ public class MixinMinecraft {
 
     @Inject(method = "initializeGame", at = @At("RETURN"))
     public void startGame(CallbackInfo ci) {
-        Platform.getEventBus().emit(new MinecraftInitEvent());
+        Platform.eventBus.emit(new MinecraftInitEvent());
     }
 
     @Inject(method = "setPixelFormat", at = @At("RETURN"))
@@ -35,7 +35,7 @@ public class MixinMinecraft {
             clazz = null;
         }
 
-        Platform.getEventBus().emit(new MinecraftScreenChangedEvent(clazz));
+        Platform.eventBus.emit(new MinecraftScreenChangedEvent(clazz));
     }
 
 }

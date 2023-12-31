@@ -5,10 +5,7 @@ interface IMinecraft {
     val fps: Int
     val gameVersion: String
     var isFullscreen: Boolean
-
-//    fun toggleFullscreen() {
-//        isFullscreen = !isFullscreen
-//    }
+    val gameDirectory: String
 
     fun scheduleStop()
 }

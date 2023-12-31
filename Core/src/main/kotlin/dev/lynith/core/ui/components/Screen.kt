@@ -19,6 +19,12 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyle
         this.screen = this
     }
 
+    override fun preInit() {
+        once<Destroyed> {
+            unregister()
+        }
+    }
+
     override fun render(mouseX: Int, mouseY: Int, delta: Float) {
         // Empty
     }
@@ -54,7 +60,7 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyle
                 screen.emit(CursorMoved(prevX!!, prevY!!))
             }
 
-            screen.wrappedRender(mouseX, mouseY, delta)
+            screen.wrappedRender(mouseXScaled, mouseYScaled, delta)
         }
 
         override fun init() {

@@ -14,7 +14,7 @@ open class ButtonStyles(
     theme
 ) {
 
-    open var backgroundColor = Color(250, 251, 252)
+    open var backgroundColor = theme.colorScheme.backgroundSecondary
     open var foregroundColor = theme.colorScheme.foreground
     open var hoveredForegroundColor = theme.colorScheme.foregroundHover
     open var hoveredBackgroundColor = theme.colorScheme.backgroundHover

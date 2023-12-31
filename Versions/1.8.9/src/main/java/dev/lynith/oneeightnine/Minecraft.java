@@ -2,6 +2,7 @@ package dev.lynith.oneeightnine;
 
 import dev.lynith.core.bridge.IMinecraft;
 import net.minecraft.client.MinecraftClient;
+import org.jetbrains.annotations.NotNull;
 
 public class Minecraft implements IMinecraft {
 
@@ -34,4 +35,9 @@ public class Minecraft implements IMinecraft {
         MinecraftClient.getInstance().scheduleStop();
     }
 
+    @NotNull
+    @Override
+    public String getGameDirectory() {
+        return MinecraftClient.getInstance().runDirectory.getAbsolutePath();
+    }
 }

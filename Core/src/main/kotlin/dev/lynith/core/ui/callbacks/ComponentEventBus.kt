@@ -9,16 +9,18 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class ComponentEventBus {
 
-    companion object {
-        val instance = ComponentEventBus()
-    }
-
     private val events: MutableMap<Class<out ComponentEvent>, MutableList<StoredEvent<in ComponentEvent>>> = mutableMapOf()
 
     fun <T : ComponentEvent> on(component: Component<*,*>, eventClazz: Class<T>, callback: (T) -> Unit, once: Boolean = false) {
         val storedEvent = StoredEvent(component, callback, once) as StoredEvent<in ComponentEvent>
         events[eventClazz] = (events[eventClazz] ?: CopyOnWriteArrayList()).apply {
             add(storedEvent)
+        }
+    }
+
+    fun unregister(component: Component<*, *>) {
+        for (event in events.values) {
+            event.removeIf { it.component == component }
         }
     }
 
@@ -43,7 +45,11 @@ class ComponentEventBus {
         var once: Boolean = false
     ) {
         override fun toString(): String {
-            return "StoredEvent(callback=${callback.javaClass.simpleName}, once=$once)"
+            return "StoredEvent(" +
+                "component=${component.javaClass.simpleName}@${component.hashCode()}, " +
+                "callback=${callback.javaClass.simpleName}@${callback.hashCode()}, " +
+                "once=$once" +
+                ")"
         }
     }
 

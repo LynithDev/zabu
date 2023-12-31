@@ -32,6 +32,25 @@ class MainMenu : Screen() {
         }
 
         children (
+            Button().configure {
+                style {
+                    position = Position(Position.PositionType.ABSOLUTE)
+                }
+
+                bounds = BoundingBox(
+                    x = 10.px,
+                    y = 10.px,
+                    width = 100.px,
+                    height = 50.px
+                )
+
+                text = "Theme"
+
+                on<Clicked> {
+                    Platform.themeManager.nextTheme()
+                }
+            },
+
             Block().configure {
                 layout {
                     direction = LayoutProperties.Direction.Vertical

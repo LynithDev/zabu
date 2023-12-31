@@ -41,5 +41,5 @@ class Button : Component<Button, ButtonStyles>() {
         }
     }
 
-    override var styles = Platform.themeManager.currentTheme.getButtonStyles(this)
+    override var styles: ButtonStyles = Platform.themeManager.currentTheme.getButtonStyles(this)
 }

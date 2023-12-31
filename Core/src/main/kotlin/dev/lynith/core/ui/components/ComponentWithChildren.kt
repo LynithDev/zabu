@@ -34,7 +34,7 @@ abstract class ComponentWithChildren<C : Component<C, S>, S : ComponentWithChild
     override fun postInit() {
         super.postInit()
 
-        on<Destroyed> {
+        once<Destroyed> {
             clearChildren()
         }
 

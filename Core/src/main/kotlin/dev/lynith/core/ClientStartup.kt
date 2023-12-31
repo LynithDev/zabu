@@ -3,13 +3,16 @@ package dev.lynith.core
 import dev.lynith.core.bridge.IVersion
 import dev.lynith.core.bridge.IVersionMain
 import dev.lynith.core.bridge.gui.IRenderer
+import dev.lynith.core.config.Config
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.events.impl.MinecraftScreenChangedEvent
 import dev.lynith.core.events.impl.ShutdownEvent
+import dev.lynith.core.ui.callbacks.ComponentEventBus
 import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.screens.MainMenu
 import dev.lynith.core.ui.theme.ThemeManager
 import dev.lynith.core.ui.nvg.FontHelper
+import dev.lynith.core.utils.FileUtils
 import kotlin.system.exitProcess
 
 class ClientStartup {
@@ -20,6 +23,9 @@ class ClientStartup {
             minecraft = ver.minecraft
             bridge = ver
 
+            config = Config()
+
+            componentEventBus = ComponentEventBus()
             eventBus = EventBus()
             logger.log("Initialized EventBus")
 
@@ -34,6 +40,9 @@ class ClientStartup {
 
             themeManager = ThemeManager()
             logger.log("Initialized ThemeManager")
+
+            config.init()
+            logger.log("Initialized and loaded Config")
 
             logger.log("Initialized Platform")
         }

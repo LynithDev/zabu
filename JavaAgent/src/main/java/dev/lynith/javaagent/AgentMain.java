@@ -57,7 +57,6 @@ public class AgentMain {
                     break;
                 }
             } catch (Exception ignored) {
-                ignored.printStackTrace();
                 // Class not found, continue to the next injector
             }
         }
