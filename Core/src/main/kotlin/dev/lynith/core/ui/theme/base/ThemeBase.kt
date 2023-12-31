@@ -1,7 +1,8 @@
 package dev.lynith.core.ui.theme.base
 
+import dev.lynith.core.ui.components.Component
 import dev.lynith.core.ui.components.impl.Button
-import dev.lynith.core.ui.components.impl.Label
+import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.theme.AbstractTheme
 
 class ThemeBase : AbstractTheme(
@@ -11,7 +12,10 @@ class ThemeBase : AbstractTheme(
 
     override val colorScheme = DefaultColorScheme()
 
-    override fun getButtonStyles(button: Button) = ButtonStyles(button, this)
-    override fun getLabelStyles(label: Label) = LabelStyles(label, this)
+    // Custom styles for components
+    override var componentMap: Map<Class<out Component<*, *>>, ComponentStyles<*, *>> = mapOf(
+        Button::class.java to ButtonStyles(this),
+    )
+
 
 }

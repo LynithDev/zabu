@@ -8,9 +8,4 @@ class WindowResized(
     val height: Float
 ) : ComponentEvent() {
 
-    override fun postPass(component: Component<*, *>) {
-        println("$component")
-        super.postPass(component)
-    }
-
 }

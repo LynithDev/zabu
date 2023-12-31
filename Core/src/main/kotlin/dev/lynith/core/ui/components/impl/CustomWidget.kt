@@ -3,9 +3,9 @@ package dev.lynith.core.ui.components.impl
 import dev.lynith.core.ui.components.Component
 import dev.lynith.core.ui.styles.ComponentStyles
 
-class CustomWidget : Component<CustomWidget, ComponentStyles.EmptyStyles<CustomWidget>>() {
+class CustomWidget : Component<CustomWidget, ComponentStyles.BaseStyles<CustomWidget>>() {
 
-    override var styles = ComponentStyles.EmptyStyles(this)
+    override var styles = ComponentStyles.BaseStyles<CustomWidget>()
 
     private var onRender: (Renderable) -> Unit = { }
     private var onInit: () -> Unit = {}

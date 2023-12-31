@@ -1,15 +1,16 @@
 package dev.lynith.core.ui.components
 
 import dev.lynith.core.Platform
-import dev.lynith.core.events.EventBus
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.callbacks.ComponentEvent
-import dev.lynith.core.ui.callbacks.ComponentEventBus
 import dev.lynith.core.ui.callbacks.impl.*
+import dev.lynith.core.ui.components.impl.CustomWidget
+import dev.lynith.core.ui.components.impl.Label
 import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.styles.impl.Border
 import dev.lynith.core.ui.styles.impl.Color
+import dev.lynith.core.ui.theme.AbstractTheme
 import dev.lynith.core.ui.units.px
 
 abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoVGHelper() {
@@ -34,7 +35,17 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     /**
      * The styles for this component. This is a mutable property so that you can change the styles of a component
      */
-    abstract var styles: S
+    private val baseStyles: S
+        get() {
+            val customStyles = Platform.themeManager.currentTheme.componentMap[this::class.java]
+            if (customStyles != null) {
+                return customStyles.javaClass.getConstructor(AbstractTheme::class.java).newInstance(Platform.themeManager.currentTheme) as S
+            }
+
+            return ComponentStyles.BaseStyles<CustomWidget>() as S
+        }
+
+    open var styles: S = baseStyles
 
     // ---- RENDER ----
     protected open fun preRender(mouseX: Int, mouseY: Int, delta: Float) {
@@ -121,7 +132,7 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
 
     // Blocks
     fun style(block: S.() -> Unit): C {
-        styles.apply(block)
+        styles = baseStyles.configure(block)
         return this as C
     }
 

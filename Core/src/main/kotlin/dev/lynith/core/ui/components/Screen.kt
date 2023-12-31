@@ -3,11 +3,10 @@ package dev.lynith.core.ui.components
 import dev.lynith.core.Platform
 import dev.lynith.core.bridge.gui.MCScreen
 import dev.lynith.core.ui.BoundingBox
-import dev.lynith.core.ui.callbacks.*
 import dev.lynith.core.ui.callbacks.impl.*
-import dev.lynith.core.ui.styles.ComponentWithChildrenStyles
+import dev.lynith.core.ui.styles.ComponentStyles
 
-abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyles.EmptyStyles<Screen>>() {
+abstract class Screen : ComponentWithChildren<Screen, ComponentStyles.BaseStyles<Screen>>() {
     var shouldPauseGame: Boolean = false
 
     override var bounds: BoundingBox = BoundingBox(
@@ -29,7 +28,7 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentWithChildrenStyle
         // Empty
     }
 
-    override var styles = ComponentWithChildrenStyles.EmptyStyles(this)
+    override var styles = ComponentStyles.BaseStyles<Screen>()
 
     override fun child(child: Component<*, *>) {
         super.child(child)

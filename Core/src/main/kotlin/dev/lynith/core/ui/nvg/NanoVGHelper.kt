@@ -3,11 +3,9 @@ package dev.lynith.core.ui.nvg
 import dev.lynith.core.Platform
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.styles.impl.*
-import dev.lynith.core.ui.units.px
 import org.lwjgl.nanovg.NVGColor
 import org.lwjgl.nanovg.NVGPaint
 import org.lwjgl.nanovg.NanoVG.*
-import org.lwjgl.opengl.GL11
 import kotlin.math.round
 
 open class NanoVGHelper {
@@ -87,18 +85,18 @@ open class NanoVGHelper {
         }
     }
 
-    fun text(text: String, bounds: BoundingBox, fontStyles: FontStyles, color: Color) {
+    fun text(text: String, bounds: BoundingBox, font: FontStyles, color: Color) {
         nvgBeginPath(ctx)
 //        nvgFontBlur(ctx, 0.5f / fontStyles.size)
-        nvgFontFace(ctx, Platform.fontHelper.getOrDefault(fontStyles.family, fontStyles.weight).formatted())
-        nvgFontSize(ctx, fontStyles.size)
-        nvgTextAlign(ctx, textAlign(fontStyles.align) or NVG_ALIGN_BASELINE)
+        nvgFontFace(ctx, Platform.fontHelper.getOrDefault(font.family, font.weight).formatted())
+        nvgFontSize(ctx, font.size)
+        nvgTextAlign(ctx, textAlign(font.align) or NVG_ALIGN_BASELINE)
         nvgFillColor(ctx, createColor(color))
-        nvgTextLetterSpacing(ctx, fontStyles.letterSpacing)
+        nvgTextLetterSpacing(ctx, font.letterSpacing)
         nvgTextBox(
             ctx,
             round(bounds.x),
-            round(bounds.y + textHeight(text, fontStyles)),
+            round(bounds.y + textHeight(text, font)),
             bounds.width,
             text
         )

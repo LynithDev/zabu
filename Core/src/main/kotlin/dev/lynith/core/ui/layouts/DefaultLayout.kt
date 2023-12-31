@@ -2,6 +2,9 @@ package dev.lynith.core.ui.layouts
 
 import dev.lynith.core.ui.components.Component
 import dev.lynith.core.ui.components.ComponentWithChildren
+import dev.lynith.core.ui.components.impl.Button
+import dev.lynith.core.ui.components.impl.CustomWidget
+import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.styles.impl.Position
 
 class DefaultLayout : Layout() {
@@ -10,6 +13,8 @@ class DefaultLayout : Layout() {
         var children = component.children.filter {
             it.styles.position.type != Position.PositionType.ABSOLUTE
         }
+
+
 
         if (children.isEmpty()) return
 

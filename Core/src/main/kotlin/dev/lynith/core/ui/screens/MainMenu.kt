@@ -71,7 +71,7 @@ class MainMenu : Screen() {
                         text = "ZABU"
 
                         style {
-                            fontStyles.change {
+                            font.change {
                                 size = 56.px
                                 weight = Font.FontWeight.BOLD
                                 align = Font.FontAlign.CENTER

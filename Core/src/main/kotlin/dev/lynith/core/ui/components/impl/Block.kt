@@ -1,14 +1,11 @@
 package dev.lynith.core.ui.components.impl
 
 import dev.lynith.core.ui.components.ComponentWithChildren
-import dev.lynith.core.ui.styles.ComponentWithChildrenStyles
-import dev.lynith.core.ui.styles.impl.Border
-import dev.lynith.core.ui.styles.impl.Color
-import dev.lynith.core.ui.units.px
+import dev.lynith.core.ui.styles.ComponentStyles
 
-class Block : ComponentWithChildren<Block, ComponentWithChildrenStyles.EmptyStyles<Block>>() {
+class Block : ComponentWithChildren<Block, ComponentStyles.BaseStyles<Block>>() {
 
-    override var styles = ComponentWithChildrenStyles.EmptyStyles(this)
+    override var styles = ComponentStyles.BaseStyles<Block>()
 
     override fun render(mouseX: Int, mouseY: Int, delta: Float) {
 

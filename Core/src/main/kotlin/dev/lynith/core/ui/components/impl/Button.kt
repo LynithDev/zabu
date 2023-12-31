@@ -1,9 +1,7 @@
 package dev.lynith.core.ui.components.impl
 
 import dev.lynith.core.Platform
-import dev.lynith.core.ui.callbacks.impl.CursorMoved
 import dev.lynith.core.ui.components.Component
-import dev.lynith.core.ui.styles.impl.Color
 import dev.lynith.core.ui.theme.base.ButtonStyles
 
 class Button : Component<Button, ButtonStyles>() {
@@ -14,9 +12,9 @@ class Button : Component<Button, ButtonStyles>() {
 
         rectangle(
             bounds = bounds,
-            color = if (mouseOver) styles.hoveredBackgroundColor else styles.backgroundColor,
+            color = styles.backgroundColor,
             border = styles.border,
-            cornerRadius = styles.cornerRadius
+            cornerRadius = styles.borderRadius
         )
 
         boxShadow(bounds, styles.innerBoxShadow)
@@ -24,22 +22,20 @@ class Button : Component<Button, ButtonStyles>() {
         text(
             text = text,
             bounds = bounds.with(
-                y = bounds.y + (bounds.height / 2) - (textHeight(text, styles.fontStyles) / 2)
+                y = bounds.y + (bounds.height / 2) - (textHeight(text, styles.font) / 2)
             ),
-            fontStyles = styles.fontStyles,
-            color = if (mouseOver) styles.hoveredForegroundColor else styles.foregroundColor
+            font = styles.font,
+            color = styles.color
         )
     }
 
     override fun init() {
         if (bounds.width <= 0f) {
-            bounds.width = textWidth(text, styles.fontStyles) + styles.padding.left + styles.padding.right
+            bounds.width = textWidth(text, styles.font) + styles.padding.left + styles.padding.right
         }
 
         if (bounds.height <= 0f) {
-            bounds.height = styles.fontStyles.size + styles.padding.top + styles.padding.bottom
+            bounds.height = styles.font.size + styles.padding.top + styles.padding.bottom
         }
     }
-
-    override var styles: ButtonStyles = Platform.themeManager.currentTheme.getButtonStyles(this)
 }

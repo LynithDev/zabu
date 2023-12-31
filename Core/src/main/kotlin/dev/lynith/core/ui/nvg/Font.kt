@@ -42,3 +42,5 @@ class Font @JvmOverloads constructor(
         RIGHT
     }
 }
+
+typealias FontAlign = Font.FontAlign
