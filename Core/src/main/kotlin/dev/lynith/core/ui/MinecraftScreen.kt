@@ -1,6 +1,8 @@
 package dev.lynith.core.ui
 
 abstract class MinecraftScreen {
+
+
     abstract fun render(mouseX: Int, mouseY: Int, delta: Float)
     abstract fun init()
     fun closed() {}

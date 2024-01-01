@@ -2,6 +2,7 @@ package dev.lynith.oneeightnine;
 
 import dev.lynith.core.bridge.IMinecraft;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.GameRenderer;
 import org.jetbrains.annotations.NotNull;
 
 public class Minecraft implements IMinecraft {

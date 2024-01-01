@@ -15,6 +15,25 @@ open class ButtonStyles @JvmOverloads constructor(
     state
 ) {
 
+    override var boxShadow = Shadow(
+        offsetY = 2f,
+        radius = CornerRadius(
+            value = 4
+        ),
+        blur = 0f,
+        innerColor = Color(27, 31, 35, 0.04f),
+        outerColor = Color(27, 31, 35, 0f)
+    )
+
+    override var border = Border(
+        thickness = 2f,
+        color = theme.colorScheme.border
+    )
+
+    override var borderRadius = CornerRadius(
+        value = 4
+    )
+
     open var innerBoxShadow = Shadow(
         offsetY = 2f,
         radius = CornerRadius(
@@ -26,9 +45,9 @@ open class ButtonStyles @JvmOverloads constructor(
     )
 
     override var padding = Padding(
-        top = 8,
+        top = 6,
         right = 16,
-        bottom = 8,
+        bottom = 6,
         left = 16
     )
 
@@ -37,5 +56,19 @@ open class ButtonStyles @JvmOverloads constructor(
     )
 
     override var hoverStyles: Class<out ButtonStyles>? = HoveredButtonStyles::class.java
+
+    class HoveredButtonStyles @JvmOverloads constructor(
+        theme: AbstractTheme,
+        state: ComponentStyleState = ComponentStyleState.HOVER
+    ) : ButtonStyles(
+        theme,
+        state
+    ) {
+
+        override var backgroundColor = theme.colorScheme.backgroundHover
+
+        override var hoverStyles: Class<out ButtonStyles>? = this.javaClass
+
+    }
 
 }

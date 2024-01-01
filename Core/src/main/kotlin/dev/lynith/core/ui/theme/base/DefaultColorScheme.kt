@@ -15,7 +15,7 @@ class DefaultColorScheme : AbstractColorScheme() {
     override val backgroundSecondary: Color = Color(223, 223, 223)
     override val backgroundTertiary: Color = Color(191, 191, 191)
     override val backgroundDisabled: Color = Color(170, 170, 170)
-    override val backgroundHover: Color = Color(240, 240, 240)
+    override val backgroundHover: Color = Color(230, 230, 230)
 
     override val border: Color = Color(27, 31, 35, 0.15f)
     override val borderSecondary: Color = Color(10, 10, 10)

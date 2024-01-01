@@ -8,19 +8,25 @@ import dev.lynith.core.ui.styles.ComponentStyles
 
 abstract class Screen : ComponentWithChildren<Screen, ComponentStyles.BaseStyles<Screen>>() {
     var shouldPauseGame: Boolean = false
+    var maxFramerate: Int = 60
+
+    companion object {
+        @JvmStatic
+        var currentScreen: Screen? = null
+    }
 
     override var bounds: BoundingBox = BoundingBox(
         width = Platform.renderer.windowWidth.toFloat(),
         height = Platform.renderer.windowHeight.toFloat()
     )
 
-    init {
-        this.screen = this
-    }
-
     override fun preInit() {
+        this.screen = this
+        currentScreen = this
+
         once<Destroyed> {
             unregister()
+            currentScreen = null
         }
     }
 

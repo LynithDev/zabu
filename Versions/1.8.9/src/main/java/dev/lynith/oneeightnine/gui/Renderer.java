@@ -231,4 +231,5 @@ public class Renderer implements IRenderer {
     public void displayMultiplayerSelectorScreen(dev.lynith.core.ui.components.@NotNull Screen parent) {
         setScreen(GuiType.MULTIPLAYER_SELECTOR, parent);
     }
+
 }
