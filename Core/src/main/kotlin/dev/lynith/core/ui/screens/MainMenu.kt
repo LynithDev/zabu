@@ -13,6 +13,7 @@ import dev.lynith.core.ui.components.impl.Label
 import dev.lynith.core.ui.layouts.LayoutProperties
 import dev.lynith.core.ui.nvg.Font
 import dev.lynith.core.ui.styles.impl.Color
+import dev.lynith.core.ui.styles.impl.FontStyles
 import dev.lynith.core.ui.styles.impl.Position
 import dev.lynith.core.ui.styles.impl.PositionType
 import dev.lynith.core.ui.units.ms
@@ -22,6 +23,20 @@ class MainMenu : Screen() {
 
     override fun render(mouseX: Int, mouseY: Int, delta: Float) {
         background()
+        text(
+            text = "FPS: ${Platform.minecraft.fps}",
+            bounds = BoundingBox(
+                x = 10.px,
+                y = 100.px,
+                width = 100.px
+            ),
+            font = FontStyles(
+                size = 16.px,
+                weight = Font.FontWeight.BOLD,
+                align = Font.FontAlign.LEFT,
+            ),
+            color = Color(0, 0, 0),
+        )
     }
 
     override fun init() {
@@ -35,13 +50,16 @@ class MainMenu : Screen() {
             Button().configure {
                 style {
                     position = Position(Position.PositionType.ABSOLUTE)
+                    backgroundColor = Color(0, 255, 0)
+                }
+
+                hoverStyles {
+                    backgroundColor = Color(0, 0, 255)
                 }
 
                 bounds = BoundingBox(
                     x = 10.px,
                     y = 10.px,
-                    width = 100.px,
-                    height = 50.px
                 )
 
                 text = "Theme"

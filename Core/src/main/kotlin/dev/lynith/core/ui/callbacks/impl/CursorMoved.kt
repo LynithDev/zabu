@@ -8,8 +8,5 @@ class CursorMoved(
     val mouseY: Int,
 ) : ComponentEvent() {
 
-    override fun shouldPass(component: Component<*, *>): Boolean {
-        return component.bounds.contains(mouseX, mouseY)
-    }
     
 }

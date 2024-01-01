@@ -16,7 +16,7 @@ public class MinecraftMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void startGame(CallbackInfo ci) {
-        Platform.getEventBus().emit(new MinecraftInitEvent());
+        Platform.eventBus.emit(new MinecraftInitEvent());
     }
 
     @Inject(method = "run", at = @At("HEAD"))
@@ -32,7 +32,7 @@ public class MinecraftMixin {
             clazzName = screen.getClass().getName();
         } catch (NullPointerException ignored) {}
 
-        Platform.getEventBus().emit(new MinecraftScreenChangedEvent(clazzName));
+        Platform.eventBus.emit(new MinecraftScreenChangedEvent(clazzName));
     }
 
 }

@@ -16,7 +16,7 @@ import dev.lynith.core.ui.units.px
 abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoVGHelper() {
     open var parent: ComponentWithChildren<*, *>? = null
     open var screen: Screen? = null
-    open var mouseOver: Boolean = false
+    open var cursorInside: Boolean = false
 
     open var bounds: BoundingBox = BoundingBox()
 
@@ -35,21 +35,35 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     /**
      * The styles for this component. This is a mutable property so that you can change the styles of a component
      */
-    private val baseStyles: S
+    private var baseStyles: S? = null
+    private var hoverStyles: S? = null
+    private val activeStateStyles: S
         get() {
-            val customStyles = Platform.themeManager.currentTheme.componentMap[this::class.java]
-            if (customStyles != null) {
-                return customStyles.javaClass.getConstructor(AbstractTheme::class.java).newInstance(Platform.themeManager.currentTheme) as S
+            return if (hoverStyles != null && cursorInside) {
+                hoverStyles!!
+            } else {
+                baseStyles!!
             }
-
-            return ComponentStyles.BaseStyles<CustomWidget>() as S
         }
 
-    open var styles: S = baseStyles
+    open val styles: S
+        get() {
+            return activeStateStyles
+        }
 
     // ---- RENDER ----
     protected open fun preRender(mouseX: Int, mouseY: Int, delta: Float) {
-        mouseOver = bounds.contains(mouseX, mouseY)
+        if (bounds.contains(mouseX, mouseY)) {
+            if (!cursorInside) {
+                cursorInside = true
+                emit(CursorEnter(mouseX, mouseY))
+            }
+        } else {
+            if (cursorInside) {
+                cursorInside = false
+                emit(CursorExit(mouseX, mouseY))
+            }
+        }
 
         createFrame()
     }
@@ -68,7 +82,27 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
     // ---- RENDER ----
 
     // ---- INIT ----
+    private fun initBaseStyles() {
+        if (baseStyles == null) {
+            val componentMapStyles = Platform.themeManager.currentTheme.componentMap[this::class.java]
+            baseStyles = if (componentMapStyles != null) {
+                componentMapStyles.javaClass.getConstructor(AbstractTheme::class.java).newInstance(Platform.themeManager.currentTheme)
+            } else {
+                ComponentStyles.BaseStyles<CustomWidget>()
+            } as S
+        }
+    }
+
+    private fun initHoverStyles() {
+        if (hoverStyles == null && styles.hoverStyles != null) {
+            hoverStyles = styles.hoverStyles!!.getConstructor(AbstractTheme::class.java).newInstance(Platform.themeManager.currentTheme) as S
+        }
+    }
+
     protected open fun preInit() {
+        initBaseStyles()
+        initHoverStyles()
+
         on<Pressed> {
             customProperties["pressed"] = true
         }
@@ -132,7 +166,14 @@ abstract class Component<C : Component<C, S>, S : ComponentStyles<C, S>> : NanoV
 
     // Blocks
     fun style(block: S.() -> Unit): C {
-        styles = baseStyles.configure(block)
+        initBaseStyles()
+        baseStyles!!.block()
+        return this as C
+    }
+
+    fun hoverStyles(block: S.() -> Unit): C {
+        initHoverStyles()
+        hoverStyles!!.block()
         return this as C
     }
 

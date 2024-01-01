@@ -7,10 +7,12 @@ import dev.lynith.core.ui.styles.ComponentStyles
 import dev.lynith.core.ui.styles.impl.*
 import dev.lynith.core.ui.theme.AbstractTheme
 
-open class ButtonStyles(
-    theme: AbstractTheme
+open class ButtonStyles @JvmOverloads constructor(
+    theme: AbstractTheme,
+    state: ComponentStyleState = ComponentStyleState.NORMAL
 ) : ComponentStyles<Button, ButtonStyles>(
-    theme
+    theme,
+    state
 ) {
 
     open var innerBoxShadow = Shadow(
@@ -33,5 +35,7 @@ open class ButtonStyles(
     override var font = FontStyles(
         align = FontAlign.CENTER,
     )
+
+    override var hoverStyles: Class<out ButtonStyles>? = HoveredButtonStyles::class.java
 
 }

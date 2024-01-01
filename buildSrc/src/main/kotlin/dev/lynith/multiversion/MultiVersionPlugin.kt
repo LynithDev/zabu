@@ -30,12 +30,6 @@ class MultiVersionPlugin : Plugin<Project> {
         val extension = target.project.extensions.create("multiversion", MultiVersionExtension::class.java)
 
         target.afterEvaluate {
-//            gradle.taskGraph.whenReady {
-//                if (hasTask(":Versions:${extension.minecraftVersion}:start-fabric-${extension.minecraftVersion}")) {
-//                    val fabric = configurations.getByName("fabric")
-//                    fabric.dependencies.add(target.dependencies.create("net.fabricmc:fabric-loader:${extension.fabricVersion}"))
-//                }
-//            }
 
             val toolchainService = target.extensions.getByType(JavaToolchainService::class.java)
             val java = target.extensions.getByType(JavaPluginExtension::class.java)
@@ -137,9 +131,9 @@ class MultiVersionPlugin : Plugin<Project> {
                     add("implementation", "org.lwjgl:lwjgl-stb:3.3.1")
                 }
 
-                if (extension.fabricVersion != null) {
-                    add("modImplementation", "net.fabricmc:fabric-loader:${extension.fabricVersion}")
-                }
+//                if (extension.fabricVersion != null) {
+//                    add("modImplementation", "net.fabricmc:fabric-loader:${extension.fabricVersion}")
+//                }
 
                 add("minecraft", "com.mojang:minecraft:${extension.minecraftVersion}")
                 add("mappings",

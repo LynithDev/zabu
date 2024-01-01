@@ -85,7 +85,7 @@ open class NanoVGHelper {
         }
     }
 
-    fun text(text: String, bounds: BoundingBox, font: FontStyles, color: Color) {
+    fun text(text: String, bounds: BoundingBox, font: FontStyles = FontStyles(), color: Color) {
         nvgBeginPath(ctx)
 //        nvgFontBlur(ctx, 0.5f / fontStyles.size)
         nvgFontFace(ctx, Platform.fontHelper.getOrDefault(font.family, font.weight).formatted())
