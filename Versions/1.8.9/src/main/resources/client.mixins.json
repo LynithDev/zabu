@@ -1,11 +1,12 @@
 {
-    "required": true,
-    "compatibilityLevel": "JAVA_8",
-    "package": "dev.lynith.oneeightnine.mixins",
-    "verbose": true,
-    "minVersion": "0.8.5",
-    "mixins": [
-        "MixinMinecraft",
-        "lwjgl.MixinNanoVGGLConfig"
-    ]
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "dev.lynith.oneeightnine.mixins",
+  "verbose": true,
+  "minVersion": "0.8.5",
+  "mixins": [
+    "MixinInGameHUD",
+    "MixinMinecraft",
+    "lwjgl.MixinNanoVGGLConfig"
+  ]
 }

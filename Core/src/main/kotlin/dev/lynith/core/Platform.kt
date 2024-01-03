@@ -6,6 +6,7 @@ import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.config.Config
 import dev.lynith.core.events.Event
 import dev.lynith.core.events.EventBus
+import dev.lynith.core.hud.HudManager
 import dev.lynith.core.ui.callbacks.ComponentEventBus
 import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.theme.ThemeManager
@@ -44,6 +45,9 @@ object Platform {
         internal set
 
     lateinit var fontHelper: FontHelper
+        internal set
+
+    lateinit var hudManager: HudManager
         internal set
 
 }

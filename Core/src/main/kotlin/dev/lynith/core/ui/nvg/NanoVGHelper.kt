@@ -8,7 +8,7 @@ import org.lwjgl.nanovg.NVGPaint
 import org.lwjgl.nanovg.NanoVG.*
 import kotlin.math.round
 
-open class NanoVGHelper {
+open class NanoVGHelper() {
 
     val ctx: Long = Platform.nvgContext
 
@@ -20,6 +20,10 @@ open class NanoVGHelper {
     fun endFrame() {
         nvgRestore(ctx)
         nvgEndFrame(ctx)
+    }
+
+    fun scale(ctx: Long, x: Float, y: Float) {
+        nvgScale(ctx, x, y)
     }
 
     fun createColor(r: Int, g: Int, b: Int, a: Int): NVGColor {
@@ -87,16 +91,22 @@ open class NanoVGHelper {
 
     fun text(text: String, bounds: BoundingBox, font: FontStyles = FontStyles(), color: Color) {
         nvgBeginPath(ctx)
-//        nvgFontBlur(ctx, 0.5f / fontStyles.size)
         nvgFontFace(ctx, Platform.fontHelper.getOrDefault(font.family, font.weight).formatted())
         nvgFontSize(ctx, font.size)
-        nvgTextAlign(ctx, textAlign(font.align) or NVG_ALIGN_BASELINE)
+        nvgTextAlign(ctx, textAlign(font.horizontalAlign) or NVG_ALIGN_BASELINE)
         nvgFillColor(ctx, createColor(color))
         nvgTextLetterSpacing(ctx, font.letterSpacing)
+
+        val y = when (font.verticalAlign) {
+            Font.VerticalAlign.TOP -> bounds.y + textHeight(text, font)
+            Font.VerticalAlign.CENTER -> bounds.y + bounds.height / 2 + textHeight(text, font) / 2
+            Font.VerticalAlign.BOTTOM -> bounds.y + bounds.height
+        }
+
         nvgTextBox(
             ctx,
             round(bounds.x),
-            round(bounds.y + textHeight(text, font)),
+            round(y),
             bounds.width,
             text
         )
@@ -124,11 +134,11 @@ open class NanoVGHelper {
         return (bounds[3] - bounds[1]) - styles.size / font.offset
     }
 
-    fun textAlign(align: Font.FontAlign): Int {
+    fun textAlign(align: Font.HorizontalAlign): Int {
         return when (align) {
-            Font.FontAlign.LEFT -> NVG_ALIGN_LEFT
-            Font.FontAlign.CENTER -> NVG_ALIGN_CENTER
-            Font.FontAlign.RIGHT -> NVG_ALIGN_RIGHT
+            Font.HorizontalAlign.LEFT -> NVG_ALIGN_LEFT
+            Font.HorizontalAlign.CENTER -> NVG_ALIGN_CENTER
+            Font.HorizontalAlign.RIGHT -> NVG_ALIGN_RIGHT
         }
     }
 

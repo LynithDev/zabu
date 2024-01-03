@@ -168,14 +168,11 @@ class Config {
                 val value = json.asJsonObject.get(name)
 
                 if (value != null) {
-                    println(field.get(obj))
                     if (value.isJsonPrimitive) {
                         setValue(obj, field, value)
                     } else if (value.isJsonObject) {
                         field.set(obj, gson.fromJson(value, field.type))
                     }
-
-                    println(field.get(obj))
 
                     continue
                 }

@@ -36,11 +36,18 @@ class Font @JvmOverloads constructor(
         }
     }
 
-    enum class FontAlign {
+    enum class HorizontalAlign {
         LEFT,
         CENTER,
         RIGHT
     }
+
+    enum class VerticalAlign {
+        TOP,
+        CENTER,
+        BOTTOM
+    }
 }
 
-typealias FontAlign = Font.FontAlign
+typealias HorizontalAlign = Font.HorizontalAlign
+typealias VerticalAlign = Font.VerticalAlign

@@ -5,6 +5,7 @@
   "verbose": true,
   "minVersion": "0.8.5",
   "mixins": [
-    "MinecraftMixin"
+    "MixinMinecraft",
+    "MixinInGameHUD"
   ]
 }

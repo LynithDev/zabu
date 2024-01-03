@@ -26,6 +26,11 @@ public class MixinMinecraft {
         Platform.eventBus.emit(new MinecraftInitEvent());
     }
 
+    @Inject(method = "handleKeyInput", at = @At("HEAD"))
+    public void handleKeyInput(CallbackInfo ci) {
+//        Platform.eventBus.emit();
+    }
+
     @Inject(method = "getMaxFramerate", at = @At("HEAD"), cancellable = true)
     public void getMaxFramerate(CallbackInfoReturnable<Integer> cir) {
         int fps;

@@ -2,41 +2,21 @@ package dev.lynith.core.ui.screens
 
 import dev.lynith.core.Platform
 import dev.lynith.core.ui.BoundingBox
-import dev.lynith.core.ui.animation.Animation
-import dev.lynith.core.ui.animation.Easing
 import dev.lynith.core.ui.components.Screen
 import dev.lynith.core.ui.callbacks.impl.Clicked
 import dev.lynith.core.ui.components.impl.Block
 import dev.lynith.core.ui.components.impl.Button
-import dev.lynith.core.ui.components.impl.CustomWidget
 import dev.lynith.core.ui.components.impl.Label
 import dev.lynith.core.ui.layouts.LayoutProperties
 import dev.lynith.core.ui.nvg.Font
 import dev.lynith.core.ui.styles.impl.Color
-import dev.lynith.core.ui.styles.impl.FontStyles
 import dev.lynith.core.ui.styles.impl.Position
-import dev.lynith.core.ui.styles.impl.PositionType
-import dev.lynith.core.ui.units.ms
 import dev.lynith.core.ui.units.px
 
 class MainMenu : Screen() {
 
     override fun render(mouseX: Int, mouseY: Int, delta: Float) {
         background()
-        text(
-            text = "FPS: ${Platform.minecraft.fps}",
-            bounds = BoundingBox(
-                x = 10.px,
-                y = 100.px,
-                width = 100.px
-            ),
-            font = FontStyles(
-                size = 16.px,
-                weight = Font.FontWeight.BOLD,
-                align = Font.FontAlign.LEFT,
-            ),
-            color = Color(0, 0, 0),
-        )
     }
 
     override fun init() {
@@ -62,10 +42,10 @@ class MainMenu : Screen() {
                     y = 10.px,
                 )
 
-                text = "Theme"
+                text = "Test"
 
                 on<Clicked> {
-                    Platform.themeManager.nextTheme()
+                    Platform.renderer.setScreen(HudConfigScreen())
                 }
             },
 
@@ -92,7 +72,7 @@ class MainMenu : Screen() {
                             font.change {
                                 size = 56.px
                                 weight = Font.FontWeight.BOLD
-                                align = Font.FontAlign.CENTER
+                                horizontalAlign = Font.HorizontalAlign.CENTER
                                 letterSpacing = 5.px
                             }
                         }

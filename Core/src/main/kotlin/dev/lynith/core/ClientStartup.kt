@@ -7,11 +7,13 @@ import dev.lynith.core.config.Config
 import dev.lynith.core.events.EventBus
 import dev.lynith.core.events.impl.MinecraftScreenChangedEvent
 import dev.lynith.core.events.impl.ShutdownEvent
+import dev.lynith.core.hud.HudManager
 import dev.lynith.core.ui.callbacks.ComponentEventBus
 import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.screens.MainMenu
 import dev.lynith.core.ui.theme.ThemeManager
 import dev.lynith.core.ui.nvg.FontHelper
+import dev.lynith.core.ui.screens.InGameHUD
 import dev.lynith.core.utils.FileUtils
 import kotlin.system.exitProcess
 
@@ -41,6 +43,9 @@ class ClientStartup {
             themeManager = ThemeManager()
             logger.log("Initialized ThemeManager")
 
+            hudManager = HudManager()
+            logger.log("Initialized HudManager")
+
             config.init()
             logger.log("Initialized and loaded Config")
 
@@ -53,8 +58,9 @@ class ClientStartup {
         })
 
         Platform.eventBus.on<MinecraftScreenChangedEvent> {
-            if (Platform.renderer.currentScreen == IRenderer.GuiType.MAIN_MENU) {
-                Platform.renderer.setScreen(MainMenu())
+            when (Platform.renderer.currentScreen) {
+                IRenderer.GuiType.MAIN_MENU -> Platform.renderer.setScreen(MainMenu())
+                else -> {}
             }
         }
     }

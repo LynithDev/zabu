@@ -8,12 +8,13 @@ class FontStyles @JvmOverloads constructor(
     var size: Float = 16f,
     var weight: Font.FontWeight = Font.FontWeight.REGULAR,
     var lineHeight: Float = 1f,
-    var align: Font.FontAlign = Font.FontAlign.LEFT,
+    var horizontalAlign: Font.HorizontalAlign = Font.HorizontalAlign.LEFT,
+    var verticalAlign: Font.VerticalAlign = Font.VerticalAlign.TOP,
     var letterSpacing: Float = 0f,
 ) : Style<FontStyles>() {
 
     override val propertyName = "font"
     override val valueSerialized: String
-        get() = "'$family', $size, $weight, $lineHeight, ${align.name}, $letterSpacing"
+        get() = "'$family', $size, $weight, $lineHeight, ${horizontalAlign.name}, $letterSpacing"
 
 }
