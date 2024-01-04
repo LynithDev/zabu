@@ -19,6 +19,7 @@ class FPSElement : HudElement("FPS Counter") {
     )
     private var textFormat = "FPS: $$$"
 
+    @ConfigOption
     override var bounds: BoundingBox = BoundingBox(
         width = 100f,
         height = 30f,
