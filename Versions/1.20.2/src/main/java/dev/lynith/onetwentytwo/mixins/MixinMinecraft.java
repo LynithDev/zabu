@@ -1,5 +1,6 @@
 package dev.lynith.onetwentytwo.mixins;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import dev.lynith.core.ClientStartup;
 import dev.lynith.core.Platform;
 import dev.lynith.core.events.impl.MinecraftInitEvent;
@@ -7,6 +8,9 @@ import dev.lynith.core.events.impl.MinecraftScreenChangedEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Overlay;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.input.KeyboardInput;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.world.ClientWorld;
 import org.spongepowered.asm.mixin.Final;
@@ -28,6 +32,8 @@ public class MixinMinecraft {
 
     @Shadow @Final private Window window;
 
+    @Shadow public GameOptions options;
+
     @Inject(method = "tick", at = @At("HEAD"))
     public void startGame(CallbackInfo ci) {
         Platform.eventBus.emit(new MinecraftInitEvent());
@@ -41,7 +47,7 @@ public class MixinMinecraft {
         if (screen != null) {
             fps = screen.getMaxFramerate();
         } else if (this.world != null || this.currentScreen == null && this.overlay == null) {
-            fps = this.window.getFramerateLimit();
+            fps = this.options.getMaxFps().getValue();
         } else {
             fps = 60;
         }

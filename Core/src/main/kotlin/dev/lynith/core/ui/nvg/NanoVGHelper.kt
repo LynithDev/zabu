@@ -6,6 +6,7 @@ import dev.lynith.core.ui.styles.impl.*
 import org.lwjgl.nanovg.NVGColor
 import org.lwjgl.nanovg.NVGPaint
 import org.lwjgl.nanovg.NanoVG.*
+import org.lwjgl.opengl.GL11
 import kotlin.math.round
 
 open class NanoVGHelper() {
@@ -13,13 +14,19 @@ open class NanoVGHelper() {
     val ctx: Long = Platform.nvgContext
 
     fun createFrame() {
+        // TODO: Figure out how to fix this in modern versions
+        if (Platform.bridge.minecraft.gameVersion == "1.8.9") {
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS)
+        }
+
         nvgBeginFrame(ctx, Platform.renderer.windowWidth.toFloat(), Platform.renderer.windowHeight.toFloat(), 1f)
-        nvgSave(ctx)
     }
 
     fun endFrame() {
-        nvgRestore(ctx)
         nvgEndFrame(ctx)
+        if (Platform.bridge.minecraft.gameVersion == "1.8.9") {
+            GL11.glPopAttrib()
+        }
     }
 
     fun scale(ctx: Long, x: Float, y: Float) {

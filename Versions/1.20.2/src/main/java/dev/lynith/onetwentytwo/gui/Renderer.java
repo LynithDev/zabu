@@ -123,6 +123,10 @@ public class Renderer implements IRenderer {
 
     @Override
     public boolean setScreen(dev.lynith.core.ui.components.Screen screen, Object... args) {
+        if (screen == null) {
+            return false;
+        }
+
         MinecraftClient.getInstance().setScreen(toMCScreen(screen.toMCScreen()));
         return true;
     }
@@ -198,8 +202,8 @@ public class Renderer implements IRenderer {
             }
 
             @Override
-            public void close() {
-                super.close();
+            public void removed() {
+                super.removed();
                 screen.closed();
             }
         };

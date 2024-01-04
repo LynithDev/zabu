@@ -1,9 +1,11 @@
 package dev.lynith.onetwentytwo.mixins;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.lynith.core.ui.screens.InGameHUD;
+import dev.lynith.core.hud.InGameHUD;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import org.lwjgl.opengl.GL20;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +23,8 @@ public class MixinInGameHUD {
         if (client$hud == null)
             client$hud = new InGameHUD();
 
-        client$hud.toMCScreen().render(0, 0, f);
+        client$hud.render(f);
+        // TODO Fix minecraft sky issue
     }
 
 }

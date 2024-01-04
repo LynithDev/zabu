@@ -1,11 +1,14 @@
 {
-  "required": true,
-  "compatibilityLevel": "JAVA_8",
-  "package": "dev.lynith.onetwentytwo.mixins",
-  "verbose": true,
-  "minVersion": "0.8.5",
-  "mixins": [
-    "MixinMinecraft",
-    "MixinInGameHUD"
-  ]
+    "required": true,
+    "compatibilityLevel": "JAVA_8",
+    "package": "dev.lynith.onetwentytwo.mixins",
+    "verbose": true,
+    "minVersion": "0.8.5",
+    "mixins": [
+        "MixinInGameHUD",
+        "MixinMinecraft"
+    ],
+    "client": [
+        "MixinKeyboard"
+    ]
 }
