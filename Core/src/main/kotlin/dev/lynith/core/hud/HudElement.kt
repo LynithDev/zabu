@@ -4,6 +4,8 @@ import dev.lynith.core.config.Category
 import dev.lynith.core.config.ConfigOption
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.nvg.NanoVGHelper
+import org.lwjgl.nanovg.NanoVG
+import java.nio.FloatBuffer
 
 abstract class HudElement(
     val name: String,
@@ -15,18 +17,16 @@ abstract class HudElement(
     open var bounds: BoundingBox = BoundingBox()
 
     @ConfigOption
-    var visible: Boolean = true
+    var scaleFactor: Float = 1f
 
     @ConfigOption
-    var scaleFactor: Float = 1f
+    var visible: Boolean = true
 
     private var offsetX: Float = 0f
     private var offsetY: Float = 0f
 
     fun wrappedRender(delta: Float) {
-        scale(ctx, scaleFactor, scaleFactor)
         render(delta)
-        scale(ctx, 1f, 1f)
     }
 
     fun drag(state: DraggingState, mouseX: Float, mouseY: Float) {

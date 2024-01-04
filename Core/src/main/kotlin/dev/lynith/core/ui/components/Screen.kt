@@ -43,11 +43,11 @@ abstract class Screen : ComponentWithChildren<Screen, ComponentStyles.BaseStyles
 
     // Utils
 
-    fun toMCScreen(): MCScreen {
+    open fun toMCScreen(): MCScreen {
         return WrappedScreen(this)
     }
 
-    private class WrappedScreen(
+    protected open class WrappedScreen(
         private val screen: Screen
     ) : MCScreen() {
         var prevX: Int? = null

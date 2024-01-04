@@ -1,4 +1,4 @@
-package dev.lynith.core.ui.screens
+package dev.lynith.core.hud
 
 import dev.lynith.core.Platform
 import dev.lynith.core.hud.HudElement
@@ -31,7 +31,7 @@ class HudConfigScreen : Screen() {
         }
 
         on<Released> {
-            if (state == HudElement.DraggingState.Dragging) {
+            if (state != HudElement.DraggingState.Stopped) {
                 state = HudElement.DraggingState.Stopped
                 Platform.hudManager.drag(state, it.mouseX.toFloat(), it.mouseY.toFloat())
             }

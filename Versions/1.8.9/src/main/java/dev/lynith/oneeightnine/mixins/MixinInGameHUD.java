@@ -1,7 +1,7 @@
 package dev.lynith.oneeightnine.mixins;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import dev.lynith.core.ui.screens.InGameHUD;
+import dev.lynith.core.hud.InGameHUD;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

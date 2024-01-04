@@ -1,6 +1,7 @@
 package dev.lynith.core.hud
 
 import dev.lynith.core.Platform
+import dev.lynith.core.hud.impl.FPSElement
 
 class HudManager {
 
@@ -24,7 +25,9 @@ class HudManager {
     private var currentDraggingElement: HudElement? = null
     fun drag(state: HudElement.DraggingState, mouseX: Float, mouseY: Float) {
         if (currentDraggingElement == null) {
-            currentDraggingElement = visibleElements.firstOrNull { it.bounds.contains(mouseX, mouseY) }
+            currentDraggingElement = visibleElements.firstOrNull {
+                it.bounds.contains(mouseX, mouseY)
+            }
         }
 
         if (currentDraggingElement != null) {
@@ -43,6 +46,7 @@ class HudManager {
     fun add(element: HudElement) {
         Platform.config.register(element)
         elements.add(element)
+        Platform.config.loadIntoClass(element)
         reorderList = true
     }
 

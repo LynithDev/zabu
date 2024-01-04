@@ -1,8 +1,9 @@
-package dev.lynith.core.hud
+package dev.lynith.core.hud.impl
 
 import dev.lynith.core.Platform
 import dev.lynith.core.config.Category
 import dev.lynith.core.config.ConfigOption
+import dev.lynith.core.hud.HudElement
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.nvg.Font
 import dev.lynith.core.ui.styles.impl.Color

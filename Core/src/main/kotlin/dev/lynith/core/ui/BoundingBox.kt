@@ -4,8 +4,9 @@ class BoundingBox(
     var x: Float = 0f,
     var y: Float = 0f,
     var width: Float = 0f,
-    var height: Float = 0f
+    var height: Float = 0f,
 ) {
+
     fun contains(x: Float, y: Float): Boolean {
         return x >= this.x // left
             && x <= this.x + width // right

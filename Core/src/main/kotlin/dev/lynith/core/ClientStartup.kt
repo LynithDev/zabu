@@ -5,16 +5,17 @@ import dev.lynith.core.bridge.IVersionMain
 import dev.lynith.core.bridge.gui.IRenderer
 import dev.lynith.core.config.Config
 import dev.lynith.core.events.EventBus
+import dev.lynith.core.events.impl.KeyPressedEvent
 import dev.lynith.core.events.impl.MinecraftScreenChangedEvent
 import dev.lynith.core.events.impl.ShutdownEvent
+import dev.lynith.core.hud.HudConfigScreen
 import dev.lynith.core.hud.HudManager
+import dev.lynith.core.input.Keyboard
 import dev.lynith.core.ui.callbacks.ComponentEventBus
 import dev.lynith.core.ui.nvg.NanoVGHelper
 import dev.lynith.core.ui.screens.MainMenu
 import dev.lynith.core.ui.theme.ThemeManager
 import dev.lynith.core.ui.nvg.FontHelper
-import dev.lynith.core.ui.screens.InGameHUD
-import dev.lynith.core.utils.FileUtils
 import kotlin.system.exitProcess
 
 class ClientStartup {
@@ -50,6 +51,12 @@ class ClientStartup {
             logger.log("Initialized and loaded Config")
 
             logger.log("Initialized Platform")
+        }
+
+        Platform.eventBus.on<KeyPressedEvent> {
+            if (it.key == Keyboard.KEY_RSHIFT && Platform.renderer.currentScreen == IRenderer.GuiType.INGAME) {
+                Platform.renderer.setScreen(HudConfigScreen())
+            }
         }
 
         Runtime.getRuntime().addShutdownHook(Thread {

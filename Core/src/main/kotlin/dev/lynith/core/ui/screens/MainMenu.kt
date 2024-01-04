@@ -1,6 +1,7 @@
 package dev.lynith.core.ui.screens
 
 import dev.lynith.core.Platform
+import dev.lynith.core.hud.HudConfigScreen
 import dev.lynith.core.ui.BoundingBox
 import dev.lynith.core.ui.components.Screen
 import dev.lynith.core.ui.callbacks.impl.Clicked

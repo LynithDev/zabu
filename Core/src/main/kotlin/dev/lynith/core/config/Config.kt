@@ -44,6 +44,7 @@ class Config {
             loadFromClass(clazz)
         }
 
+        writeToFile()
         return true
     }
 
@@ -107,7 +108,9 @@ class Config {
         if (clazz.name.equals("java.lang.Class")) return false
 
         val clazzValues = JsonObject()
-        for (field in clazz.declaredFields) {
+        val fields = fieldsFromClass(clazz)
+
+        for (field in fields) {
             if (field == null || !field.isAnnotationPresent(ConfigOption::class.java)) {
                 continue
             }
@@ -130,7 +133,7 @@ class Config {
         return true
     }
 
-    private fun loadIntoClass(obj: Any): Boolean {
+    fun loadIntoClass(obj: Any): Boolean {
         if (!registeredClasses.contains(obj)) {
             return false
         }
@@ -146,10 +149,7 @@ class Config {
 
         val json = storedConfig?.get(clazz.name)
 
-        var fields = clazz.declaredFields
-        if (clazz.superclass != null) {
-            fields += clazz.superclass.declaredFields
-        }
+        val fields = fieldsFromClass(clazz)
 
         try {
             if (json == null) {
@@ -235,6 +235,16 @@ class Config {
             e.printStackTrace()
             return false
         }
+    }
+
+    private fun fieldsFromClass(clazz: Class<*>): List<Field> {
+        val fields = mutableListOf(*clazz.declaredFields, *clazz.superclass.declaredFields)
+
+        if (clazz.superclass != null) {
+            fields += clazz.superclass.declaredFields
+        }
+
+        return fields
     }
 
 }
